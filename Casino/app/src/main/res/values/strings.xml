@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Casino</string>
+    <string name="edit_message">Enter a message</string>
+    <string name="button_send">Send</string>
+    <string name="newGame_button">New Game</string>
+    <string name="coinToss_head">Heads</string>
+    <string name="coinToss_tails">Tails</string>
+    <string name="loadGame_button">Load Game</string>
+</resources>
