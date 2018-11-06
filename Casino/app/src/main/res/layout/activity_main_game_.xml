@@ -4,6 +4,286 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainGame_Activity">
+    android:background="#FF000000"
+    tools:context=".MainGame_Activity"
+    tools:layout_editor_absoluteY="81dp">
+
+    <TextView
+        android:id="@+id/outputTextView"
+        android:layout_width="297dp"
+        android:layout_height="160dp"
+        android:layout_marginTop="464dp"
+        android:layout_marginEnd="50dp"
+        android:layout_marginRight="50dp"
+        android:background="#FFFFFFFF"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageButton
+        android:id="@+id/playerHand1"
+        android:layout_width="89dp"
+        android:layout_height="94dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginEnd="1100dp"
+        android:layout_marginRight="1100dp"
+        android:background="@android:color/transparent"
+        android:contentDescription="@string/humanHandCard1"
+        android:scaleType="fitXY"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/redback" />
+
+    <ImageButton
+        android:id="@+id/playerHand2"
+        android:layout_width="89dp"
+        android:layout_height="94dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginEnd="900dp"
+        android:layout_marginRight="900dp"
+        android:background="@android:color/transparent"
+        android:contentDescription="@string/humanHandCard2"
+        android:scaleType="fitXY"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/redback" />
+
+    <ImageButton
+        android:id="@+id/playerHand3"
+        android:layout_width="89dp"
+        android:layout_height="94dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:background="@android:color/transparent"
+        android:contentDescription="@string/humanHandCard3"
+        android:scaleType="fitXY"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.21"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/redback" />
+
+    <ImageButton
+        android:id="@+id/playerHand4"
+        android:layout_width="89dp"
+        android:layout_height="94dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginEnd="400dp"
+        android:layout_marginRight="400dp"
+        android:background="@android:color/transparent"
+        android:contentDescription="@string/humanHandCard4"
+        android:scaleType="fitXY"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.445"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/redback" />
+
+    <TextView
+        android:id="@+id/humanHandTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="200dp"
+        android:layout_marginLeft="200dp"
+        android:layout_marginTop="20dp"
+        android:text="@string/humanHandTextView"
+        android:textColor="#FFFFFFFF"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/computerHandTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="206dp"
+        android:layout_marginLeft="206dp"
+        android:layout_marginTop="320dp"
+        android:text="@string/computerHandTextView"
+        android:textColor="#FFFFFFFF"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/playerHand2" />
+
+    <ImageView
+        android:id="@+id/computerHand1"
+        android:layout_width="89dp"
+        android:layout_height="94dp"
+        android:layout_marginEnd="1100dp"
+        android:layout_marginRight="1100dp"
+        android:layout_marginBottom="69dp"
+        android:contentDescription="@string/computerHandCard1"
+        android:scaleType="fitXY"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/redback" />
+
+    <ImageView
+        android:id="@+id/computerHand2"
+        android:layout_width="89dp"
+        android:layout_height="94dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginBottom="69dp"
+        android:contentDescription="@string/computerHandCard2"
+        android:scaleType="fitXY"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/computerHand1"
+        app:srcCompat="@drawable/redback" />
+
+    <ImageView
+        android:id="@+id/computerHand3"
+        android:layout_width="89dp"
+        android:layout_height="94dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginBottom="68dp"
+        android:contentDescription="@string/computerHandCard3"
+        android:scaleType="fitXY"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/computerHand2"
+        app:srcCompat="@drawable/redback" />
+
+    <ImageView
+        android:id="@+id/computerHand4"
+        android:layout_width="89dp"
+        android:layout_height="94dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginBottom="69dp"
+        android:contentDescription="@string/computerHandCard4"
+        android:scaleType="fitXY"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/computerHand3"
+        app:srcCompat="@drawable/redback" />
+
+    <TextView
+        android:id="@+id/humanPileTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="18dp"
+        android:layout_marginStart="700dp"
+        android:layout_marginLeft="700dp"
+        android:layout_marginTop="20dp"
+        android:text="@string/humanPileTextView"
+        android:textColor="#FFFFFFFF"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageButton
+        android:id="@+id/saveButton"
+        android:layout_width="91dp"
+        android:layout_height="82dp"
+        android:layout_marginTop="48dp"
+        android:layout_marginEnd="188dp"
+        android:layout_marginRight="188dp"
+        android:contentDescription="@string/saveButton"
+        android:scaleType="fitXY"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/save" />
+
+    <ImageButton
+        android:id="@+id/helpButton"
+        android:layout_width="91dp"
+        android:layout_height="82dp"
+        android:layout_marginTop="48dp"
+        android:layout_marginEnd="50dp"
+        android:layout_marginRight="50dp"
+        android:contentDescription="@string/helpButton"
+        android:scaleType="fitXY"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/help" />
+
+    <TextView
+        android:id="@+id/saveTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
+        android:layout_marginEnd="220dp"
+        android:layout_marginRight="220dp"
+        android:text="@string/saveTextView"
+        android:textColor="#FFFFFFFF"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/helpTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
+        android:layout_marginEnd="85dp"
+        android:layout_marginRight="85dp"
+        android:text="@string/helpTextView"
+        android:textColor="#FFFFFFFF"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tableTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="315dp"
+        android:layout_marginLeft="315dp"
+        android:layout_marginTop="40dp"
+        android:text="@string/tableTextView"
+        android:textColor="#FFFFFFFF"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/playerHand2" />
+
+    <TextView
+        android:id="@+id/computerPileTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="16dp"
+        android:layout_marginStart="400dp"
+        android:layout_marginLeft="400dp"
+        android:layout_marginBottom="180dp"
+        android:text="@string/computerPileTextView"
+        android:textColor="#FFFFFFFF"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/computerHandTextView" />
+
+    <TextView
+        android:id="@+id/consoleTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="175dp"
+        android:layout_marginRight="175dp"
+        android:layout_marginBottom="39dp"
+        android:text="@string/consoleTextView"
+        android:textColor="#FFFFFFFF"
+        app:layout_constraintBottom_toTopOf="@+id/outputTextView"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <TextView
+        android:id="@+id/deckTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="63dp"
+        android:layout_marginEnd="268dp"
+        android:layout_marginRight="268dp"
+        android:text="@string/deckTextView"
+        android:textColor="#FFFFFFFF"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/saveButton" />
+
+    <HorizontalScrollView
+        android:id="@+id/tableHorizontalView"
+        android:layout_width="426dp"
+        android:layout_height="149dp"
+        android:layout_marginStart="46dp"
+        android:layout_marginLeft="46dp"
+        android:layout_marginTop="27dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tableTextView">
+
+        <LinearLayout
+            android:id="@+id/linearLayoutTableView"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="vertical" />
+    </HorizontalScrollView>
+
 
 </android.support.constraint.ConstraintLayout>

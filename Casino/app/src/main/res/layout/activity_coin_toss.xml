@@ -4,17 +4,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#FF000000"
     tools:context=".CoinToss">
 
     <Button
         android:id="@+id/HeadsButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="50dp"
-        android:layout_marginLeft="50dp"
+        android:layout_width="193dp"
+        android:layout_height="120dp"
+        android:layout_marginStart="80dp"
+        android:layout_marginLeft="80dp"
         android:layout_marginTop="72dp"
-        android:layout_marginEnd="100dp"
-        android:layout_marginRight="100dp"
+        android:layout_marginEnd="50dp"
+        android:layout_marginRight="50dp"
         android:onClick="heads"
         android:text="@string/coinToss_head"
         app:layout_constraintEnd_toStartOf="@+id/TailsButton"
@@ -24,25 +25,54 @@
 
     <Button
         android:id="@+id/TailsButton"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_width="191dp"
+        android:layout_height="125dp"
         android:layout_marginTop="72dp"
         android:layout_marginEnd="80dp"
         android:layout_marginRight="80dp"
         android:onClick="heads"
         android:text="@string/coinToss_tails"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/HeadsButton"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/CoinTossTextView"
-        android:layout_width="189dp"
-        android:layout_height="42dp"
+        android:layout_width="500dp"
+        android:layout_height="80dp"
         android:layout_marginTop="350dp"
         android:layout_marginBottom="300dp"
-        android:text="TextView"
+        android:gravity="center"
+        android:textSize="30sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/PlayButton"
+        android:layout_width="274dp"
+        android:layout_height="115dp"
+        android:layout_marginTop="61dp"
+        android:layout_marginBottom="100dp"
+        android:onClick="Play"
+        android:text="@string/play_button"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/CoinTossTextView" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="321dp"
+        android:layout_height="158dp"
+        android:layout_marginStart="69dp"
+        android:layout_marginLeft="69dp"
+        android:layout_marginBottom="61dp"
+        android:contentDescription="@string/coinFlipImage"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/coinflip" />
+
 </android.support.constraint.ConstraintLayout>

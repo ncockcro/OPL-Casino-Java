@@ -1,4 +1,5 @@
 package edu.ramapo.ncockcro.casino;
 
-public class Round_Class {
+public class Build_Model {
+
 }
