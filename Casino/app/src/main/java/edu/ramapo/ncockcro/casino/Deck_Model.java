@@ -9,6 +9,17 @@ public class Deck_Model {
 
     private Vector<Card_Model> deckOfCards = new Vector();
 
+    /** *********************************************************************
+     Function Name: Deck_Model
+     Purpose: The constructor for the Deck_Model class
+     Parameters: None
+     Return Value: None
+     Local Variables: None
+     Algorithm:
+     1) Create all of the 52 cards and store them in the vector of cards
+     2) Shuffle the deck
+     Assistance Received: none
+      ********************************************************************* */
     Deck_Model() {
 
         int count = 0;
@@ -103,7 +114,19 @@ public class Deck_Model {
 
     }
 
-    public boolean isEmpty() {
+    /** *********************************************************************
+     Function Name: IsEmpty
+     Purpose: To check if the deck is empty
+     Parameters: None
+     Return Value:
+     @return boolean
+     Local Variables: None
+     Algorithm:
+     1) Returns true if the deck is empty
+     2) Otherwise, it returns false
+     Assistance Received: none
+      ********************************************************************* */
+    boolean IsEmpty() {
         if(deckOfCards.isEmpty() == true) {
             return true;
         }
@@ -112,11 +135,33 @@ public class Deck_Model {
         }
     }
 
-    public Vector<Card_Model> GetDeck() {
+    /** *********************************************************************
+     Function Name: GetDeck
+     Purpose: To retrieve the deck
+     Parameters: None
+     Return Value:
+     @return Vector<Card_Model>
+     Local Variables: None
+     Algorithm:
+     1) Return the deck of cards
+     Assistance Received: none
+      ********************************************************************* */
+    Vector<Card_Model> GetDeck() {
         return deckOfCards;
     }
 
-    public void RemoveFourCards() {
+    /** *********************************************************************
+     Function Name: RemoveFourCards
+     Purpose: To remove four cards from the deck
+     Parameters: None
+     Return Value:
+     @return void
+     Local Variables: None
+     Algorithm:
+     1) Remove four cards from the first index of the deck four times
+     Assistance Received: none
+      ********************************************************************* */
+    void RemoveFourCards() {
         deckOfCards.remove(0);
         deckOfCards.remove(0);
         deckOfCards.remove(0);
@@ -124,12 +169,20 @@ public class Deck_Model {
 
     }
 
+    /** *********************************************************************
+     Function Name: ShuffleCards
+     Purpose: To shuffle the deck of cards
+     Parameters: None
+     Return Value:
+     @return void
+     Local Variables: None
+     Algorithm:
+     1) Shuffle the deck of cards
+     Assistance Received: none
+      ********************************************************************* */
     private void ShuffleCards() {
 
-        //Collections.shuffle(deckOfCards);
+        Collections.shuffle(deckOfCards);
 
-        /*for(int i = 0; i < deckOfCards.size(); i++) {
-            Log.d("Rawr", deckOfCards.get(i).GetCard());
-        }*/
     }
 }

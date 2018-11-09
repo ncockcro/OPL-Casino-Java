@@ -2,402 +2,312 @@ package edu.ramapo.ncockcro.casino;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
+import android.widget.HorizontalScrollView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
 
 import java.util.Vector;
 
 public class Round_View extends MainGame_Activity {
 
     private Round_Model roundModel = new Round_Model();
+    private Player_Model playerModel = new Player_Model();
+    private Card_View cardView = new Card_View();
     private Activity activity;
-    private ImageButton playerHand1;
-    private ImageButton playerHand2;
-    private ImageButton playerHand3;
-    private ImageButton playerHand4;
-    private ImageView computerHand1;
-    private ImageView computerHand2;
-    private ImageView computerHand3;
-    private ImageView computerHand4;
-    private ImageButton tableCard1;
-    private ImageButton tableCard2;
-    private ImageButton tableCard3;
-    private ImageButton tableCard4;
+    private Vector<ImageButton> playerImageButtonHand = new Vector();
+    private Vector<ImageView> computerImageViewHand = new Vector();
+    private Vector<ImageButton> table = new Vector();
+    private Vector<ImageView> deck = new Vector();
+    private HorizontalScrollView tableHorizontalScrollView;
+    private LinearLayout tableLinearLayout;
+    private HorizontalScrollView deckHorizontalScrollView;
+    private LinearLayout deckLinearLayout;
+    private Button trailButton;
 
+    private Vector<Card_View> playerCards = new Vector();
+    private Vector<Card_View> computerCards = new Vector();
+    private Vector<Card_View> tableCards = new Vector();
+    private Card_View playerWantCard = new Card_View();
+    private Vector<Card_View> deckCards = new Vector();
+    private Card_View highlightedCard = new Card_View();
+
+    // Default constructor
     Round_View() {
 
     }
 
+    // Overloaded constructor where the activity for the current screen is passed through
     Round_View(Activity passedActivity) {
         this.activity = (Activity) passedActivity;
-        playerHand1 = activity.findViewById(R.id.playerHand1);
-        playerHand2 = activity.findViewById(R.id.playerHand2);
-        playerHand3 = activity.findViewById(R.id.playerHand3);
-        playerHand4 = activity.findViewById(R.id.playerHand4);
-        computerHand1 = activity.findViewById(R.id.computerHand1);
-        computerHand2 = activity.findViewById(R.id.computerHand2);
-        computerHand3 = activity.findViewById(R.id.computerHand3);
-        computerHand4 = activity.findViewById(R.id.computerHand4);
+        playerImageButtonHand.add((ImageButton) activity.findViewById(R.id.playerHand1));
+        playerImageButtonHand.add((ImageButton) activity.findViewById(R.id.playerHand2));
+        playerImageButtonHand.add((ImageButton) activity.findViewById(R.id.playerHand3));
+        playerImageButtonHand.add((ImageButton) activity.findViewById(R.id.playerHand4));
+
+        computerImageViewHand.add((ImageView) activity.findViewById(R.id.computerHand1));
+        computerImageViewHand.add((ImageView) activity.findViewById(R.id.computerHand2));
+        computerImageViewHand.add((ImageView) activity.findViewById(R.id.computerHand3));
+        computerImageViewHand.add((ImageView) activity.findViewById(R.id.computerHand4));
+
+        tableHorizontalScrollView = (HorizontalScrollView) activity.findViewById(R.id.tableHorizontalView);
+        tableLinearLayout = (LinearLayout) activity.findViewById(R.id.linearLayoutTableView);
+        tableLinearLayout.setOrientation(LinearLayout.HORIZONTAL);
+
+        deckHorizontalScrollView = (HorizontalScrollView) activity.findViewById(R.id.deckHorizontalView);
+        deckLinearLayout = (LinearLayout) activity.findViewById(R.id.linearLayoutDeckView);
+        tableLinearLayout.setOrientation(LinearLayout.HORIZONTAL);
+
+        trailButton = (Button) activity.findViewById(R.id.trailButton);
+
     }
 
-    public void SetFourCardsHuman() {
-
+    /** *********************************************************************
+    Function Name: DrawFourCardsHumandAndComputer
+    Purpose: To draw four cards to the human and computer player's hands
+    Parameters: None
+    Return Value:
+        @Void
+    Local Variables: None
+    Algorithm:
+        1) Update the model by dealing four cards
+        2) Get the four cards that were dealt and store them in the view
+        3) Draw the four cards for the human's hand
+        4) Draw the four cards for the computer's hand
+    Assistance Received: none
+    ********************************************************************* */
+    public void DrawFourCardsHumanAndComputer() {
 
         roundModel.DealCardsToPlayer();
-        Vector<Card_Model> playerCards = roundModel.GetHumanHand(0);
+        playerCards = cardView.ConvertModelToView(roundModel.GetHand(0));
+        computerCards = cardView.ConvertModelToView(roundModel.GetHand(1));
 
-        GetImageCard(playerCards.get(0), playerHand1);
-        GetImageCard(playerCards.get(1), playerHand2);
-        GetImageCard(playerCards.get(2), playerHand3);
-        GetImageCard(playerCards.get(3), playerHand4);
+        //playerCards.get(0).DrawImageCard(playerHand1);
+        playerCards.get(0).DrawImageCard(playerImageButtonHand.get(0));
+        playerCards.get(1).DrawImageCard(playerImageButtonHand.get(1));
+        playerCards.get(2).DrawImageCard(playerImageButtonHand.get(2));
+        playerCards.get(3).DrawImageCard(playerImageButtonHand.get(3));
+
+        computerCards.get(0).DrawImageViewCard(computerImageViewHand.get(0));
+        computerCards.get(1).DrawImageViewCard(computerImageViewHand.get(1));
+        computerCards.get(2).DrawImageViewCard(computerImageViewHand.get(2));
+        computerCards.get(3).DrawImageViewCard(computerImageViewHand.get(3));
+
+
     }
 
-    public void SetFourCardsComputer(Vector <Card_Model> passedCards) {
-        GetImageViewCard(passedCards.get(0), computerHand1);
-        GetImageViewCard(passedCards.get(1), computerHand2);
-        GetImageViewCard(passedCards.get(2), computerHand3);
-        GetImageViewCard(passedCards.get(3), computerHand4);
+    /** *********************************************************************
+     Function Name: DrawFourCardsTable
+     Purpose: To draw four cards to the table
+     Parameters:
+        @param context Context object, holds the current activity that this is accessing
+     Return Value:
+        @return void
+     Local Variables: None
+     Algorithm:
+     1) Update the model by dealing cards to the table there
+     2) Get the four cards that were dealt and store them in the view
+     3) Add a new card and append it to the table horizontal view
+     4) Draw the card that was dealt to the table at that specific card
+     5) Repeat for four times
+     Assistance Received: none
+      ********************************************************************* */
+    void DrawFourCardsTable(Context context) {
+
+
+        table.clear();
+        roundModel.DealCardsToTable();
+        tableCards = cardView.ConvertModelToView(roundModel.GetTable());
+
+        table.add(AddCardToTable(context));
+        tableCards.get(0).DrawImageCard(table.get(0));
+        table.add(AddCardToTable(context));
+        tableCards.get(1).DrawImageCard(table.get(1));
+        table.add(AddCardToTable(context));
+        tableCards.get(2).DrawImageCard(table.get(2));
+        table.add(AddCardToTable(context));
+        tableCards.get(3).DrawImageCard(table.get(3));
+
     }
 
-    public void SetFourCardsTable(Vector<Card_Model> passedCards) {
+    void DrawCards(Context context) {
 
-        GetImageCard(passedCards.get(0), tableCard1);
-        GetImageViewCard(passedCards.get(1), tableCard2);
-        GetImageViewCard(passedCards.get(2), tableCard3);
-        GetImageViewCard(passedCards.get(3), tableCard4);
+        table.clear();
+        tableCards.clear();
+        tableLinearLayout.removeAllViews();
+        tableCards = cardView.ConvertModelToView(roundModel.GetTable());
+
+        for(int i = 0; i < tableCards.size(); i++) {
+            table.add(AddCardToTable(context));
+            tableCards.get(i).DrawImageCard(table.get(i));
+        }
     }
 
-    private void GetImageCard(Card_Model card, ImageButton imageButton) {
+    void DrawDeck(Context context) {
 
-        switch (card.GetCard()) {
-            case "CA":
-                imageButton.setImageResource(R.drawable.ca);
-                break;
-            case "C2":
-                imageButton.setImageResource(R.drawable.c2);
-                break;
-            case "C3":
-                imageButton.setImageResource(R.drawable.c3);
-                break;
-            case "C4":
-                imageButton.setImageResource(R.drawable.c4);
-                break;
-            case "C5":
-                imageButton.setImageResource(R.drawable.c5);
-                break;
-            case "C6":
-                imageButton.setImageResource(R.drawable.c6);
-                break;
-            case "C7":
-                imageButton.setImageResource(R.drawable.c7);
-                break;
-            case "C8":
-                imageButton.setImageResource(R.drawable.c8);
-                break;
-            case "C9":
-                imageButton.setImageResource(R.drawable.c9);
-                break;
-            case "CX":
-                imageButton.setImageResource(R.drawable.cx);
-                break;
-            case "CJ":
-                imageButton.setImageResource(R.drawable.cj);
-                break;
-            case "CQ":
-                imageButton.setImageResource(R.drawable.cq);
-                break;
-            case "CK":
-                imageButton.setImageResource(R.drawable.ck);
-                break;
-            case "DA":
-                imageButton.setImageResource(R.drawable.da);
-                break;
-            case "D2":
-                imageButton.setImageResource(R.drawable.d2);
-                break;
-            case "D3":
-                imageButton.setImageResource(R.drawable.d3);
-                break;
-            case "D4":
-                imageButton.setImageResource(R.drawable.d4);
-                break;
-            case "D5":
-                imageButton.setImageResource(R.drawable.d5);
-                break;
-            case "D6":
-                imageButton.setImageResource(R.drawable.d6);
-                break;
-            case "D7":
-                imageButton.setImageResource(R.drawable.d7);
-                break;
-            case "D8":
-                imageButton.setImageResource(R.drawable.d8);
-                break;
-            case "D9":
-                imageButton.setImageResource(R.drawable.d9);
-                break;
-            case "DX":
-                imageButton.setImageResource(R.drawable.dx);
-                break;
-            case "DJ":
-                imageButton.setImageResource(R.drawable.dj);
-                break;
-            case "DQ":
-                imageButton.setImageResource(R.drawable.dq);
-                break;
-            case "DK":
-                imageButton.setImageResource(R.drawable.dk);
-                break;
-            case "HA":
-                imageButton.setImageResource(R.drawable.ha);
-                break;
-            case "H2":
-                imageButton.setImageResource(R.drawable.h2);
-                break;
-            case "H3":
-                imageButton.setImageResource(R.drawable.h3);
-                break;
-            case "H4":
-                imageButton.setImageResource(R.drawable.h4);
-                break;
-            case "H5":
-                imageButton.setImageResource(R.drawable.h5);
-                break;
-            case "H6":
-                imageButton.setImageResource(R.drawable.h6);
-                break;
-            case "H7":
-                imageButton.setImageResource(R.drawable.h7);
-                break;
-            case "H8":
-                imageButton.setImageResource(R.drawable.h8);
-                break;
-            case "H9":
-                imageButton.setImageResource(R.drawable.h9);
-                break;
-            case "HX":
-                imageButton.setImageResource(R.drawable.hx);
-                break;
-            case "HJ":
-                imageButton.setImageResource(R.drawable.hj);
-                break;
-            case "HQ":
-                imageButton.setImageResource(R.drawable.hq);
-                break;
-            case "HK":
-                imageButton.setImageResource(R.drawable.hk);
-                break;
-            case "SA":
-                imageButton.setImageResource(R.drawable.sa);
-                break;
-            case "S2":
-                imageButton.setImageResource(R.drawable.s2);
-                break;
-            case "S3":
-                imageButton.setImageResource(R.drawable.s3);
-                break;
-            case "S4":
-                imageButton.setImageResource(R.drawable.s4);
-                break;
-            case "S5":
-                imageButton.setImageResource(R.drawable.s5);
-                break;
-            case "S6":
-                imageButton.setImageResource(R.drawable.s6);
-                break;
-            case "S7":
-                imageButton.setImageResource(R.drawable.s7);
-                break;
-            case "S8":
-                imageButton.setImageResource(R.drawable.s8);
-                break;
-            case "S9":
-                imageButton.setImageResource(R.drawable.s9);
-                break;
-            case "SX":
-                imageButton.setImageResource(R.drawable.sx);
-                break;
-            case "SJ":
-                imageButton.setImageResource(R.drawable.sj);
-                break;
-            case "SQ":
-                imageButton.setImageResource(R.drawable.sq);
-                break;
-            case "SK":
-                imageButton.setImageResource(R.drawable.sk);
-                break;
-            default:
-                Log.d("ERROR", "Error in drawing the card to the screen in the round_view class.");
-                break;
+        deck.clear();
+        deckLinearLayout.removeAllViews();
+        deckCards = cardView.ConvertModelToView(roundModel.GetDeck());
+
+
+        for(int i = 0; i < deckCards.size(); i++) {
+            deck.add(AddCardToDeck(context));
+            deckCards.get(i).DrawImageViewCard(deck.get(i));
+        }
+        /*table.add(AddCardToTable(context));
+        tableCards.get(0).DrawImageCard(table.get(0));
+        table.add(AddCardToTable(context));
+        tableCards.get(1).DrawImageCard(table.get(1));
+        table.add(AddCardToTable(context));
+        tableCards.get(2).DrawImageCard(table.get(2));
+        table.add(AddCardToTable(context));
+        tableCards.get(3).DrawImageCard(table.get(3));*/
+
+    }
+
+    /** *********************************************************************
+     Function Name: AddCardToTable
+     Purpose: To create a new image button to be added to the table horizontal scroll view
+     Parameters:
+     @param context Context object, holds the current activity that this is accessing
+     Return Value:
+     @return ImageButton
+     Local Variables:
+        button, a new image button which gets added to the table
+     Algorithm:
+     1) Create a new button
+     2) Set the background to be a default background
+     3) Set the size of the button
+     4) Set the scale type to fit x and y coordinates
+     5) Set the background to clear
+     6) Add it to the linear layout for the table
+     Assistance Received: none
+      ********************************************************************* */
+    ImageButton AddCardToTable(Context context) {
+        ImageButton button = new ImageButton(context);
+        button.setImageResource(R.drawable.blackback);
+        button.setLayoutParams(new LinearLayout.LayoutParams(89, 125));
+        button.setScaleType(ImageView.ScaleType.FIT_XY);
+        button.setBackgroundColor(Color.TRANSPARENT);
+        tableLinearLayout.addView(button);
+
+        return button;
+    }
+
+    ImageView AddCardToDeck(Context context) {
+        ImageView button = new ImageView(context);
+        button.setImageResource(R.drawable.blackback);
+        button.setLayoutParams(new LinearLayout.LayoutParams(89, 125));
+        button.setScaleType(ImageView.ScaleType.FIT_XY);
+        button.setBackgroundColor(Color.TRANSPARENT);
+        deckLinearLayout.addView(button);
+
+        return button;
+    }
+
+    /** *********************************************************************
+     Function Name: HighlightCard
+     Purpose: When a card in the player's hand is clicked, it will highlight the card and set it
+     to be the card the player wants to use for a move
+     Parameters:
+     @param view View object, holds the button that the player clicked
+     Return Value:
+     @return Void
+     Local Variables:
+         tempCard, a card to hold the one that was clicked by the user
+     Algorithm:
+     1) Find out which button the user hit and highlight it red and set the tempCard to that card
+     2) Then update the model with the card the player selected
+     Assistance Received: none
+      ********************************************************************* */
+    void HighlightCard(View view) {
+
+        //Card_View tempCard = new Card_View();
+
+        if(view.getId() == R.id.playerHand1) {
+            playerImageButtonHand.get(0).setColorFilter(0x40ff0000);
+            highlightedCard = playerCards.get(0);
+        }
+        else if(view.getId() == R.id.playerHand2) {
+            playerImageButtonHand.get(1).setColorFilter(0x40ff0000);
+            highlightedCard = playerCards.get(1);
+        }
+        else if(view.getId() == R.id.playerHand3) {
+            playerImageButtonHand.get(2).setColorFilter(0x40ff0000);
+            highlightedCard = playerCards.get(2);
+        }
+        else if(view.getId() == R.id.playerHand4) {
+            playerImageButtonHand.get(3).setColorFilter(0x40ff0000);
+            highlightedCard = playerCards.get(3);
         }
 
-    }
-
-    private void GetImageViewCard(Card_Model card, ImageView imageView) {
-
-        switch (card.GetCard()) {
-            case "CA":
-                imageView.setImageResource(R.drawable.ca);
-                break;
-            case "C2":
-                imageView.setImageResource(R.drawable.c2);
-                break;
-            case "C3":
-                imageView.setImageResource(R.drawable.c3);
-                break;
-            case "C4":
-                imageView.setImageResource(R.drawable.c4);
-                break;
-            case "C5":
-                imageView.setImageResource(R.drawable.c5);
-                break;
-            case "C6":
-                imageView.setImageResource(R.drawable.c6);
-                break;
-            case "C7":
-                imageView.setImageResource(R.drawable.c7);
-                break;
-            case "C8":
-                imageView.setImageResource(R.drawable.c8);
-                break;
-            case "C9":
-                imageView.setImageResource(R.drawable.c9);
-                break;
-            case "CX":
-                imageView.setImageResource(R.drawable.cx);
-                break;
-            case "CJ":
-                imageView.setImageResource(R.drawable.cj);
-                break;
-            case "CQ":
-                imageView.setImageResource(R.drawable.cq);
-                break;
-            case "CK":
-                imageView.setImageResource(R.drawable.ck);
-                break;
-            case "DA":
-                imageView.setImageResource(R.drawable.da);
-                break;
-            case "D2":
-                imageView.setImageResource(R.drawable.d2);
-                break;
-            case "D3":
-                imageView.setImageResource(R.drawable.d3);
-                break;
-            case "D4":
-                imageView.setImageResource(R.drawable.d4);
-                break;
-            case "D5":
-                imageView.setImageResource(R.drawable.d5);
-                break;
-            case "D6":
-                imageView.setImageResource(R.drawable.d6);
-                break;
-            case "D7":
-                imageView.setImageResource(R.drawable.d7);
-                break;
-            case "D8":
-                imageView.setImageResource(R.drawable.d8);
-                break;
-            case "D9":
-                imageView.setImageResource(R.drawable.d9);
-                break;
-            case "DX":
-                imageView.setImageResource(R.drawable.dx);
-                break;
-            case "DJ":
-                imageView.setImageResource(R.drawable.dj);
-                break;
-            case "DQ":
-                imageView.setImageResource(R.drawable.dq);
-                break;
-            case "DK":
-                imageView.setImageResource(R.drawable.dk);
-                break;
-            case "HA":
-                imageView.setImageResource(R.drawable.ha);
-                break;
-            case "H2":
-                imageView.setImageResource(R.drawable.h2);
-                break;
-            case "H3":
-                imageView.setImageResource(R.drawable.h3);
-                break;
-            case "H4":
-                imageView.setImageResource(R.drawable.h4);
-                break;
-            case "H5":
-                imageView.setImageResource(R.drawable.h5);
-                break;
-            case "H6":
-                imageView.setImageResource(R.drawable.h6);
-                break;
-            case "H7":
-                imageView.setImageResource(R.drawable.h7);
-                break;
-            case "H8":
-                imageView.setImageResource(R.drawable.h8);
-                break;
-            case "H9":
-                imageView.setImageResource(R.drawable.h9);
-                break;
-            case "HX":
-                imageView.setImageResource(R.drawable.hx);
-                break;
-            case "HJ":
-                imageView.setImageResource(R.drawable.hj);
-                break;
-            case "HQ":
-                imageView.setImageResource(R.drawable.hq);
-                break;
-            case "HK":
-                imageView.setImageResource(R.drawable.hk);
-                break;
-            case "SA":
-                imageView.setImageResource(R.drawable.sa);
-                break;
-            case "S2":
-                imageView.setImageResource(R.drawable.s2);
-                break;
-            case "S3":
-                imageView.setImageResource(R.drawable.s3);
-                break;
-            case "S4":
-                imageView.setImageResource(R.drawable.s4);
-                break;
-            case "S5":
-                imageView.setImageResource(R.drawable.s5);
-                break;
-            case "S6":
-                imageView.setImageResource(R.drawable.s6);
-                break;
-            case "S7":
-                imageView.setImageResource(R.drawable.s7);
-                break;
-            case "S8":
-                imageView.setImageResource(R.drawable.s8);
-                break;
-            case "S9":
-                imageView.setImageResource(R.drawable.s9);
-                break;
-            case "SX":
-                imageView.setImageResource(R.drawable.sx);
-                break;
-            case "SJ":
-                imageView.setImageResource(R.drawable.sj);
-                break;
-            case "SQ":
-                imageView.setImageResource(R.drawable.sq);
-                break;
-            case "SK":
-                imageView.setImageResource(R.drawable.sk);
-                break;
-            default:
-                Log.d("ERROR", "Error in drawing the card to the screen in the round_view class.");
-                break;
+        for(int i = 0; i < playerCards.size(); i++) {
+            if(playerCards.get(i).GetCard() != highlightedCard.GetCard()) {
+                playerImageButtonHand.get(i).setColorFilter(null);
+            }
         }
 
+        SetPlayerWantCard(highlightedCard);
     }
+
+    /** *********************************************************************
+     Function Name: SetPlayerWantCard
+     Purpose: To set the card that the player wants to use for a move
+     Parameters:
+     @param passedCard Card_View object, holds the card the player tapped on
+     Return Value:
+     @return void
+     Local Variables: None
+     Algorithm:
+        1) Set the playerWantCard variable to what was passed to it
+        2) update the model with the card the player picked
+     Assistance Received: none
+      ********************************************************************* */
+    void SetPlayerWantCard(Card_View passedCard) {
+        playerWantCard = passedCard;
+        playerModel.SetPlayerWantCard(passedCard.ConvertViewToModel(passedCard));
+
+    }
+
+    void MakeTrail(View view) {
+
+
+        for(int i = 0; i < playerCards.size(); i++) {
+            if(highlightedCard.GetCard() == playerCards.get(i).GetCard()) {
+                roundModel.CheckTrail(cardView.ConvertViewToModel(playerCards.get(i)));
+            }
+        }
+
+        for(int i = 0; i < playerCards.size(); i++) {
+            playerImageButtonHand.get(i).setColorFilter(null);
+        }
+    }
+
+    void UpdateScreen(Context context) {
+
+        playerCards = cardView.ConvertModelToView(roundModel.GetHand(0));
+        computerCards = cardView.ConvertModelToView(roundModel.GetHand(1));
+
+        for(int i = 0; i < playerCards.size(); i++) {
+            playerCards.get(i).DrawImageCard(playerImageButtonHand.get(i));
+        }
+
+        for(int i = playerCards.size(); i < 4; i++) {
+            playerImageButtonHand.get(i).setVisibility(View.GONE);
+        }
+        for(int i = 0; i < computerCards.size(); i++) {
+            computerCards.get(i).DrawImageViewCard(computerImageViewHand.get(i));
+        }
+
+        DrawCards(context);
+        DrawDeck(context);
+
+    }
+
 }

@@ -46,7 +46,6 @@ public class Round_Model {
 
     }
 
-
     private void SetRoundInfo(int round, int humanScore, int computerScore) {
 
         if(round > 0) {
@@ -112,8 +111,39 @@ public class Round_Model {
 
     }
 
-    Vector<Card_Model> GetHumanHand(int passedPlayer) {
+    Vector<Card_Model> GetHand(int passedPlayer) {
         return player.get(passedPlayer).hand;
     }
+
+    Vector<Card_Model> GetTable() {
+        return table;
+    }
+
+    Vector<Card_Model> GetDeck() {
+        return deckOfCards.GetDeck();
+    }
+
+    boolean CheckTrail(Card_Model passedCard) {
+
+        Vector<Card_Model> playerHand = player.get(currentPlayer).GetHand();
+
+        player.get(currentPlayer).RemoveCard(passedCard);
+        player.get(0).RemoveCard(passedCard);
+
+        Vector<Card_Model> trailCard = new Vector();
+        trailCard.add(passedCard);
+        AddCardsToTable(trailCard);
+
+        return true;
+
+    }
+
+    void AddCardsToTable(Vector<Card_Model> passedCards) {
+
+        for(int i = 0; i < passedCards.size(); i++) {
+            table.add(passedCards.get(i));
+        }
+    }
+
 
 }

@@ -1,5 +1,7 @@
 package edu.ramapo.ncockcro.casino;
 
+import android.util.Log;
+
 import java.util.Vector;
 
 public class Player_Model {
@@ -23,6 +25,20 @@ public class Player_Model {
     private Vector<Card_Model> printTableBuildCards;
     private Vector<Card_Model> printTableCaptureCards;
 
+    private Card_Model playerWantCard = new Card_Model();
+
+    /** *********************************************************************
+     Function Name: SetHand
+     Purpose: To set four cards to the player's hand
+     Parameters:
+        @param passedFourCards Vector<Card_Model>, four cards to be set to the player
+     Return Value:
+        @return void
+     Local Variables: None
+     Algorithm:
+     1) Add the four cards to the player's hand
+     Assistance Received: none
+      ********************************************************************* */
     public void SetHand(Vector<Card_Model> passedFourCards) {
 
         hand.add(passedFourCards.get(0));
@@ -30,6 +46,30 @@ public class Player_Model {
         hand.add(passedFourCards.get(2));
         hand.add(passedFourCards.get(3));
 
+    }
+
+    void SetPlayerWantCard(Card_Model passedCard) {
+        playerWantCard = passedCard;
+    }
+
+    Vector<Card_Model> GetHand() {
+        return hand;
+    }
+
+    void RemoveCard(Card_Model passedCard) {
+        boolean notFound = false;
+
+        for(int i = 0; i < hand.size(); i++) {
+            if(hand.get(i).GetCard() == passedCard.GetCard()) {
+                Log.d("Yup", "Deleting card");
+                hand.remove(i);
+                notFound = true;
+            }
+        }
+
+        if(notFound == false) {
+            Log.d("ERROR", "Error in removing a card in the player model class.");
+        }
     }
 
 }

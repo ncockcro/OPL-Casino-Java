@@ -17,7 +17,18 @@ public class Start_Menu extends AppCompatActivity {
 
     }
 
-    // Called when the user taps the Send button
+    /** *********************************************************************
+     Function Name: newGame
+     Purpose: When the new game button is pressed, this will direct the game to the coin toss screen
+     Parameters:
+        @param view View, the view of the button that was pressed
+     Return Value:
+         @return void
+     Local Variables: None
+     Algorithm:
+     1) Start a new activity with the intent of the CoinToss class
+     Assistance Received: none
+      ********************************************************************* */
     public void newGame(View view) {
         // Do something in response to button
         Intent intent = new Intent(this, CoinToss.class);

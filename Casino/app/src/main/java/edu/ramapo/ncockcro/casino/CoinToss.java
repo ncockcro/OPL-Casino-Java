@@ -24,6 +24,20 @@ public class CoinToss extends AppCompatActivity {
     }
     String coinTossWinner;
 
+    /** *********************************************************************
+     Function Name: heads
+     Purpose: If the user clicks heads or tails, this function will determine who goes first
+     Parameters:
+        @param view, View, the view for the button that was clicked
+     Return Value:
+        @return void
+     Local Variables: None
+     Algorithm:
+        1) Generate a random number between 0 and 1 as the "coin"
+        2) If the user's guess matched the random number, output they were correct and pass "Human"
+        3) Otherwise, output they were wrong and pass "Computer"
+     Assistance Received: none
+      ********************************************************************* */
     public void heads(View view) {
 
         Random random = new Random();
@@ -80,6 +94,18 @@ public class CoinToss extends AppCompatActivity {
 
     }
 
+    /** *********************************************************************
+     Function Name: Play
+     Purpose: When the user clicks the play button, it will send them to the main game screen
+     Parameters:
+        @param view, View, the view of the button that was pressed
+     Return Value:
+        @return void
+     Local Variables: None
+     Algorithm:
+        1) Start up the main game activity
+     Assistance Received: none
+      ********************************************************************* */
     public void Play(View view) {
         Intent intent = new Intent(this, MainGame_Activity.class);
         intent.putExtra("coinWinner", coinTossWinner);
