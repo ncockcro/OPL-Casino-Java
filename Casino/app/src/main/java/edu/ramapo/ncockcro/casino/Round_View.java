@@ -12,6 +12,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
+import android.widget.Toast;
 
 import java.util.Vector;
 
@@ -275,20 +276,53 @@ public class Round_View extends MainGame_Activity {
 
     }
 
-    void MakeTrail(View view) {
+    /** *********************************************************************
+     Function Name: MakeTrail
+     Purpose: Find which card is the highlighted card and call the model to see if the playe can trail
+     Parameters: None
+     Return Value:
+     @return void
+     Local Variables: None
+     Algorithm:
+     1) Cycle through the player's cards and find which one they clicked previously
+     2) Then call the model and check if the player is able to trail
+     3) Then, unhighlight all of the cards on the table
+     Assistance Received: none
+      ********************************************************************* */
+    void MakeTrail() {
 
-
+        // Checking to make sure the card the user selected is in the hand
         for(int i = 0; i < playerCards.size(); i++) {
             if(highlightedCard.GetCard() == playerCards.get(i).GetCard()) {
-                roundModel.CheckTrail(cardView.ConvertViewToModel(playerCards.get(i)));
+
+                // If the CheckTrail returned false, then we need to notify the user to make a different move
+                if(roundModel.CheckTrail(cardView.ConvertViewToModel(playerCards.get(i))) == false) {
+                    Toast.makeText(activity, "Can not trail with " + highlightedCard.GetCard() + " because " +
+                            roundModel.GetErrorReason(), Toast.LENGTH_LONG).show();
+                }
             }
         }
 
+        // Once done, we need to unhighlight any other cards
         for(int i = 0; i < playerCards.size(); i++) {
             playerImageButtonHand.get(i).setColorFilter(null);
         }
     }
 
+    /** *********************************************************************
+     Function Name: UpdateScreen
+     Purpose: To redraw all of the different piles, hand, table, ect since they may have changed since last time
+     Parameters:
+     @param context, Context object, holds the context
+     Return Value:
+     @return void
+     Local Variables: None
+     Algorithm:
+     1) Cycle through the player's cards and find which one they clicked previously
+     2) Then call the model and check if the player is able to trail
+     3) Then, unhighlight all of the cards on the table
+     Assistance Received: none
+      ********************************************************************* */
     void UpdateScreen(Context context) {
 
         playerCards = cardView.ConvertModelToView(roundModel.GetHand(0));
@@ -308,6 +342,23 @@ public class Round_View extends MainGame_Activity {
         DrawCards(context);
         DrawDeck(context);
 
+    }
+
+    boolean CheckForDealingCards() {
+
+        // If the player's hands are empty but not the deck, deal cards and return true
+        if(roundModel.CheckIfPlayersHandEmpty() && roundModel.CheckIfDeckEmpty() == false) {
+            roundModel.DealCardsToPlayer();
+            return true;
+        }
+        // If the hands aren't empty and the deck isn't empty, return true
+        else if(roundModel.CheckIfPlayersHandEmpty() == false && roundModel.CheckIfDeckEmpty() == false) {
+            return true;
+        }
+        // Otherwise, return false, the round is over
+        else {
+            return false;
+        }
     }
 
 }
