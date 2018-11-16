@@ -34,7 +34,7 @@ public class Card_Model {
             number = passedCard.charAt(1);
         }
         else {
-            Log.d("ERROR", "Error in setting the card in the card_model class.");
+            Log.d("MyError", "Error in setting the card in the card_model class.");
         }
     }
 

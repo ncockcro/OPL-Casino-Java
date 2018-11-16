@@ -29,8 +29,7 @@ public class CoinToss extends AppCompatActivity {
      Purpose: If the user clicks heads or tails, this function will determine who goes first
      Parameters:
         @param view, View, the view for the button that was clicked
-     Return Value:
-        @return void
+     Return Value: Void
      Local Variables: None
      Algorithm:
         1) Generate a random number between 0 and 1 as the "coin"
@@ -45,7 +44,7 @@ public class CoinToss extends AppCompatActivity {
         // Get a random number, either 0 or 1
         int randomCoin = random.nextInt(2);
 
-        // Capture the layout's TextViewand set the string as its text
+        // Capture the layout's TextView and set the string as its text
         setContentView(R.layout.activity_coin_toss);
         TextView textView = (TextView) findViewById(R.id.CoinTossTextView);
 
@@ -99,8 +98,7 @@ public class CoinToss extends AppCompatActivity {
      Purpose: When the user clicks the play button, it will send them to the main game screen
      Parameters:
         @param view, View, the view of the button that was pressed
-     Return Value:
-        @return void
+     Return Value: Void
      Local Variables: None
      Algorithm:
         1) Start up the main game activity

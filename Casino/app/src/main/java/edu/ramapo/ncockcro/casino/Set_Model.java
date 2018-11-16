@@ -3,15 +3,14 @@ package edu.ramapo.ncockcro.casino;
 import java.util.Vector;
 
 public class Set_Model {
-    private Vector<Card_Model> cardOfSet = new Vector();
+    private Vector<Card_Model> cardOfSet = new Vector<Card_Model>();
 
     /** *********************************************************************
     Function Name: SetCardsOfSet
     Purpose: To set a vector of cards into a set
     Parameters:
     @param cards, a vector of cards. It refers to the cards which make up a set
-    Return Value:
-    @return Void
+    Return Value: Void
     Local Variables: None
     Algorithm:
     1) Set the cardsOfSet variable to what was passed in

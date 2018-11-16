@@ -6,11 +6,11 @@ import java.util.Vector;
 
 public class Player_Model {
 
-    protected Vector<Card_Model> hand = new Vector();
+    protected Vector<Card_Model> hand = new Vector<Card_Model>();
     private Vector<Card_Model> pile;
-    private Vector<Card_Model> playerBuildCards = new Vector();
-    private Vector<Card_Model> playerSingleSetCards;
-    private Vector<Set_Model> playerMultipleSetCards;
+    private Vector<Card_Model> playerBuildCards = new Vector<Card_Model>();
+    private Vector<Card_Model> playerSingleSetCards = new Vector<Card_Model>();
+    private Vector<Set_Model> playerMultipleSetCards = new Vector<Set_Model>();
     private Deck_Model deck = new Deck_Model();
     private Vector<Card_Model> uniqueCards = deck.GetDeck();
     private boolean playerWantSave;
@@ -18,28 +18,45 @@ public class Player_Model {
     private Vector<Card_Model> buildCards;
     private char newOrExistingBuild;
     private Card_Model existingBuildCard;
-    private char playerMove;
+    protected char playerMove;
     private char playerWantBuild;
     private char printPlayerCaptureBuild;
     private char playerWantSet;
-    private Vector<Card_Model> printTableBuildCards;
-    private Vector<Card_Model> printTableCaptureCards;
+    private Vector<Card_Model> printTableBuildCards = new Vector<Card_Model>();
+    private Vector<Card_Model> printTableCaptureCards = new Vector<Card_Model>();
 
-    private Card_Model playerWantCard = new Card_Model();
+    private Card_Model playerWantCard;
+
+    /** *********************************************************************
+     Function Name: SetHand
+     Purpose: To set four cards to the player's hand
+     Parameters:
+     @param table Vector<Card_Model>, the cards on the table
+     @param tableBuilds Vector<Build_Model>, the builds in the game
+     Return Value:
+     @return char, return the move type
+     Local Variables: None
+     Algorithm:
+     1) Virtual function, just returns a null value, the actual functions in the human
+     and computer classes return the player's move
+     Assistance Received: none
+      ********************************************************************* */
+    public char MakeMove(Vector<Card_Model> table, Vector<Build_Model> tableBuilds) {
+        return '0';
+    }
 
     /** *********************************************************************
      Function Name: SetHand
      Purpose: To set four cards to the player's hand
      Parameters:
         @param passedFourCards Vector<Card_Model>, four cards to be set to the player
-     Return Value:
-        @return void
+     Return Value: Void
      Local Variables: None
      Algorithm:
      1) Add the four cards to the player's hand
      Assistance Received: none
       ********************************************************************* */
-    public void SetHand(Vector<Card_Model> passedFourCards) {
+    void SetHand(Vector<Card_Model> passedFourCards) {
 
         hand.add(passedFourCards.get(0));
         hand.add(passedFourCards.get(1));
@@ -53,8 +70,7 @@ public class Player_Model {
     Purpose: Adds any cards that are passed in to the function
     Parameters:
     @param cards, a vector of cards passed by value. It holds the cards to be added to a player's hand
-    Return Value:
-    @return Void
+    Return Value: Void
     Local Variables: None
     Algorithm:
     1) Add the cards to the player's hand
@@ -88,42 +104,407 @@ public class Player_Model {
         }
     }
 
+    /** *********************************************************************
+     Function Name: SetPlayerWantCard
+     Purpose: To set
+     Parameters:
+     @param passedCard Card_Model, the card the player wants to use
+     Return Value: Void
+     Local Variables: None
+     Algorithm:
+     1) Set the playerWantCard variable
+     Assistance Received: none
+      ********************************************************************* */
     void SetPlayerWantCard(Card_Model passedCard) {
         playerWantCard = passedCard;
     }
 
+    /** *********************************************************************
+     Function Name: SetHand
+     Purpose: To set four cards to the player's hand
+     Parameters: None
+     Return Value: Void
+     Local Variables: None
+     Algorithm:
+     1) Retrieve the player's hand
+     Assistance Received: none
+      ********************************************************************* */
     Vector<Card_Model> GetHand() {
         return hand;
     }
 
-    void RemoveCard(Card_Model passedCard) {
-        boolean notFound = false;
-
-        for(int i = 0; i < hand.size(); i++) {
-            if(hand.get(i).GetCard().equals(passedCard.GetCard())) {
-                Log.d("Yup", "Deleting card");
-                hand.remove(i);
-                notFound = true;
-            }
-        }
-
-        if(!notFound) {
-            Log.d("ERROR", "Error in removing a card in the player model class.");
-        }
-    }
-
+    /** *********************************************************************
+     Function Name: AddToPile
+     Purpose: To add cards to a player's pile
+     Parameters:
+     @param passedCards Vector<Card_Model>, cards to be added to the pile
+     Return Value: Void
+     Local Variables: None
+     Algorithm:
+     1) if the cards are an actual card, add them to the pile
+     Assistance Received: none
+      ********************************************************************* */
     void AddToPile(Vector<Card_Model> passedCards) {
         for(int i = 0; i < uniqueCards.size(); i++) {
             for(int j = 0; j < passedCards.size(); j++) {
-                if(uniqueCards.get(i).GetCard() == passedCards.get(j).GetCard()) {
+                if(uniqueCards.get(i).GetCard().equals(passedCards.get(j).GetCard())) {
                     pile.add(passedCards.get(j));
                 }
             }
         }
     }
 
+    /** *********************************************************************
+     Function Name: GetBuildCards
+     Purpose: Retrieve the build cards
+     Parameters: None
+     Return Value: Void
+     Local Variables: None
+     Algorithm:
+     1) Return the buildCards
+     Assistance Received: none
+      ********************************************************************* */
+    Vector<Card_Model> GetBuildCards() {
+        return buildCards;
+    }
+
+    /** *********************************************************************
+     Function Name: GetNewOrExistingBuild
+     Purpose: To get the newOrExistingBuild variable
+     Parameters: None
+     Return Value:
+     @return char
+     Local Variables: None
+     Algorithm:
+     1) return the newOrExistingBuild variable
+     Assistance Received: none
+      ********************************************************************* */
+    char GetNewOrExistingBuild() {
+        return newOrExistingBuild;
+    }
+
+    /** *********************************************************************
+     Function Name: GetExistingBuildCard
+     Purpose: Get the existing build card
+     Parameters: None
+     Return Value: Void
+     Local Variables: None
+     Algorithm:
+     1) Retrieve the existingBuildCard variable
+     Assistance Received: none
+      ********************************************************************* */
+    Card_Model GetExistingBuildCard() {
+        return existingBuildCard;
+    }
+
+    /** *********************************************************************
+     Function Name: GetPlayerCard
+     Purpose: To return the player's card
+     Parameters: None
+     Return Value: Void
+     Local Variables: None
+     Algorithm:
+     1) Return the playerCard
+     Assistance Received: none
+      ********************************************************************* */
+    Card_Model GetPlayerCard() {
+        return playerCard;
+    }
+
+    /** *********************************************************************
+     Function Name: SetHand
+     Purpose: To remove a card from the player's hand
+     Parameters:
+     @param passedCard Card_Model, a card to be removed from the player's hand
+     Return Value: Void
+     Local Variables: None
+     Algorithm:
+     1) If the card is in the player's hand, delete the card
+     Assistance Received: none
+      ********************************************************************* */
+    void RemoveCard(Card_Model passedCard) {
+        boolean notFound = false;
+
+        for(int i = 0; i < hand.size(); i++) {
+            if(hand.get(i).GetCard().equals(passedCard.GetCard())) {
+                hand.remove(i);
+                notFound = true;
+            }
+        }
+
+        if(!notFound) {
+            Log.d("MyError", "Error in removing a card in the player model class.");
+        }
+    }
+
+    /** *********************************************************************
+     Function Name: SetPile
+     Purpose: To set a player's pile
+     Parameters:
+     @param passedPile Vector<Card_Model>, a player's pile
+     Return Value: Void
+     Local Variables: None
+     Algorithm:
+     1) if the cards in the pile are valid cards, place them into the player's pile
+     Assistance Received: none
+      ********************************************************************* */
+    void SetPile(Vector<Card_Model> passedPile) {
+        int count = 0;
+        for(int i = 0; i  <uniqueCards.size(); i++) {
+            for(int j = 0; j < passedPile.size(); j++) {
+                if(uniqueCards.get(i).GetCard().equals(passedPile.get(j).GetCard())) {
+                    count++;
+                }
+            }
+        }
+
+        if(count == passedPile.size()) {
+            pile = passedPile;
+        }
+    }
+
+    /** *********************************************************************
+    Function Name: AddToPile
+    Purpose: To add a certain amount of cards to a player's pile
+    Parameters:
+    @param passedPile, a vector of cards passed by value. It holds the pile to be added to a player's existing pile
+    Return Value: Void
+    Local Variables: None
+    Algorithm:
+    1) Iterate through the 52 cards deck and through the passed in pile
+    2) If there is a match, add the card to the existing pile
+    Assistance Received: none
+    ********************************************************************* */
+    void AddtoPile(Vector<Card_Model> passedPile) {
+
+        for(int i = 0; i < uniqueCards.size(); i++) {
+            for(int j = 0; j < passedPile.size(); j++) {
+                if(uniqueCards.get(i).GetCard().equals(passedPile.get(j).GetCard())) {
+                    pile.add(passedPile.get(j));
+                }
+            }
+        }
+    }
+
+    /** *********************************************************************
+    Function Name: GetPile
+    Purpose: To retrieve a player's pile
+    Parameters: None
+    Return Value: The pile of a players pile, a constant vector of cards value
+    Local Variables: None
+    Algorithm:
+    1) Returns a player's pile
+    Assistance Received: none
+    ********************************************************************* */
+    Vector<Card_Model> GetPile() {
+        return pile;
+    }
+
+    /** *********************************************************************
+    Function Name: AddToPlayerBuildCards
+    Purpose: To add a card to the list of build cards a player must put down at some point to
+    complete a build
+    Parameters:
+    @param buildCard, A build card to be added to the vector, a card type
+    Return Value: Void
+    Local Variables: None
+    Algorithm:
+    1) Cycle through and ensure the card passed in is a valid card
+    2) Push the card to the back of the vector of build cards
+    Assistance Received: none
+    ********************************************************************* */
+    void AddToPlayerBuildCards(Card_Model buildCard) {
+        for(int i = 0; i < uniqueCards.size(); i++) {
+            if(buildCard.GetCard().equals(uniqueCards.get(i).GetCard())) {
+                playerBuildCards.add(buildCard);
+            }
+        }
+    }
+
+    /** *********************************************************************
+    Function Name: GetPlayerBuildCards
+    Purpose: To retrieve the cards the player must use for a build
+    Parameters: None
+    Return Value:
+    @return Vector<Card_Model>, the vector of cards the player must use to build, a vector of cards
+    Local Variables: None
+    Algorithm:
+    1) Return the vector of cards the player must build with
+    Assistance Received: none
+    ********************************************************************* */
     Vector<Card_Model> GetPlayerBuildCards() {
         return playerBuildCards;
+    }
+
+    /** *********************************************************************
+    Function Name: RemovePlayerBuildCard
+    Purpose: To remove a card from the list of cards the player has tied to a build
+    Parameters:
+    @param card, a card object passed by value, the card to be removed from a build
+    Return Value: Void
+    Local Variables: None
+    Algorithm:
+    1) Cycle through the list of cards tied to a build and if the one that is passed in matches
+    2) Remove it from the vector
+    Assistance Received: none
+    ********************************************************************* */
+    void RemovePlayerBuildCard(Card_Model card) {
+
+        // Cycle through the vector of cards and make sure what was passed in is a valid card
+        for(int i = 0; i < playerBuildCards.size(); i++) {
+
+            // If it is, erase the card from the list of build cards
+            if(card.GetCard().equals(playerBuildCards.get(i).GetCard())) {
+                playerBuildCards.remove(playerBuildCards.get(i));
+                return;
+            }
+        }
+    }
+
+    /** *********************************************************************
+    Function Name: GetPlayerWantBuild
+    Purpose: To retrieve the character indicating if a player wants to capture a set or not
+    Parameters: None
+    Return Value: The character either being 'y' or 'n', a constant char value
+    Local Variables: None
+    Algorithm:
+    1) Return the playerWantBuild variable
+    Assistance Received: none
+    ********************************************************************* */
+    char GetPlayerWantBuild() {
+        return playerWantBuild;
+    }
+
+    /** *********************************************************************
+    Function Name: SetPlayerWantBuild
+    Purpose: To retrieve the character indicating if a player wants to capture a set or not
+    Parameters:
+    @param choice, a char variable, used for holding the choice if a player wants to build or not
+    Return Value: Void
+    Local Variables: None
+    Algorithm:
+    1) Check if the choice variable passed in is either a 'y' or 'n'
+    Assistance Received: none
+    ********************************************************************* */
+    void SetPlayerWantBuild(char choice) {
+        if(Character.toLowerCase(choice) == 'y' || Character.toLowerCase(choice) == 'n') {
+            playerWantBuild = choice;
+        }
+        else {
+            Log.d("MyError", "Error in setting player want build in player model class.");
+        }
+    }
+
+    /** *********************************************************************
+    Function Name: GetPlayerWantSet
+    Purpose: To retrieve the character indicating if a player wants to make a set or not
+    Parameters: None
+    Return Value:
+     @return char, The character either being 'y' or 'n', a constant char value
+    Local Variables: None
+    Algorithm:
+    1) Return the playerWantSet variable
+    Assistance Received: none
+    ********************************************************************* */
+    char GetPlayerWantSet() {
+        return playerWantSet;
+    }
+
+    /** *********************************************************************
+    Function Name: GetPlayerSingleSetCards
+    Purpose: To retrieve the cards the player wants to use for a set
+    Parameters: None
+    Return Value:
+     @return Vector<Card_Model>The cards used for a set, a vector of cards value
+    Local Variables: None
+    Algorithm:
+    1) Return the playerSetCards variable
+    Assistance Received: none
+    ********************************************************************* */
+    Vector<Card_Model> GetPlayerSingleSetCards() {
+        return playerSingleSetCards;
+    }
+
+    /** *********************************************************************
+    Function Name: GetPlayerMultipleSetCards
+    Purpose: To retrieve the cards the player wants to use for a set
+    Parameters: None
+    Return Value:
+    @return Vector<Set_Model> The sets the player wants to capture, a vector of sets value
+    Local Variables: None
+    Algorithm:
+    1) Return the playerOfSetCards variable
+    Assistance Received: none
+    ********************************************************************* */
+    Vector<Set_Model> GetPlayerMultipleSetCards() {
+        return playerMultipleSetCards;
+    }
+
+    /** *********************************************************************
+    Function Name: GetPlayerWantSave
+    Purpose: To retrieve the bool indicating if the player wants to save or not
+    Parameters: None
+    Return Value:
+    @return boolean, The bool either being true or false, a constant boolean value
+    Local Variables: None
+    Algorithm:
+    1) Return the playerWantSave variable
+    Assistance Received: none
+    ********************************************************************* */
+    boolean GetPlayerWantSave() {
+        return playerWantSave;
+    }
+
+    /** *********************************************************************
+    Function Name: SetPrintTableBuildCards
+    Purpose: To record any cards that were used in a build from the table
+    Parameters:
+    @param cards, a vector of cards passed by value, the cards that were from the table used for a build
+    Return Value: Void
+    Local Variables: None
+        Algorithm:
+    1) Iterate through the 52 card deck and see if the passed in card matches one of them
+    2) If it does, put it into the vector
+    Assistance Received: none
+    ********************************************************************* */
+    void SetPrintTableBuildCards(Vector<Card_Model> cards) {
+
+        // Cycle through the cards being passed in
+        for(int i = 0; i < uniqueCards.size(); i++) {
+
+            // Cycle through the list of 52 cards and make sure the cards match one of them before putting it into the vector
+            for(int j = 0; j < cards.size(); j++) {
+                if(uniqueCards.get(i).GetCard().equals(cards.get(j).GetCard())) {
+                    printTableBuildCards.add(cards.get(j));
+                }
+            }
+        }
+    }
+
+    /** *********************************************************************
+    Function Name: SetPrintTableCaptureCards
+    Purpose: To record any cards from the table used in a capture
+    Parameters:
+    @param cards, a vector of cards passed by value, the cards to be recorder
+    Return Value: Void
+    Local Variables: None
+    Algorithm:
+    1) Iterate through the 52 card deck and see if the passed in card matches one of them
+    2) If it does, return true, otherwise, return false
+    Assistance Received: none
+    ********************************************************************* */
+    void SetPrintTableCaptureCards(Vector<Card_Model> cards) {
+
+        // Cycle through the cards being passed in
+        for(int i = 0; i < uniqueCards.size(); i++) {
+
+            // Cycle through the list of 52 cards and make sure the cards match one of them before putting it into the vector
+            for(int j = 0; j < cards.size(); j++) {
+                if(uniqueCards.get(i).GetCard().equals(cards.get(j).GetCard())) {
+                    printTableCaptureCards.add(cards.get(j));
+                }
+            }
+        }
     }
 
     /** *********************************************************************
@@ -191,7 +572,7 @@ public class Player_Model {
 
         // **** Adding to an existing build ****
         int buildValue;
-        Vector<Integer> buildWithAddedCards = new Vector();
+        Vector<Integer> buildWithAddedCards = new Vector<Integer>();
 
         // Cycling through each of the builds on the table to see if any of the builds can be added to
         for(int i = 0; i < tableBuilds.size(); i++) {
@@ -512,9 +893,27 @@ public class Player_Model {
             return 13;
         }
         else {
-            Log.d("ERROR", "Error in finding card value in player model class.");
+            Log.d("MyError", "Error in finding card value in player model class.");
             return -1;
         }
+    }
+
+    /** *********************************************************************
+     Function Name: AskForHelp
+     Purpose: To find what the best move would be using the ai's capabilities
+     Parameters:
+     @param table, Vector<Card_Model> the cards on the table
+     @param tableBuilds Vector<Card_Model> the cards on table that are builds
+     Return Value: Void
+     Local Variables:None
+     Algorithm:
+     1) Use the AI's ability to check for a build and if it can, it will display the cards to use
+     2) If it can't build, use the AI's ability to check for a capture and if it can, display the cards to capture
+     3) If the AI can't do either of those, then trail and output a card for the player to trail with
+     Assistance Received: none
+     ********************************************************************* */
+    void AskForHelp(Vector<Card_Model> table, Vector<Build_Model> tableBuilds) {
+
     }
 
     /** *********************************************************************
@@ -580,6 +979,41 @@ public class Player_Model {
         else {
             Log.d("ERROR", "Error in finding the suit in the player model class.");
             return "ERROR";
+        }
+    }
+
+    /***********************************************************************
+     Function Name: SetPlayerMove
+     Purpose: To set the move of the player
+     Parameters:
+     @param passedMove, char the player's move
+     Return Value: Void
+     Local Variables:None
+     Algorithm:
+     1) Set the move that was passed in
+     Assistance Received: none
+     ********************************************************************* */
+    void SetPlayerMove(char passedMove) {
+        playerMove = passedMove;
+    }
+
+    /***********************************************************************
+     Function Name: SetPlayerCard
+     Purpose: To set the card the player wants to use
+     Parameters:
+     @param passedPlayerCard, Card_Model the card the player wants to use
+     Return Value: Void
+     Local Variables:None
+     Algorithm:
+     1) Set the card that was passed in
+     Assistance Received: none
+     ********************************************************************* */
+    void SetPlayerCard(Card_Model passedPlayerCard) {
+
+        for(int i = 0; i < uniqueCards.size(); i++) {
+            if(uniqueCards.get(i).GetCard().equals(passedPlayerCard.GetCard())) {
+                playerCard = passedPlayerCard;
+            }
         }
     }
 

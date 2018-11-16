@@ -94,7 +94,7 @@ public class Card_View {
      Assistance Received: none
       ********************************************************************* */
     Vector<Card_View> ConvertModelToView(Vector<Card_Model> passedCards) {
-        Vector<Card_View> tempCards = new Vector();
+        Vector<Card_View> tempCards = new Vector<Card_View>();
 
         for(int i = 0; i < passedCards.size(); i++) {
             tempCards.add(new Card_View(passedCards.get(i)));
@@ -115,8 +115,7 @@ public class Card_View {
      Purpose: To find which card to draw to the screen
      Parameters:
      @param imageButton Imagebutton, the button to have the image drawn onto
-     Return Value:
-     @return void
+     Return Value: Void
      Local Variables: None
      Algorithm:
      1) Cycle through the possible card values and once found, draw the card to the button passed in
@@ -283,7 +282,7 @@ public class Card_View {
                 imageButton.setImageResource(R.drawable.sk);
                 break;
             default:
-                Log.d("ERROR", "Error in drawing the card to the screen in the round_view class.");
+                Log.d("MyError", "Error in drawing the card to the screen in the round_view class.");
                 break;
         }
 
@@ -294,8 +293,7 @@ public class Card_View {
      Purpose: To draw a specific card to a specific image view
      Parameters:
      @param imageView ImageView object, the image view to be drawn to
-     Return Value:
-     @return void
+     Return Value: Void
      Local Variables: None
      Algorithm:
      1) Cycle through the list of cards and once found, draw that card to the image view
@@ -462,7 +460,7 @@ public class Card_View {
                 imageView.setImageResource(R.drawable.sk);
                 break;
             default:
-                Log.d("ERROR", "Error in drawing the card to the screen in the round_view class.");
+                Log.d("MyError", "Error in drawing the card to the screen in the round_view class.");
                 break;
         }
 

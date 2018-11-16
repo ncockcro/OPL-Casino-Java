@@ -7,7 +7,7 @@ import java.util.Vector;
 
 public class Deck_Model {
 
-    private Vector<Card_Model> deckOfCards = new Vector();
+    private Vector<Card_Model> deckOfCards = new Vector<Card_Model>();
 
     /** *********************************************************************
      Function Name: Deck_Model
@@ -107,7 +107,6 @@ public class Deck_Model {
         count++;
         deckOfCards.add(new Card_Model());
         deckOfCards.get(count).SetCard("SA");
-        count++;
 
         ShuffleCards();
 
@@ -127,7 +126,7 @@ public class Deck_Model {
      Assistance Received: none
       ********************************************************************* */
     boolean IsEmpty() {
-        if(deckOfCards.isEmpty() == true) {
+        if(deckOfCards.isEmpty()) {
             return true;
         }
         else {
@@ -154,8 +153,7 @@ public class Deck_Model {
      Function Name: RemoveFourCards
      Purpose: To remove four cards from the deck
      Parameters: None
-     Return Value:
-     @return void
+     Return Value: Void
      Local Variables: None
      Algorithm:
      1) Remove four cards from the first index of the deck four times
@@ -173,8 +171,7 @@ public class Deck_Model {
      Function Name: ShuffleCards
      Purpose: To shuffle the deck of cards
      Parameters: None
-     Return Value:
-     @return void
+     Return Value: Void
      Local Variables: None
      Algorithm:
      1) Shuffle the deck of cards

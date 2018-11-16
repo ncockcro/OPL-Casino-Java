@@ -313,5 +313,17 @@
             android:orientation="horizontal" />
     </HorizontalScrollView>
 
+    <Button
+        android:id="@+id/computerMoveButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="94dp"
+        android:layout_marginRight="94dp"
+        android:layout_marginBottom="96dp"
+        android:onClick="ComputerMoveButtonPressed"
+        android:text="@string/computerMoveButton"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/trailButton" />
+
 
 </android.support.constraint.ConstraintLayout>

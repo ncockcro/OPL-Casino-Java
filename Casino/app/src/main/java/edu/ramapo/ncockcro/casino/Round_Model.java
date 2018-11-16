@@ -12,24 +12,24 @@ import java.util.Vector;
 public class Round_Model {
 
     // Private variables for the Round class
-    private Vector<Card_Model> computerPile = new Vector();
+    private Vector<Card_Model> computerPile = new Vector<Card_Model>();
     private int humanScore;
     //private Vector<Card_Model> humanHand = new Vector();
-    private Vector<Card_Model> humanPile = new Vector();
-    private Vector<Card_Model> table = new Vector();
-    private Vector<Card_Model> buildCards = new Vector();
-    private Vector<Build_Model> builds = new Vector();
-    private Vector<Card_Model> deck = new Vector();
-    private String nextPlayer = new String();
+    private Vector<Card_Model> humanPile = new Vector<Card_Model>();
+    private Vector<Card_Model> table = new Vector<Card_Model>();
+    private Vector<Card_Model> buildCards = new Vector<Card_Model>();
+    private Vector<Build_Model> builds = new Vector<Build_Model>();
+    private Vector<Card_Model> deck = new Vector<Card_Model>();
+    private String nextPlayer;
     private String lastCapture;
-    private int currentPlayer;
+    private int currentPlayer = 1;
     private Deck_Model deckOfCards = new Deck_Model();
     private Human_Model p1 = new Human_Model();
     private Computer_Model p2 = new Computer_Model();
-    private Vector<Player_Model> player = new Vector();
+    private Vector<Player_Model> player = new Vector<Player_Model>();
     private Card_Model playerHandBuiltCard;
     private Vector<Card_Model> playerTableBuildCards;
-    private Vector<Build_Model> tableBuids;
+    private Vector<Build_Model> tableBuilds;
     private int buildCounter;
     private Card_Model playerHandCaptureCard;
     private Vector<Card_Model> playerTableCaptureCards;
@@ -39,14 +39,13 @@ public class Round_Model {
     private int computerPoints;
     private boolean loadGame;
     private Round_View roundView;
-    private String errorReason = new String();
+    private String errorReason;
 
     /** *********************************************************************
      Function Name: Round_Model
      Purpose: To initialize the players and built counter
      Parameters: None
-     Return Value:
-     @return None
+     Return Value: Void
      Local Variables: None
      Algorithm:
      1) Intialize the players and buildCounter
@@ -67,8 +66,7 @@ public class Round_Model {
      @param round int, the current round of the tournament
      @param humanScore, int, the current score of the human
      @param computerScore, int, the currentScore of the computer
-     Return Value:
-     @return void
+     Return Value: Void
      Local Variables: None
      Algorithm:
      1) If the round is greater than 0, set the round
@@ -77,6 +75,7 @@ public class Round_Model {
       ********************************************************************* */
     private void SetRoundInfo(int round, int humanScore, int computerScore) {
 
+        // So long as it is not a negative round or 0, set the currentRound to be that round
         if(round > 0) {
             currentRound = round;
         }
@@ -84,6 +83,7 @@ public class Round_Model {
             Log.d("ERROR", "Error in setting the round in the round class");
         }
 
+        // So long as the human and computer scores are 0 or greater, set them
         if(humanScore >= 0 && computerScore >= 0) {
             humanPoints = humanScore;
             computerPoints = computerScore;
@@ -93,23 +93,42 @@ public class Round_Model {
         }
     }
 
+    /** *********************************************************************
+    Function Name: LoadRound
+    Purpose: Load all of the appropriate information for a round to be picked up on
+    Parameters:
+    @param loadComputerHand, holds the computer's hand, a vector of cards
+    @param loadComputerPile, holds the computer's pile, a vector of cards
+    @param loadHumanHand, holds the human's hand, a vector of cards
+    @param loadHumanPile, holds the human's pile, a vector of cards
+    @param loadTable, holds the cards on the table, a vector of cards
+    @param loadBuilds, holds any builds on the table, a vector of builds
+    @param loadDeck, holds the cards left in a deck, a vector of cards
+    @param loadNextPlayer, holds the player who plays next, a string
+    Return Value: Void
+    Local Variables: None
+    Algorithm:
+    1) Set each of the different fields to what the data was passed in.
+    2) No error checking here as saved input files should always be properly formatted
+    Assistance Received: none
+    ********************************************************************* */
     void LoadRound(Vector<Card_Model> loadComputerHand, Vector<Card_Model> loadComputerPile, Vector<Card_Model> loadHumanHand,
                            Vector<Card_Model> loadHumanPile, Vector<Card_Model> loadTable, Vector<Build_Model> loadBuilds,
-                           Vector<Card_Model> loadDeck) {
+                           Vector<Card_Model> loadDeck, String loadNextPlayer) {
 
     }
 
 
     void PlayRound(String passedFirstPlayer) {
 
-        if(passedFirstPlayer == "Human") {
+        if(passedFirstPlayer.equals("Human")) {
             currentPlayer = 0;
         }
         else {
             currentPlayer = 1;
         }
 
-        if(loadGame == false) {
+        if(!loadGame) {
             DealCardsToPlayer();
             DealCardsToTable();
         }
@@ -119,8 +138,7 @@ public class Round_Model {
      Function Name: DealCardsToPlayer
      Purpose: To deal four cards to the human, four cards to the computer, and remove the cards from the deck
      Parameters: None
-     Return Value:
-     @return void
+     Return Value: Void
      Local Variables: None
      Algorithm:
      1) Deal four cards to the human
@@ -143,8 +161,7 @@ public class Round_Model {
      Function Name: DealCardsToTable
      Purpose: To deal cards to the table at the beginning of a round
      Parameters: None
-     Return Value:
-     @return void
+     Return Value: Void
      Local Variables: None
      Algorithm:
      1) Add the four cards to the table
@@ -163,8 +180,7 @@ public class Round_Model {
      Purpose: To set four cards to the table at the start of a round
      Parameters:
      @param passedFourCards Vector<Card_Model>, four cards to be set to the table
-     Return Value:
-     @return void
+     Return Value: Void
      Local Variables: None
      Algorithm:
      1) Add the four cards to the table
@@ -226,6 +242,250 @@ public class Round_Model {
     }
 
     /** *********************************************************************
+    Function Name: RemoveTableCards
+    Purpose: Remove a series of cards that are passed in from the table
+    Parameters:
+    @param cards, a vector of cards passed by value. It holds the cards to be removed
+    Return Value: Void
+    Local Variables: None
+    Algorithm:
+    1) Iterate through the table and the cards to be removed...
+    2) If the card to be removed matches with the one from the table, it will be erased and the vector will shift everything over
+    Assistance Received: none
+    ********************************************************************* */
+    void RemoveTableCards(Vector<Card_Model> cards) {
+
+        // First go through the table vector, then through the cards vector that was passed in...
+        for(int i = 0; i < cards.size(); i++) {
+            for(int j = 0; j < table.size(); j++) {
+
+                // If there is a match, erase the card from the vector
+                if(cards.get(i).GetCard().equals(table.get(j).GetCard())) {
+                    table.remove(cards.get(i));
+                }
+            }
+        }
+    }
+
+    /** *********************************************************************
+    Function Name: CheckCapture
+    Purpose: To check if the player is elegible to make a capture based on what they entered
+    Parameters: None
+    Return Value:
+    @return boolean, Whether the player can make a capture or not, a boolean value
+    Local Variables: None
+    Algorithm:
+    1) Get the card the player wants to capture with and the player's hand
+    2) Check and see if the player has any cards on the table to capture or any sets
+    Assistance Received: none
+    ********************************************************************* */
+    boolean CheckCapture() {
+
+        // Getting the player card that they want to put on the build and the current player's hand
+        playerHandCaptureCard = player.get(currentPlayer).GetPlayerCard();
+        Vector<Card_Model> playerHand = player.get(currentPlayer).GetHand();
+
+        // Local variables for capturing
+        int number = player.get(currentPlayer).CardNumber(playerHandCaptureCard.GetNumber());
+        Vector<Card_Model> pile = new Vector<Card_Model>();
+        Vector<Card_Model> removeTableCards = new Vector<Card_Model>();
+        pile.add(playerHandCaptureCard);
+        boolean canCapture = false;
+        boolean looseCardsCapture = false;
+
+        // Local variables for sets
+        Vector<Card_Model> setCards = new Vector<Card_Model>();
+        int count = 0;
+        int aceAs1Count = 0;
+        int aceAs14Count = 0;
+
+        // If the player said they wanted to make a set, then we will check those cards with the table cards first
+        // to make sure they are on the table and add up to the capture card
+        if(player.get(currentPlayer).GetPlayerWantSet() == 'y') {
+            Vector<Set_Model> playerSets = new Vector<Set_Model>();
+            playerSets = player.get(currentPlayer).GetPlayerMultipleSetCards();
+            Vector<Card_Model> cardsOfSet = new Vector<Card_Model>();
+
+            // Cycling through all of the sets that the player wants to capture
+            for(int i = 0; i < playerSets.size(); i++) {
+
+                cardsOfSet = playerSets.get(i).GetCardOfSet();
+
+                // For each set, we must check and make sure that the cards are actually on the table
+                for(int j = 0; j < table.size(); j++) {
+                    for(int k = 0; k < cardsOfSet.size(); k++) {
+                        // If the card is on the table, push it onto the pile vector to be added later
+                        if(table.get(j).GetNumber() == cardsOfSet.get(k).GetNumber()) {
+                            pile.add(table.get(j));
+                            removeTableCards.add(table.get(j));
+
+                            // Special handling if the card is an ace or not
+                            if(cardsOfSet.get(k).GetNumber() == 'A') {
+                                aceAs1Count += player.get(currentPlayer).CardNumber(cardsOfSet.get(k).GetNumber());
+                                aceAs14Count += 14;
+                            }
+                            else {
+                                aceAs1Count += player.get(currentPlayer).CardNumber(cardsOfSet.get(k).GetNumber());
+                            }
+                            count++;
+                        }
+                    }
+                }
+
+                // If the set card's numbers add up to the capture card, then they can make the set
+                if(playerHandCaptureCard.GetNumber() == 'A' && aceAs14Count == 14) {
+                    // Left blank intentionally so the function wouldn't return false in the else if statement
+                }
+                else if(aceAs1Count != player.get(currentPlayer).CardNumber(playerHandCaptureCard.GetNumber()) && aceAs14Count != player.get(currentPlayer).CardNumber(playerHandCaptureCard.GetNumber()) ) {
+                    return false;
+                }
+
+                aceAs1Count = 0;
+                aceAs14Count = 0;
+                canCapture = true;
+            }
+        }
+
+        // If the player wanted to build, then this function will check if it is possible based on
+        // the information the user provided
+        if(player.get(currentPlayer).GetPlayerWantBuild() == 'y') {
+            if(CheckIfPlayerCanCaptureBuild(playerHandCaptureCard, playerHand)) {
+                canCapture = true;
+
+                // Decrement the build counter since the player is capturing the build
+                buildCounter--;
+                // Resetting this variable so the player doesn't always want a build
+                player.get(currentPlayer).SetPlayerWantBuild('n');
+            }
+        }
+        else {
+            boolean partOfBuild = false;
+
+            // Checking to see if there are any cards on the table that match the card the player wants to capture with the same value
+            for(int i = 0; i < table.size(); i++) {
+
+                if(tableBuilds.size() == 0) {
+                    if(player.get(currentPlayer).CardNumber(table.get(i).GetNumber()) == number) {
+                        pile.add(table.get(i));
+                        removeTableCards.add(table.get(i));
+                        canCapture = true;
+                        looseCardsCapture = true;
+                    }
+                }
+
+                for(int j = 0; j < tableBuilds.size(); j++) {
+
+                    // If the card the player is capturing with equals the build and they are the owner
+                    if(tableBuilds.get(j).GetCardValueOfBuild() == number && tableBuilds.get(j).GetOwner() == currentPlayer) {
+                        partOfBuild = true;
+                        continue;
+                    }
+
+                    // Same thing but if they are using an ace
+                    if(number == 1 && tableBuilds.get(j).GetCardValueOfBuild() == 14 && tableBuilds.get(j).GetOwner() == currentPlayer) {
+                        partOfBuild = true;
+                        continue;
+                    }
+
+                    if(player.get(currentPlayer).CardNumber(table.get(i).GetNumber()) == number) {
+                        pile.add(table.get(i));
+                        removeTableCards.add(table.get(i));
+                        canCapture = true;
+                        looseCardsCapture = true;
+                    }
+                }
+            }
+
+            if(partOfBuild) {
+                errorReason = "You can not capture with that card because it is needed for a build.";
+                return false;
+            }
+
+            if(looseCardsCapture) {
+                player.get(currentPlayer).SetPrintTableCaptureCards(removeTableCards);
+            }
+
+            // If everything is correct, add the cards and remove them properly
+            if(canCapture) {
+                player.get(currentPlayer).RemoveCard(playerHandCaptureCard);
+                RemoveTableCards(removeTableCards);
+
+                player.get(currentPlayer).AddToPile(pile);
+
+            }
+        }
+
+        // Set lastCapture to whoever the current player is
+        if(currentPlayer == 0) {
+            lastCapture = "Human";
+        }
+        else {
+            lastCapture = "Computer";
+        }
+
+        if(!canCapture) {
+            errorReason = "You can not capture any cards on the table with that capture card.";
+        }
+
+        return canCapture;
+    }
+
+    /** *********************************************************************
+    Function Name: CheckIfPlayerCanCaptureBuild
+    Purpose: To check if the player is elegible to capture a build
+    Parameters:
+    @param playerHandCaptureCard, a card passed by value. It holds the card the player wants to capture with
+    @param playerHand, a vector of cards. It refers to the player's hand
+    Return Value:
+    @return boolean, Whether the player can make a capture or not, a boolean value
+    Local Variables:
+    existingBuildCard, a card used to store the card the player wants to add to a build
+    tempPile, a vector of cards used to add the cards to a player's pile
+    Algorithm:
+    1) Get the card the player wants to capture with and the player's hand
+    2) Check and see if the player has any cards on the table to capture or any sets
+    Assistance Received: none
+    ********************************************************************* */
+    boolean CheckIfPlayerCanCaptureBuild(Card_Model playerHandCaptureCard, Vector<Card_Model> playerHand) {
+
+        Card_Model existingBuildCard = player.get(currentPlayer).GetExistingBuildCard();
+        Vector<Card_Model> tempPile = new Vector<Card_Model>();
+
+        // Iterate through each of the builds on the table and check if any of them can be captured
+        // based on the specifications the user entered in
+        for(int i = 0; i < tableBuilds.size(); i++) {
+
+            // If there was a build that can be successfully captured after checking if possible, move the cards
+            // from the build element into player's pile, move the card used for capture to player pile, and
+            // erase this build
+            if(tableBuilds.get(i).CanCaptureBuildOfCards(playerHandCaptureCard, existingBuildCard, playerHand)) {
+                tempPile = tableBuilds.get(i).GetBuildOfCards();
+                tempPile.add(playerHandCaptureCard);
+                player.get(currentPlayer).AddToPile(tempPile);
+
+                player.get(currentPlayer).RemovePlayerBuildCard(playerHandCaptureCard);
+
+                // If the player that captured the build is not the current owner, then we need to cycle through the owner of the build's
+                // card's and remove it from their build cards that way they can discard that card again
+                if(tableBuilds.get(i).GetOwner() != currentPlayer) {
+                    int buildOwner = tableBuilds.get(i).GetOwner();
+                    Vector<Card_Model> buildOwnerHand = new Vector<Card_Model>();
+                    buildOwnerHand = player.get(buildOwner).GetHand();
+
+                    for(int j = 0; j < buildOwnerHand.size(); j++) {
+                        player.get(buildOwner).RemovePlayerBuildCard(buildOwnerHand.get(j));
+                    }
+                }
+
+                tableBuilds.remove(tableBuilds.get(i));
+                player.get(currentPlayer).RemoveCard(playerHandCaptureCard);
+                return true;
+            }
+        }
+
+        return false;
+    }
+    /** *********************************************************************
      Function Name: CheckTrail
      Purpose: Given a card, check to see if the player can trail with it
      Parameters:
@@ -243,7 +503,7 @@ public class Round_Model {
 
         // Iterating through the cards the player can not put down because the card is needed to complete a build
         for(int i = 0; i < player.get(currentPlayer).GetPlayerBuildCards().size(); i++) {
-            if(player.get(currentPlayer).GetPlayerBuildCards().get(i).GetCard() == passedCard.GetCard()) {
+            if(player.get(currentPlayer).GetPlayerBuildCards().get(i).GetCard().equals(passedCard.GetCard())) {
                 errorReason = "you need that card for a build.";
                 return false;
             }
@@ -252,23 +512,36 @@ public class Round_Model {
         for(int i = 0; i < table.size(); i++) {
             for(int j = 0 ; j < playerHand.size(); j++) {
                 if(table.get(i).GetNumber() == playerHand.get(j).GetNumber()) {
-                    errorReason = "there is a card with the same value on the table.";
+                    errorReason = "there is a card with the same value on the table." + table.get(i).GetCard();
                     return false;
                 }
             }
         }
 
         player.get(currentPlayer).RemoveCard(passedCard);
-        player.get(0).RemoveCard(passedCard);
 
-        Vector<Card_Model> trailCard = new Vector();
+        Vector<Card_Model> trailCard = new Vector<Card_Model>();
         trailCard.add(passedCard);
         AddCardsToTable(trailCard);
+
+        // Switch player's because the trail was successful
+        SwitchPlayer();
 
         return true;
 
     }
 
+    /** *********************************************************************
+    Function Name: AddCardsToTable
+    Purpose: To add any cards that were passed into it to the table
+    Parameters:
+    @param passedCards, a vector of cards passed by value. It holds cards to be added to the table
+    Return Value: Void
+    Local Variables: None
+    Algorithm:
+    1) Iterate through the vector of cards passed in and add them to the table
+    Assistance Received: none
+    ********************************************************************* */
     void AddCardsToTable(Vector<Card_Model> passedCards) {
 
         for(int i = 0; i < passedCards.size(); i++) {
@@ -276,22 +549,73 @@ public class Round_Model {
         }
     }
 
+    /* *********************************************************************
+    Function Name: SwitchPlayer
+    Purpose: If the player is human, switches to computer and vice versa
+    Parameters: None
+    Return Value: Void
+    Local Variables: None
+    Algorithm:
+    1) If currentPlayer is 0 (human), switch it to 1 (computer) and vice versa
+    Assistance Received: none
+    ********************************************************************* */
+    void SwitchPlayer() {
+        if(currentPlayer == 0) {
+            currentPlayer = 1;
+        }
+        else {
+            currentPlayer = 0;
+        }
+    }
+
+    /** *********************************************************************
+    Function Name: GiveTableCards
+    Purpose: At the end of the round, the player that captured last gets the table cards
+    Parameters: None
+    Return Value: Void
+    Local Variables: None
+    Algorithm:
+    1) If the human captured last, they get the cards
+    2) If the computer captured last, they get the cards
+    Assistance Received: none
+    ********************************************************************* */
     void GiveTableCards() {
-        if(lastCapture == "Human") {
+        if(lastCapture.equals("Human")) {
             player.get(0).AddToPile(table);
         }
-        else if (lastCapture == "Computer") {
+        else if (lastCapture.equals("Computer")) {
             player.get(1).AddToPile(table);
         }
         else {
-            Log.d("ERROR", "Error, there is a problem giving the cards at the end of the round.");
+            Log.d("MyError", "Error, there is a problem giving the cards at the end of the round.");
         }
     }
 
-    final String GetErrorReason() {
+    /** *********************************************************************
+    Function Name: GetErrorReason
+    Purpose: To return the reason for an error
+    Parameters: None
+    Return Value: Void
+    Local Variables: None
+    Algorithm:
+    1) Return the errorReason variable
+    Assistance Received: none
+    ********************************************************************* */
+    String GetErrorReason() {
         return errorReason;
     }
 
+    /** *********************************************************************
+    Function Name: CheckIfPlayersHandEmpty
+    Purpose: Checks both of the player's hands to see if they are empty
+    Parameters: None
+    Return Value: Void
+    Local Variables: None
+    Algorithm:
+    1) If the human and computer's hands are empty, return true
+    2) Otherwise, return false
+    Assistance Received: none
+    ********************************************************************* */
     boolean CheckIfPlayersHandEmpty() {
         if(player.get(0).hand.isEmpty() && player.get(1).hand.isEmpty()) {
             return true;
@@ -301,6 +625,17 @@ public class Round_Model {
         }
     }
 
+    /** *********************************************************************
+    Function Name: CheckIfDeckEmpty
+    Purpose: Checks if the deck is empty or not
+    Parameters: None
+    Return Value: Void
+    Local Variables: None
+    Algorithm:
+    1) Returns true if if the deck is empty
+    2) False otherwise
+    Assistance Received: none
+    ********************************************************************* */
     boolean CheckIfDeckEmpty() {
         if(deckOfCards.GetDeck().isEmpty()) {
             return true;
@@ -308,6 +643,117 @@ public class Round_Model {
         else {
             return false;
         }
+    }
+
+    /** *********************************************************************
+     Function Name: PlayerMakeMove
+     Purpose: To have the current player to make a move
+     Parameters: None
+     Return Value: Void
+     Local Variables: None
+     Algorithm:
+     1) Current player makes a move
+     2) Check the move to make sure it is valid
+     3) Then switch the player
+     Assistance Received: none
+      ********************************************************************* */
+    void PlayerMakeMove() {
+        char move;
+
+        move = player.get(currentPlayer).MakeMove(table, builds);
+
+        if(move == 'b') {
+            //build
+        }
+        else if(move == 'c') {
+            //capture
+        }
+        else if(move == 't') {
+            CheckTrail(player.get(currentPlayer).GetPlayerCard());
+        }
+        else {
+            Log.d("MyError", "Error in making a move in the round model class.");
+        }
+
+        //CheckTrail(player.get(currentPlayer).GetPlayerCard());
+        //SwitchPlayer();
+
+    }
+
+    /** *********************************************************************
+    Function Name: SetFirstPlayer
+    Purpose: To set who is the first player at the beginning of a round
+    Parameters:
+    @param passedFirstPlayer, the string that is the first player
+    Return Value: Void
+    Local Variables: None
+    Algorithm:
+    1) If the passed player is human, set the current player to 0
+    2) If the passed player is computer, set the current player to 1
+    3) If the passed player is anything else, output an error
+    Assistance Received: none
+    ********************************************************************* */
+    void SetFirstPlayer(String passedFirstPlayer) {
+
+        if(passedFirstPlayer.equals("Human")) {
+            currentPlayer = 0;
+        }
+        else if(passedFirstPlayer.equals("Computer")) {
+            currentPlayer = 1;
+        }
+        else {
+            Log.d("MyError", "Error in setting the first player in round model.");
+        }
+    }
+
+    /** *********************************************************************
+    Function Name: GetCurrentPlayer
+    Purpose: To retrieve the current player
+    Parameters: None
+    Return Value: Void
+    Local Variables: None
+    Algorithm:
+    1) Return the currentPlayer variable
+    Assistance Received: none
+    ********************************************************************* */
+    Integer GetCurrentPlayer() {
+        return currentPlayer;
+    }
+
+    /** *********************************************************************
+    Function Name: SetPlayerMove
+    Purpose: To set a player's move choice
+    Parameters:
+    @param passedMove, a char which has the player's move
+    Return Value: Void
+    Local Variables: None
+    Algorithm:
+    1) If the player move is 'b', 'c', or 't', set the move
+    2) Otherwise, output an error
+    Assistance Received: none
+    ********************************************************************* */
+    void SetPlayerMove(char passedMove) {
+        if(passedMove == 'b' || passedMove == 'c' || passedMove == 't') {
+            player.get(currentPlayer).SetPlayerMove(passedMove);
+        }
+        else {
+            Log.d("MyError", "Error in setting the player move in the round model.");
+        }
+    }
+
+    /** *********************************************************************
+    Function Name: SetPlayerCard
+    Purpose: Set the player card for the current player
+    Parameters:
+    @param passedPlayerCard, a card object which has the card the player wants to use from their hand
+    Return Value: Void
+    Local Variables: None
+    Algorithm:
+    1) Set the player card for the current player
+    Assistance Received: none
+    ********************************************************************* */
+    void SetPlayerCard(Card_Model passedPlayerCard) {
+        player.get(currentPlayer).SetPlayerCard(passedPlayerCard);
     }
 
 
