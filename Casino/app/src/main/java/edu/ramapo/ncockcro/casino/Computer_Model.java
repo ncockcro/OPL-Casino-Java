@@ -1,5 +1,7 @@
 package edu.ramapo.ncockcro.casino;
 
+import android.util.Log;
+
 import java.util.Vector;
 
 public class Computer_Model extends Player_Model {
@@ -27,10 +29,10 @@ public class Computer_Model extends Player_Model {
         }*/
 
         //Check for trail
-        if(AICheckForCapture(table, tableBuilds)) {
+        /*if(AICheckForCapture(table, tableBuilds)) {
             AICheckForCapture(table, tableBuilds);
             return 'c';
-        }
+        }*/
 
         //Check for trail
         AIMakeTrail();

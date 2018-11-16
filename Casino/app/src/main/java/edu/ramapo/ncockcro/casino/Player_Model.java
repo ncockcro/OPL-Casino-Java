@@ -25,6 +25,8 @@ public class Player_Model {
     private Vector<Card_Model> printTableBuildCards = new Vector<Card_Model>();
     private Vector<Card_Model> printTableCaptureCards = new Vector<Card_Model>();
 
+    private Vector<Card_Model> tableCardsToBeCaptured;
+
     private Card_Model playerWantCard;
 
     /** *********************************************************************
@@ -1015,6 +1017,23 @@ public class Player_Model {
                 playerCard = passedPlayerCard;
             }
         }
+    }
+
+    void SetTableCardToBeCaptured(Vector<Card_Model> passedCards) {
+
+        tableCardsToBeCaptured.clear();
+
+        for(int i = 0; i < uniqueCards.size(); i++) {
+            for(int j = 0; j < passedCards.size(); j++) {
+                if(uniqueCards.get(i).GetCard().equals(passedCards.get(j).GetCard())) {
+                    tableCardsToBeCaptured.add(passedCards.get(j));
+                }
+            }
+        }
+    }
+
+    Vector<Card_Model> GetTableCardsToBeCaptured() {
+        return tableCardsToBeCaptured;
     }
 
 }

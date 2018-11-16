@@ -56,6 +56,7 @@ public class Round_Model {
         player.add(p2);
 
         buildCounter = 0;
+        errorReason = "";
 
     }
 
@@ -754,6 +755,10 @@ public class Round_Model {
     ********************************************************************* */
     void SetPlayerCard(Card_Model passedPlayerCard) {
         player.get(currentPlayer).SetPlayerCard(passedPlayerCard);
+    }
+
+    void SetCaptureInfo() {
+
     }
 
 

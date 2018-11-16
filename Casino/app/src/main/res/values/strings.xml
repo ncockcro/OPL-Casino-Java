@@ -43,4 +43,9 @@
     <string name="tableCard12">Tcard12</string>
     <string name="trailButton">Trail</string>
     <string name="computerMoveButton">Computer Make Move</string>
+    <string name="captureButton">Capture</string>
+    <string name="captureBuildButton">Capture Build</string>
+    <string name="captureSetButton">Capture Set</string>
+    <string name="captureSameValueButton">Capture Same Value Card</string>
+    <string name="captureDoneButton">Done</string>
 </resources>

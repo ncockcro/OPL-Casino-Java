@@ -3,7 +3,6 @@ package edu.ramapo.ncockcro.casino;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
-import android.graphics.PorterDuff;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -11,7 +10,6 @@ import android.widget.HorizontalScrollView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,6 +32,10 @@ public class Round_View extends MainGame_Activity {
     private LinearLayout deckLinearLayout;
     private Button trailButton;
     private Button computerMoveButton;
+    private Button captureButton;
+    private Button captureBuildButton;
+    private Button captureSetButton;
+    private Button captureDoneButton;
 
     private Vector<Card_View> playerCards = new Vector<Card_View>();
     private Vector<Card_View> computerCards = new Vector<Card_View>();
@@ -41,6 +43,8 @@ public class Round_View extends MainGame_Activity {
     private Card_View playerWantCard = new Card_View();
     private Vector<Card_View> deckCards = new Vector<Card_View>();
     private Card_View highlightedCard = new Card_View();
+    private Vector<Card_View> highlightedTableCard = new Vector<Card_View>();
+    private int tableIdCounter = 0;
 
     // Default constructor
     Round_View() {
@@ -72,6 +76,10 @@ public class Round_View extends MainGame_Activity {
 
         trailButton = (Button) activity.findViewById(R.id.trailButton);
         computerMoveButton = (Button) activity.findViewById(R.id.computerMoveButton);
+        captureButton = (Button) activity.findViewById(R.id.captureButton);
+        captureBuildButton = (Button) activity.findViewById(R.id.captureBuildButton);
+        captureSetButton = (Button) activity.findViewById(R.id.captureSetButton);
+        captureDoneButton = (Button) activity.findViewById(R.id.captureDoneButton);
 
     }
 
@@ -214,10 +222,19 @@ public class Round_View extends MainGame_Activity {
     ImageButton AddCardToTable(Context context) {
         ImageButton button = new ImageButton(context);
         button.setImageResource(R.drawable.blackback);
+        button.setId(tableIdCounter);
+        tableIdCounter++;
         button.setLayoutParams(new LinearLayout.LayoutParams(89, 125));
         button.setScaleType(ImageView.ScaleType.FIT_XY);
         button.setBackgroundColor(Color.TRANSPARENT);
+        //button.setEnabled(false);
         tableLinearLayout.addView(button);
+
+        button.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                HighlightTableCard(view);
+            }
+        });
 
         return button;
     }
@@ -292,7 +309,21 @@ public class Round_View extends MainGame_Activity {
             }
         }
 
+        EnableMainInputButtons();
         SetPlayerWantCard(highlightedCard);
+    }
+
+    void HighlightTableCard(View view) {
+        for(int i = 0; i < table.size(); i++) {
+            if(view.getId() == table.get(i).getId()) {
+                table.get(i).setColorFilter(0x40ff0000);
+                highlightedTableCard.add(tableCards.get(i));
+            }
+        }
+
+        captureBuildButton.setEnabled(true);
+        captureSetButton.setEnabled(true);
+        captureDoneButton.setEnabled(true);
     }
 
     /** *********************************************************************
@@ -444,6 +475,9 @@ public class Round_View extends MainGame_Activity {
     void ShowHumanButtons() {
         HideAllButtons();
         trailButton.setVisibility(View.VISIBLE);
+        captureButton.setVisibility(View.VISIBLE);
+
+        DisableMainInputButtons();
     }
 
     /** *********************************************************************
@@ -451,8 +485,7 @@ public class Round_View extends MainGame_Activity {
      Purpose: To show only the computer buttons
      Parameters: None
      Return Value: Void
-     Local Variables:
-     button, a new image button which gets added to the table
+     Local Variables: None
      Algorithm:
      1) Hide all of the buttons
      2) Show the computer move button
@@ -463,12 +496,58 @@ public class Round_View extends MainGame_Activity {
         computerMoveButton.setVisibility(View.VISIBLE);
     }
 
+    void ShowCaptureButtons() {
+        HideAllButtons();
+        captureBuildButton.setVisibility(View.VISIBLE);
+        captureBuildButton.setEnabled(false);
+        captureSetButton.setVisibility(View.VISIBLE);
+        captureSetButton.setEnabled(false);
+        captureDoneButton.setVisibility(View.VISIBLE);
+        captureDoneButton.setEnabled(false);
+    }
+
+    void EnableMainInputButtons() {
+        trailButton.setEnabled(true);
+        captureButton.setEnabled(true);
+    }
+
+    void DisableMainInputButtons() {
+        trailButton.setEnabled(false);
+        captureButton.setEnabled(false);
+    }
+
+    /** *********************************************************************
+     Function Name: HideAllButtons
+     Purpose: To hide all of the player input buttons for making moves
+     Parameters: None
+     Return Value: Void
+     Local Variables: None
+     Algorithm:
+     1) Hide the various buttons that are used for making moves
+     Assistance Received: none
+     ********************************************************************* */
     void HideAllButtons() {
 
         trailButton.setVisibility(View.GONE);
         computerMoveButton.setVisibility(View.GONE);
+        captureButton.setVisibility(View.GONE);
+        captureBuildButton.setVisibility(View.GONE);
+        captureSetButton.setVisibility(View.GONE);
+        captureDoneButton.setVisibility(View.GONE);
     }
 
+    /** *********************************************************************
+     Function Name: PrintErrors
+     Purpose: If there were any errors in making moves, this will output them to the text box
+     Parameters: None
+     Return Value:
+     @return boolean, true if there was an error, false otherwise
+     Local Variables: None
+     Algorithm:
+     1) If there was an error, output and return true
+     2) Otherwise, show the computer buttons and output false
+     Assistance Received: none
+     ********************************************************************* */
     boolean PrintErrors() {
         if(!roundModel.GetErrorReason().equals("")) {
             outputTextView.append("Can not trail with " + highlightedCard.GetCard() + " because " +

@@ -65,6 +65,31 @@ public class MainGame_Activity extends AppCompatActivity {
     }
 
     /** *********************************************************************
+     Function Name: CaptureButtonPressed
+     Purpose: When the player wants to capture, it sets the move and changes the buttons
+     Parameters:
+     @param view
+     Return Value: Void
+     Local Variables:None
+     Algorithm:
+     1) Set the trail info for the card the player is trailing with
+     2) Have the player try and make the move
+     3) If the move was successful, update the screen to reflect the changes from the trail
+     Assistance Received: none
+      ********************************************************************* */
+    public void CaptureButtonPressed(View view) {
+
+        roundModel.SetPlayerMove('c');
+        roundView.ShowCaptureButtons();
+        roundModel.SetCaptureInfo();
+    }
+
+    public void CaptureDoneButtonPressed(View view) {
+
+        roundModel.PlayerMakeMove();
+    }
+
+    /** *********************************************************************
      Function Name: TrailCardPressed
      Purpose: When the player wants to trail, it sets the trail info and calls for the player to make move
      Parameters:
@@ -102,6 +127,7 @@ public class MainGame_Activity extends AppCompatActivity {
     public void ComputerMoveButtonPressed(View view) {
         roundModel.PlayerMakeMove();
         roundView.UpdateScreen(this);
+        roundView.ShowHumanButtons();
 
     }
 }
