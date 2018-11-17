@@ -86,7 +86,10 @@ public class MainGame_Activity extends AppCompatActivity {
 
     public void CaptureDoneButtonPressed(View view) {
 
+        roundView.SetCaptureInfo();
         roundModel.PlayerMakeMove();
+        roundView.ShowComputerButtons();
+        roundView.UpdateScreen(this);
     }
 
     /** *********************************************************************

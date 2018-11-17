@@ -7,7 +7,7 @@ import java.util.Vector;
 public class Player_Model {
 
     protected Vector<Card_Model> hand = new Vector<Card_Model>();
-    private Vector<Card_Model> pile;
+    private Vector<Card_Model> pile = new Vector<Card_Model>();
     private Vector<Card_Model> playerBuildCards = new Vector<Card_Model>();
     private Vector<Card_Model> playerSingleSetCards = new Vector<Card_Model>();
     private Vector<Set_Model> playerMultipleSetCards = new Vector<Set_Model>();
@@ -25,7 +25,7 @@ public class Player_Model {
     private Vector<Card_Model> printTableBuildCards = new Vector<Card_Model>();
     private Vector<Card_Model> printTableCaptureCards = new Vector<Card_Model>();
 
-    private Vector<Card_Model> tableCardsToBeCaptured;
+    private Vector<Card_Model> tableCardsToBeCaptured = new Vector<Card_Model>();
 
     private Card_Model playerWantCard;
 
@@ -150,6 +150,7 @@ public class Player_Model {
         for(int i = 0; i < uniqueCards.size(); i++) {
             for(int j = 0; j < passedCards.size(); j++) {
                 if(uniqueCards.get(i).GetCard().equals(passedCards.get(j).GetCard())) {
+                    Log.d("LOL", passedCards.get(j).GetCard());
                     pile.add(passedCards.get(j));
                 }
             }
@@ -638,12 +639,14 @@ public class Player_Model {
     ********************************************************************* */
     boolean AICheckForCapture(Vector<Card_Model> table, Vector<Build_Model> tableBuilds) {
 
+        tableCardsToBeCaptured.clear();
         Vector<Card_Model> currentBuild;
         int count = 0;
         boolean isCapturing = false;
         playerWantSet = 'n';
         playerMultipleSetCards.clear();
 
+        Log.d("YELLLLL", "AI is trying to capture");
         // Checking to see if any builds can be captured
 
         // First we need to cycle through each of the builds on the table
@@ -692,10 +695,11 @@ public class Player_Model {
             for(int j = 0; j < hand.size(); j++) {
 
                 // If any of them have the same card number value, the computer can capture the card
-                if(CardNumber(hand.get(j).GetNumber()) == CardNumber(hand.get(j).GetNumber())) {
+                if(CardNumber(hand.get(j).GetNumber()) == CardNumber(table.get(i).GetNumber())) {
 
                     playerCard = hand.get(j);
                     tableCardToBeCaptured = table.get(i);
+                    tableCardsToBeCaptured.add(table.get(i));
                     isCapturing = true;
 
                     // Saving the card that matched so it can be outputted later to show the computers move

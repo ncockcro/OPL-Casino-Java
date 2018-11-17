@@ -25,11 +25,17 @@ public class Round_View extends MainGame_Activity {
     private Vector<ImageView> computerImageViewHand = new Vector<ImageView>();
     private Vector<ImageButton> table = new Vector<ImageButton>();
     private Vector<ImageView> deck = new Vector<ImageView>();
+    private Vector<ImageView> playerPile = new Vector<ImageView>();
+    private Vector<ImageView> computerPile = new Vector<ImageView>();
     private TextView outputTextView;
     private HorizontalScrollView tableHorizontalScrollView;
     private LinearLayout tableLinearLayout;
     private HorizontalScrollView deckHorizontalScrollView;
     private LinearLayout deckLinearLayout;
+    private HorizontalScrollView playerPileHorizontalScrollView;
+    private LinearLayout playerPileLinearLayout;
+    private HorizontalScrollView computerPileHorizontalScrollView;
+    private LinearLayout computerPileLinearLayout;
     private Button trailButton;
     private Button computerMoveButton;
     private Button captureButton;
@@ -42,6 +48,8 @@ public class Round_View extends MainGame_Activity {
     private Vector<Card_View> tableCards = new Vector<Card_View>();
     private Card_View playerWantCard = new Card_View();
     private Vector<Card_View> deckCards = new Vector<Card_View>();
+    private Vector<Card_View> playerPileCards = new Vector<Card_View>();
+    private Vector<Card_View> computerPileCards = new Vector<Card_View>();
     private Card_View highlightedCard = new Card_View();
     private Vector<Card_View> highlightedTableCard = new Vector<Card_View>();
     private int tableIdCounter = 0;
@@ -73,6 +81,14 @@ public class Round_View extends MainGame_Activity {
         deckHorizontalScrollView = (HorizontalScrollView) activity.findViewById(R.id.deckHorizontalView);
         deckLinearLayout = (LinearLayout) activity.findViewById(R.id.linearLayoutDeckView);
         tableLinearLayout.setOrientation(LinearLayout.HORIZONTAL);
+
+        playerPileHorizontalScrollView = (HorizontalScrollView) activity.findViewById(R.id.playerPileHorizontalView);
+        playerPileLinearLayout = (LinearLayout) activity.findViewById(R.id.linearLayoutPlayerPileView);
+        playerPileLinearLayout.setOrientation(LinearLayout.HORIZONTAL);
+
+        computerPileHorizontalScrollView = (HorizontalScrollView) activity.findViewById(R.id.computerPileHorizontalView);
+        computerPileLinearLayout = (LinearLayout) activity.findViewById(R.id.linearLayoutComputerPile);
+        computerPileLinearLayout.setOrientation(LinearLayout.HORIZONTAL);
 
         trailButton = (Button) activity.findViewById(R.id.trailButton);
         computerMoveButton = (Button) activity.findViewById(R.id.computerMoveButton);
@@ -161,7 +177,7 @@ public class Round_View extends MainGame_Activity {
      2) Cycle through the table vector and add them to the view of the screen
      Assistance Received: none
      ********************************************************************* */
-    void DrawCards(Context context) {
+    void DrawTable(Context context) {
 
         table.clear();
         tableCards.clear();
@@ -199,6 +215,30 @@ public class Round_View extends MainGame_Activity {
             deckCards.get(i).DrawImageViewCard(deck.get(i));
         }
 
+    }
+
+    void DrawPlayerPile(Context context) {
+
+        playerPile.clear();
+        playerPileLinearLayout.removeAllViews();
+        playerPileCards = cardView.ConvertModelToView(roundModel.GetPlayerPile(0));
+
+        for(int i = 0; i < playerPileCards.size(); i++) {
+            playerPile.add(AddCardToPlayerPile(context));
+            playerPileCards.get(i).DrawImageViewCard(playerPile.get(i));
+        }
+    }
+
+    void DrawComputerPile(Context context) {
+
+        computerPile.clear();
+        computerPileLinearLayout.removeAllViews();
+        computerPileCards = cardView.ConvertModelToView(roundModel.GetPlayerPile(1));
+
+        for(int i = 0; i < computerPileCards.size(); i++) {
+            computerPile.add(AddCardToComputerPile(context));
+            computerPileCards.get(i).DrawImageViewCard(computerPile.get(i));
+        }
     }
 
     /** *********************************************************************
@@ -268,6 +308,27 @@ public class Round_View extends MainGame_Activity {
         return button;
     }
 
+    ImageView AddCardToPlayerPile(Context context) {
+        ImageView button = new ImageView(context);
+        button.setImageResource(R.drawable.redback);
+        button.setLayoutParams(new LinearLayout.LayoutParams(89, 125));
+        button.setScaleType(ImageView.ScaleType.FIT_XY);
+        button.setBackgroundColor(Color.TRANSPARENT);
+        playerPileLinearLayout.addView(button);
+
+        return button;
+    }
+
+    ImageView AddCardToComputerPile(Context context) {
+        ImageView button = new ImageView(context);
+        button.setImageResource(R.drawable.redback);
+        button.setLayoutParams(new LinearLayout.LayoutParams(89, 125));
+        button.setScaleType(ImageView.ScaleType.FIT_XY);
+        button.setBackgroundColor(Color.TRANSPARENT);
+        computerPileLinearLayout.addView(button);
+        return button;
+    }
+
     /** *********************************************************************
      Function Name: HighlightCard
      Purpose: When a card in the player's hand is clicked, it will highlight the card and set it
@@ -318,6 +379,7 @@ public class Round_View extends MainGame_Activity {
             if(view.getId() == table.get(i).getId()) {
                 table.get(i).setColorFilter(0x40ff0000);
                 highlightedTableCard.add(tableCards.get(i));
+                table.get(i).setEnabled(false);
             }
         }
 
@@ -342,6 +404,22 @@ public class Round_View extends MainGame_Activity {
         playerWantCard = passedCard;
         playerModel.SetPlayerWantCard(passedCard.ConvertViewToModel(passedCard));
 
+    }
+
+    void SetCaptureInfo() {
+
+        // Sending over the card the player wants to capture with
+        for(int i = 0; i < playerCards.size(); i++) {
+            if(highlightedCard.GetCard().equals(playerCards.get(i).GetCard())) {
+                roundModel.SetPlayerCard(cardView.ConvertViewToModel(playerCards.get(i)));
+            }
+        }
+
+        roundModel.SetTableCardsToBeCaptured(cardView.ConvertViewToModelVector(highlightedTableCard));
+
+        for(int i = 0; i < playerCards.size(); i++) {
+            playerImageButtonHand.get(i).setColorFilter(null);
+        }
     }
 
     /** *********************************************************************
@@ -389,6 +467,7 @@ public class Round_View extends MainGame_Activity {
 
         playerCards = cardView.ConvertModelToView(roundModel.GetHand(0));
         computerCards = cardView.ConvertModelToView(roundModel.GetHand(1));
+        playerPileCards = cardView.ConvertModelToView(roundModel.GetPlayerPile(0));
 
         for(int i = 0; i < playerCards.size(); i++) {
             playerCards.get(i).DrawImageCard(playerImageButtonHand.get(i));
@@ -405,8 +484,11 @@ public class Round_View extends MainGame_Activity {
             computerImageViewHand.get(i).setVisibility(View.GONE);
         }
 
-        DrawCards(context);
+
+        DrawTable(context);
         DrawDeck(context);
+        DrawPlayerPile(context);
+        DrawComputerPile(context);
 
     }
 

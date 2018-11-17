@@ -28,11 +28,11 @@ public class Computer_Model extends Player_Model {
             return;
         }*/
 
-        //Check for trail
-        /*if(AICheckForCapture(table, tableBuilds)) {
+        //Check for Capture
+        if(AICheckForCapture(table, tableBuilds)) {
             AICheckForCapture(table, tableBuilds);
             return 'c';
-        }*/
+        }
 
         //Check for trail
         AIMakeTrail();

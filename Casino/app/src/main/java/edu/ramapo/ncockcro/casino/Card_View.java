@@ -109,6 +109,15 @@ public class Card_View {
         modelCard.SetCard(passedCard.GetCard());
         return modelCard;
     }
+    Vector<Card_Model> ConvertViewToModelVector(Vector<Card_View> passedCards) {
+        Vector<Card_Model> modelCards = new Vector<Card_Model>();
+
+        for(int i = 0; i < passedCards.size(); i++) {
+            modelCards.add(ConvertViewToModel(passedCards.get(i)));
+        }
+
+        return modelCards;
+    }
 
     /** *********************************************************************
      Function Name: DrawImageCard
