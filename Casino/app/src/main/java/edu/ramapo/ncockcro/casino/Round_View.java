@@ -267,7 +267,7 @@ public class Round_View extends MainGame_Activity {
         button.setLayoutParams(new LinearLayout.LayoutParams(89, 125));
         button.setScaleType(ImageView.ScaleType.FIT_XY);
         button.setBackgroundColor(Color.TRANSPARENT);
-        //button.setEnabled(false);
+        button.setEnabled(false);
         tableLinearLayout.addView(button);
 
         button.setOnClickListener(new View.OnClickListener() {
@@ -508,6 +508,7 @@ public class Round_View extends MainGame_Activity {
 
         // If the player's hands are empty but not the deck, deal cards and return true
         if(roundModel.CheckIfPlayersHandEmpty() && !roundModel.CheckIfDeckEmpty()) {
+            Log.d("Check", "Dealing cardssssss");
             roundModel.DealCardsToPlayer();
             return 1;
         }
@@ -640,6 +641,18 @@ public class Round_View extends MainGame_Activity {
         else {
             ShowComputerButtons();
             return false;
+        }
+    }
+
+    void EnableTableButtons() {
+        for(int i = 0; i < table.size(); i++) {
+            table.get(i).setEnabled(true);
+        }
+    }
+
+    void DisableTableButtons() {
+        for(int i = 0; i < table.size(); i++) {
+            table.get(i).setEnabled(false);
         }
     }
 

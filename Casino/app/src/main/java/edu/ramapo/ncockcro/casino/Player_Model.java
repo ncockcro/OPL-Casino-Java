@@ -11,6 +11,7 @@ public class Player_Model {
     private Vector<Card_Model> playerBuildCards = new Vector<Card_Model>();
     private Vector<Card_Model> playerSingleSetCards = new Vector<Card_Model>();
     private Vector<Set_Model> playerMultipleSetCards = new Vector<Set_Model>();
+    private int multipleSetCardsCount = 0;
     private Deck_Model deck = new Deck_Model();
     private Vector<Card_Model> uniqueCards = deck.GetDeck();
     private boolean playerWantSave;
@@ -646,7 +647,6 @@ public class Player_Model {
         playerWantSet = 'n';
         playerMultipleSetCards.clear();
 
-        Log.d("YELLLLL", "AI is trying to capture");
         // Checking to see if any builds can be captured
 
         // First we need to cycle through each of the builds on the table
@@ -722,6 +722,7 @@ public class Player_Model {
         // If the computer is capturing, maybe there are some sets to be captured aswell
         if(isCapturing) {
 
+            Log.d("AI", "AI is trying to get a set");
             // Next two for loops go through the table and we are looking for combinations of cards on the table
             // that add up to the card the computer is capturing with
             for(int i = 0; i < table.size(); i++) {
@@ -776,7 +777,9 @@ public class Player_Model {
 
                             // Then push these cards onto a set object and them to the vector of sets
                             tempSet.SetCardsOfSet(tempCards);
+
                             playerMultipleSetCards.add(tempSet);
+                            playerMultipleSetCards.get(multipleSetCardsCount).SetCardsOfSet(tempSet.GetCardOfSet());
                             tempCards.clear();
                         }
                     }

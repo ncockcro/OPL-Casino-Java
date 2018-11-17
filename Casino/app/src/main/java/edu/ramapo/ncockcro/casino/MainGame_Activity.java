@@ -79,6 +79,7 @@ public class MainGame_Activity extends AppCompatActivity {
       ********************************************************************* */
     public void CaptureButtonPressed(View view) {
 
+        roundView.EnableTableButtons();
         roundModel.SetPlayerMove('c');
         roundView.ShowCaptureButtons();
         roundModel.SetCaptureInfo();
@@ -86,9 +87,11 @@ public class MainGame_Activity extends AppCompatActivity {
 
     public void CaptureDoneButtonPressed(View view) {
 
+        roundView.DisableTableButtons();
         roundView.SetCaptureInfo();
         roundModel.PlayerMakeMove();
         roundView.ShowComputerButtons();
+        roundView.CheckForDealingCards();
         roundView.UpdateScreen(this);
     }
 
@@ -111,6 +114,7 @@ public class MainGame_Activity extends AppCompatActivity {
         roundModel.PlayerMakeMove();
 
         if(!roundView.PrintErrors()) {
+            roundView.CheckForDealingCards();
             roundView.UpdateScreen(this);
         }
     }
@@ -129,6 +133,7 @@ public class MainGame_Activity extends AppCompatActivity {
      ********************************************************************* */
     public void ComputerMoveButtonPressed(View view) {
         roundModel.PlayerMakeMove();
+        roundView.CheckForDealingCards();
         roundView.UpdateScreen(this);
         roundView.ShowHumanButtons();
 

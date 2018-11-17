@@ -301,7 +301,6 @@ public class Round_Model {
         int aceAs1Count = 0;
         int aceAs14Count = 0;
 
-        Log.d("Yell", Character.toString(player.get(currentPlayer).GetPlayerWantSet()));
         // If the player said they wanted to make a set, then we will check those cards with the table cards first
         // to make sure they are on the table and add up to the capture card
         if(player.get(currentPlayer).GetPlayerWantSet() == 'y') {
@@ -312,11 +311,18 @@ public class Round_Model {
             // Cycling through all of the sets that the player wants to capture
             for(int i = 0; i < playerSets.size(); i++) {
 
+                Log.d("Set2", Integer.toString(playerSets.size()));
                 cardsOfSet = playerSets.get(i).GetCardOfSet();
+
+                Log.d("SizeofSet", Integer.toString(cardsOfSet.size()));
+                for(int r = 0; r < cardsOfSet.size(); r++) {
+                    Log.d("SetCards", cardsOfSet.get(r).GetCard());
+                }
 
                 // For each set, we must check and make sure that the cards are actually on the table
                 for(int j = 0; j < table.size(); j++) {
                     for(int k = 0; k < cardsOfSet.size(); k++) {
+                        Log.d("Set", cardsOfSet.get(i).GetCard());
                         // If the card is on the table, push it onto the pile vector to be added later
                         if(table.get(j).GetNumber() == cardsOfSet.get(k).GetNumber()) {
                             pile.add(table.get(j));
@@ -336,7 +342,7 @@ public class Round_Model {
                 }
 
                 // If the set card's numbers add up to the capture card, then they can make the set
-                if(playerHandCaptureCard.GetNumber() == 'A' && aceAs14Count == 14) {
+                if(playerHandCaptureCard.GetNumber() == 'A' && aceAs1Count == 14) {
                     // Left blank intentionally so the function wouldn't return false in the else if statement
                 }
                 else if(aceAs1Count != player.get(currentPlayer).CardNumber(playerHandCaptureCard.GetNumber()) && aceAs14Count != player.get(currentPlayer).CardNumber(playerHandCaptureCard.GetNumber()) ) {
