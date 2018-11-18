@@ -30,7 +30,6 @@ public class Computer_Model extends Player_Model {
 
         //Check for Capture
         if(AICheckForCapture(table, tableBuilds)) {
-            AICheckForCapture(table, tableBuilds);
             return 'c';
         }
 

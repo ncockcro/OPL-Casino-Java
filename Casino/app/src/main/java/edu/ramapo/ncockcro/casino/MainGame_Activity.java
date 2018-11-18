@@ -3,6 +3,7 @@ package edu.ramapo.ncockcro.casino;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 
@@ -79,6 +80,7 @@ public class MainGame_Activity extends AppCompatActivity {
       ********************************************************************* */
     public void CaptureButtonPressed(View view) {
 
+        roundView.PrintTableToOutput();
         roundView.EnableTableButtons();
         roundModel.SetPlayerMove('c');
         roundView.ShowCaptureButtons();
@@ -87,12 +89,21 @@ public class MainGame_Activity extends AppCompatActivity {
 
     public void CaptureDoneButtonPressed(View view) {
 
-        roundView.DisableTableButtons();
+
         roundView.SetCaptureInfo();
         roundModel.PlayerMakeMove();
-        roundView.ShowComputerButtons();
-        roundView.CheckForDealingCards();
-        roundView.UpdateScreen(this);
+
+        if(!roundView.PrintErrors()) {
+            Log.d("Updating", "Updating the main screen");
+            roundView.DisableTableButtons();
+            //roundView.ShowComputerButtons();
+            roundView.CheckForDealingCards();
+            roundView.UpdateScreen(this);
+        }
+    }
+
+    public void AddSetButtonPressed(View view) {
+
     }
 
     /** *********************************************************************
@@ -110,6 +121,7 @@ public class MainGame_Activity extends AppCompatActivity {
      ********************************************************************* */
     public void TrailCardPressed(View view) {
 
+        roundView.PrintTableToOutput();
         roundView.SetTrailInfo();
         roundModel.PlayerMakeMove();
 
@@ -132,6 +144,8 @@ public class MainGame_Activity extends AppCompatActivity {
      Assistance Received: none
      ********************************************************************* */
     public void ComputerMoveButtonPressed(View view) {
+
+        roundView.PrintTableToOutput();
         roundModel.PlayerMakeMove();
         roundView.CheckForDealingCards();
         roundView.UpdateScreen(this);

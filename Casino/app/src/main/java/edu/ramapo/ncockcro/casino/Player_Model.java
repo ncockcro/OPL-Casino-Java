@@ -639,6 +639,7 @@ public class Player_Model {
     Assistance Received: none
     ********************************************************************* */
     boolean AICheckForCapture(Vector<Card_Model> table, Vector<Build_Model> tableBuilds) {
+        Log.d("AI", "Ai is capturing");
 
         tableCardsToBeCaptured.clear();
         Vector<Card_Model> currentBuild;
@@ -769,6 +770,10 @@ public class Player_Model {
 
                         // If the cards are not already in the set vector, then add them to it
                         if(canCapture) {
+                            Log.d("We", "We are at the point of adding to the sets");
+                            Vector<Card_Model> cardsForSetsAce = new Vector<Card_Model>();
+                            cardsForSetsAce.add(table.get(i));
+                            cardsForSetsAce.add(table.get(j));
 
                             // If the cards are not already in the set vector, then add them to it
                             playerWantSet = 'y';
@@ -776,7 +781,8 @@ public class Player_Model {
                             tempCards.add(table.get(j));
 
                             // Then push these cards onto a set object and them to the vector of sets
-                            tempSet.SetCardsOfSet(tempCards);
+                            //tempSet.SetCardsOfSet(tempCards);
+                            tempSet.SetCardsOfSet(cardsForSetsAce);
 
                             playerMultipleSetCards.add(tempSet);
                             playerMultipleSetCards.get(multipleSetCardsCount).SetCardsOfSet(tempSet.GetCardOfSet());
@@ -797,7 +803,12 @@ public class Player_Model {
                             // This for loop will cycle through a specific set of cards and determine if the cards
                             // were used in a set prior
                             for(int m = 0; m < setOfCards.size(); m++) {
+
+                                Log.d("falsing", setOfCards.get(m).GetCard());
+                                Log.d("tempFalsing", tempCards.get(m).GetCard());
                                 if(setOfCards.get(m).GetCard().equals(tempCards.get(m).GetCard())) {
+                                    Log.d("false", "Turning false");
+
                                     canCapture = false;
                                 }
                             }
@@ -807,19 +818,34 @@ public class Player_Model {
 
                         // If the cards are not already in the set vector, then add them to it
                         if(canCapture) {
+                            Vector<Card_Model> cardsForSets = new Vector<Card_Model>();
+                            cardsForSets.add(table.get(i));
+                            cardsForSets.add(table.get(j));
                             playerWantSet = 'y';
                             tempCards.add(table.get(i));
                             tempCards.add(table.get(j));
 
                             // Then push these cards onto a set object and them to the vector of sets
-                            tempSet.SetCardsOfSet(tempCards);
+                            //tempSet.SetCardsOfSet(tempCards);
+                            //playerMultipleSetCards.add(tempSet);
+                            tempSet.SetCardsOfSet(cardsForSets);
                             playerMultipleSetCards.add(tempSet);
-                            tempCards.clear();
+                            //tempCards.clear();
                         }
                     }
                 }
             }
         }
+
+        if(playerMultipleSetCards.size() == 0) {
+            Log.d("This is not", "Size is still 0");
+        }
+        if(playerMultipleSetCards.size() > 0) {
+            for (int i = 0; i < playerMultipleSetCards.get(0).GetCardOfSet().size(); i++) {
+                Log.d("Crds in set", playerMultipleSetCards.get(0).GetCardOfSet().get(i).GetCard());
+            }
+        }
+
         return isCapturing;
     }
 
@@ -827,8 +853,7 @@ public class Player_Model {
     Function Name: AIMakeTrail
     Purpose: To pick the lowest card the computer has and trail
     Parameters: None
-    Return Value:
-    @return Void
+    Return Value: Void
     Local Variables:
     lowestCard, a card object used to hold the lowest valued card in a player hand
     Algorithm:
@@ -955,7 +980,7 @@ public class Player_Model {
             return "Ace";
         }
         else {
-            Log.d("ERROR", "Error in setting the number of card in player model class.");
+            Log.d("MyError", "Error in setting the number of card in player model class.");
             return "ERROR";
         }
     }
@@ -986,7 +1011,7 @@ public class Player_Model {
             return "Spades";
         }
         else {
-            Log.d("ERROR", "Error in finding the suit in the player model class.");
+            Log.d("MyError", "Error in finding the suit in the player model class.");
             return "ERROR";
         }
     }

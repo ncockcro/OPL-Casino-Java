@@ -3,6 +3,7 @@ package edu.ramapo.ncockcro.casino;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
+import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -42,6 +43,7 @@ public class Round_View extends MainGame_Activity {
     private Button captureBuildButton;
     private Button captureSetButton;
     private Button captureDoneButton;
+    private Button addSetButton;
 
     private Vector<Card_View> playerCards = new Vector<Card_View>();
     private Vector<Card_View> computerCards = new Vector<Card_View>();
@@ -64,6 +66,7 @@ public class Round_View extends MainGame_Activity {
         this.activity = (Activity) passedActivity;
         roundModel = passedRoundModel;
         outputTextView = (TextView) activity.findViewById(R.id.outputTextView);
+        outputTextView.setMovementMethod(new ScrollingMovementMethod());
         playerImageButtonHand.add((ImageButton) activity.findViewById(R.id.playerHand1));
         playerImageButtonHand.add((ImageButton) activity.findViewById(R.id.playerHand2));
         playerImageButtonHand.add((ImageButton) activity.findViewById(R.id.playerHand3));
@@ -96,6 +99,7 @@ public class Round_View extends MainGame_Activity {
         captureBuildButton = (Button) activity.findViewById(R.id.captureBuildButton);
         captureSetButton = (Button) activity.findViewById(R.id.captureSetButton);
         captureDoneButton = (Button) activity.findViewById(R.id.captureDoneButton);
+        addSetButton = (Button) activity.findViewById(R.id.addSetButton);
 
     }
 
@@ -469,6 +473,12 @@ public class Round_View extends MainGame_Activity {
         computerCards = cardView.ConvertModelToView(roundModel.GetHand(1));
         playerPileCards = cardView.ConvertModelToView(roundModel.GetPlayerPile(0));
 
+        for(int i = 0; i < computerCards.size(); i++) {
+            Log.d("Computer cards", computerCards.get(i).GetCard());
+        }
+
+        Log.d("Computer cards size: ", Integer.toString(computerCards.size()));
+
         for(int i = 0; i < playerCards.size(); i++) {
             playerCards.get(i).DrawImageCard(playerImageButtonHand.get(i));
         }
@@ -479,8 +489,10 @@ public class Round_View extends MainGame_Activity {
         for(int i = 0; i < computerCards.size(); i++) {
             computerCards.get(i).DrawImageViewCard(computerImageViewHand.get(i));
         }
+        Log.d("Player cards size aft: ", Integer.toString(computerCards.size()));
 
         for(int i = computerCards.size(); i < 4; i++) {
+            Log.d("In for", Integer.toString(i));
             computerImageViewHand.get(i).setVisibility(View.GONE);
         }
 
@@ -510,6 +522,7 @@ public class Round_View extends MainGame_Activity {
         if(roundModel.CheckIfPlayersHandEmpty() && !roundModel.CheckIfDeckEmpty()) {
             Log.d("Check", "Dealing cardssssss");
             roundModel.DealCardsToPlayer();
+            SetPlayersHandsVisible();
             return 1;
         }
         // If the hands aren't empty and the deck isn't empty, return true
@@ -556,11 +569,17 @@ public class Round_View extends MainGame_Activity {
      Assistance Received: none
       ********************************************************************* */
     void ShowHumanButtons() {
+
+        roundModel.ClearErrorReason();
         HideAllButtons();
         trailButton.setVisibility(View.VISIBLE);
         captureButton.setVisibility(View.VISIBLE);
 
         DisableMainInputButtons();
+
+        for(int i = 0; i < playerCards.size(); i++) {
+            playerImageButtonHand.get(i).setEnabled(true);
+        }
     }
 
     /** *********************************************************************
@@ -577,6 +596,10 @@ public class Round_View extends MainGame_Activity {
     void ShowComputerButtons() {
         HideAllButtons();
         computerMoveButton.setVisibility(View.VISIBLE);
+
+        for(int i = 0; i < playerCards.size(); i++) {
+            playerImageButtonHand.get(i).setEnabled(false);
+        }
     }
 
     void ShowCaptureButtons() {
@@ -587,6 +610,7 @@ public class Round_View extends MainGame_Activity {
         captureSetButton.setEnabled(false);
         captureDoneButton.setVisibility(View.VISIBLE);
         captureDoneButton.setEnabled(false);
+
     }
 
     void EnableMainInputButtons() {
@@ -632,10 +656,20 @@ public class Round_View extends MainGame_Activity {
      Assistance Received: none
      ********************************************************************* */
     boolean PrintErrors() {
-        if(!roundModel.GetErrorReason().equals("")) {
-            outputTextView.append("Can not trail with " + highlightedCard.GetCard() + " because " +
-                    roundModel.GetErrorReason());
+        if(!roundModel.GetErrorReason().equals("None")) {
+            outputTextView.append(roundModel.GetErrorReason());
             outputTextView.append("\n");
+            outputTextView.append("\n");
+            roundModel.ClearErrorReason();
+            HideAllButtons();
+            ShowHumanButtons();
+
+            for(int i = 0; i < tableCards.size(); i++) {
+                table.get(i).setColorFilter(null);
+                highlightedTableCard.clear();
+                table.get(i).setEnabled(true);
+            }
+
             return true;
         }
         else {
@@ -654,6 +688,26 @@ public class Round_View extends MainGame_Activity {
         for(int i = 0; i < table.size(); i++) {
             table.get(i).setEnabled(false);
         }
+    }
+
+    void SetPlayersHandsVisible() {
+
+        for(int i = 0; i < 4; i++) {
+            playerImageButtonHand.get(i).setVisibility(View.VISIBLE);
+        }
+
+        for(int i = 0; i < 4; i++) {
+            computerImageViewHand.get(i).setVisibility(View.VISIBLE);
+        }
+    }
+
+    void PrintTableToOutput() {
+
+        outputTextView.append("TABLE: ");
+        for(int i = 0; i < tableCards.size(); i++) {
+            outputTextView.append(tableCards.get(i).GetCard() + " ");
+        }
+        outputTextView.append("\n");
     }
 
 }

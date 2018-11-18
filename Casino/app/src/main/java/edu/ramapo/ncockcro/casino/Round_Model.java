@@ -56,7 +56,7 @@ public class Round_Model {
         player.add(p2);
 
         buildCounter = 0;
-        errorReason = "";
+        errorReason = "None";
 
     }
 
@@ -311,13 +311,7 @@ public class Round_Model {
             // Cycling through all of the sets that the player wants to capture
             for(int i = 0; i < playerSets.size(); i++) {
 
-                Log.d("Set2", Integer.toString(playerSets.size()));
                 cardsOfSet = playerSets.get(i).GetCardOfSet();
-
-                Log.d("SizeofSet", Integer.toString(cardsOfSet.size()));
-                for(int r = 0; r < cardsOfSet.size(); r++) {
-                    Log.d("SetCards", cardsOfSet.get(r).GetCard());
-                }
 
                 // For each set, we must check and make sure that the cards are actually on the table
                 for(int j = 0; j < table.size(); j++) {
@@ -382,6 +376,10 @@ public class Round_Model {
                         canCapture = true;
                         looseCardsCapture = true;
                     }
+                    else {
+                        errorReason = "One of the cards selected can not be captured.";
+                        return false;
+                    }
                 }
 
                 // Checking to make sure the card the player is capturing with is not needed for a build
@@ -419,6 +417,8 @@ public class Round_Model {
 
             // If everything is correct, add the cards and remove them properly
             if(canCapture) {
+
+                Log.d("Checking", "Inside of ACTUALLY adding card to pile");
                 player.get(currentPlayer).RemoveCard(playerHandCaptureCard);
                 RemoveTableCards(removeTableCards);
 
@@ -517,7 +517,7 @@ public class Round_Model {
         // Iterating through the cards the player can not put down because the card is needed to complete a build
         for(int i = 0; i < player.get(currentPlayer).GetPlayerBuildCards().size(); i++) {
             if(player.get(currentPlayer).GetPlayerBuildCards().get(i).GetCard().equals(passedCard.GetCard())) {
-                errorReason = "you need that card for a build.";
+                errorReason = "You can not trail with " + passedCard.GetCard() + " because you need that card for a build.";
                 return false;
             }
         }
@@ -525,7 +525,7 @@ public class Round_Model {
         for(int i = 0; i < table.size(); i++) {
             for(int j = 0 ; j < playerHand.size(); j++) {
                 if(table.get(i).GetNumber() == playerHand.get(j).GetNumber()) {
-                    errorReason = "there is a card with the same value on the table." + table.get(i).GetCard();
+                    errorReason = "You can not trail with " + passedCard.GetCard() + " because there is a card with the same value on the table." + table.get(i).GetCard();
                     return false;
                 }
             }
@@ -671,18 +671,16 @@ public class Round_Model {
         char move;
 
         // Clearing the error reason from before
-        errorReason = "";
+        errorReason = "None";
         move = player.get(currentPlayer).MakeMove(table, builds);
+
+        Log.d("CurrentPlayer", Integer.toString(currentPlayer));
 
         if(move == 'b') {
             //build
         }
         else if(move == 'c') {
             if(CheckCapture()) {
-                Log.d("CurrentPlayer", Integer.toString(currentPlayer));
-                for(int i = 0; i < player.get(currentPlayer).GetPile().size(); i++) {
-                    Log.d("Pile", player.get(currentPlayer).GetPile().get(i).GetCard());
-                }
                 SwitchPlayer();
             }
         }
@@ -786,7 +784,7 @@ public class Round_Model {
     }
 
     void ClearErrorReason() {
-        errorReason = "";
+        errorReason = "None";
     }
 
 

@@ -48,4 +48,5 @@
     <string name="captureSetButton">Capture Set</string>
     <string name="captureSameValueButton">Capture Same Value Card</string>
     <string name="captureDoneButton">Done</string>
+    <string name="addSetButton">Add Set</string>
 </resources>
