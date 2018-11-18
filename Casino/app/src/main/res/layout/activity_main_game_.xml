@@ -355,6 +355,7 @@
         android:layout_marginEnd="72dp"
         android:layout_marginRight="72dp"
         android:layout_marginBottom="200dp"
+        android:onClick="CaptureSetButtonPressed"
         android:text="@string/captureSetButton"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />

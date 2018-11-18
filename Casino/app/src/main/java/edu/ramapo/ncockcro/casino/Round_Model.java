@@ -304,9 +304,12 @@ public class Round_Model {
         // If the player said they wanted to make a set, then we will check those cards with the table cards first
         // to make sure they are on the table and add up to the capture card
         if(player.get(currentPlayer).GetPlayerWantSet() == 'y') {
+            Log.d("yes", "Inside of sets in round_model");
             Vector<Set_Model> playerSets = new Vector<Set_Model>();
             playerSets = player.get(currentPlayer).GetPlayerMultipleSetCards();
             Vector<Card_Model> cardsOfSet = new Vector<Card_Model>();
+
+            Log.d("no", Integer.toString(playerSets.size()));
 
             // Cycling through all of the sets that the player wants to capture
             for(int i = 0; i < playerSets.size(); i++) {
@@ -316,9 +319,10 @@ public class Round_Model {
                 // For each set, we must check and make sure that the cards are actually on the table
                 for(int j = 0; j < table.size(); j++) {
                     for(int k = 0; k < cardsOfSet.size(); k++) {
-                        Log.d("Set", cardsOfSet.get(i).GetCard());
+                        Log.d("Set", cardsOfSet.get(k).GetCard());
                         // If the card is on the table, push it onto the pile vector to be added later
                         if(table.get(j).GetNumber() == cardsOfSet.get(k).GetNumber()) {
+                            Log.d("Add", "Adding set cards for computer to pile");
                             pile.add(table.get(j));
                             removeTableCards.add(table.get(j));
 
@@ -340,6 +344,9 @@ public class Round_Model {
                     // Left blank intentionally so the function wouldn't return false in the else if statement
                 }
                 else if(aceAs1Count != player.get(currentPlayer).CardNumber(playerHandCaptureCard.GetNumber()) && aceAs14Count != player.get(currentPlayer).CardNumber(playerHandCaptureCard.GetNumber()) ) {
+                    Log.d("Ace as 1", Integer.toString(aceAs1Count));
+                    Log.d("Ace as 14", Integer.toString(aceAs14Count));
+                    errorReason = "Card numbers did not add up to what you were capturing with. Try again.";
                     return false;
                 }
 
@@ -377,6 +384,8 @@ public class Round_Model {
                         looseCardsCapture = true;
                     }
                     else {
+                        Log.d("Number", Integer.toString(number));
+                        Log.d("TableCard", tableCardsForCapturing.get(i).GetCard());
                         errorReason = "One of the cards selected can not be captured.";
                         return false;
                     }
@@ -785,6 +794,23 @@ public class Round_Model {
 
     void ClearErrorReason() {
         errorReason = "None";
+    }
+
+    void SetPlayerModelWantSet(char choice) {
+        player.get(currentPlayer).SetPlayerWantSet(choice);
+    }
+
+    char GetPlayerModelWantSet() {
+        return player.get(currentPlayer).GetPlayerWantSet();
+    }
+
+    void SetPlayerModelAddSet(Set_Model set) {
+        Log.d("Adding to set in round", set.GetCardOfSet().get(0).GetCard());
+        player.get(currentPlayer).AddSetToPlayer(set);
+    }
+
+    void PlayerModelClearPlayerMulitpleSets() {
+        player.get(currentPlayer).ClearPlayerMultipleSets();
     }
 
 

@@ -698,9 +698,24 @@ public class Player_Model {
                 // If any of them have the same card number value, the computer can capture the card
                 if(CardNumber(hand.get(j).GetNumber()) == CardNumber(table.get(i).GetNumber())) {
 
-                    playerCard = hand.get(j);
+                    //playerCard = hand.get(j);
                     tableCardToBeCaptured = table.get(i);
-                    tableCardsToBeCaptured.add(table.get(i));
+
+                    if(tableCardsToBeCaptured.size() > 0) {
+                        for (int k = 0; k < tableCardsToBeCaptured.size(); k++) {
+                            Log.d("CaptureCards", tableCardsToBeCaptured.get(k).GetCard());
+                            if (CardNumber(tableCardsToBeCaptured.get(k).GetNumber()) == CardNumber(table.get(i).GetNumber()) &&
+                                    !tableCardsToBeCaptured.get(k).GetCard().equals(table.get(i).GetCard())) {
+                                playerCard = hand.get(j);
+                                tableCardsToBeCaptured.add(table.get(i));
+                            }
+                        }
+                    }
+                    else {
+                        playerCard = hand.get(j);
+                        tableCardsToBeCaptured.add(table.get(i));
+                    }
+                    //tableCardsToBeCaptured.add(table.get(i));
                     isCapturing = true;
 
                     // Saving the card that matched so it can be outputted later to show the computers move
@@ -1066,6 +1081,23 @@ public class Player_Model {
 
     Vector<Card_Model> GetTableCardsToBeCaptured() {
         return tableCardsToBeCaptured;
+    }
+
+    void SetPlayerWantSet(char choice) {
+        if(choice == 'y' || choice == 'n') {
+            playerWantSet = choice;
+        }
+        else {
+            Log.d("MyError", "Error in setting the playerWantSet in the player model class.");
+        }
+    }
+
+    void AddSetToPlayer(Set_Model setCards) {
+        playerMultipleSetCards.add(setCards);
+    }
+
+    void ClearPlayerMultipleSets() {
+        playerMultipleSetCards.clear();
     }
 
 }
