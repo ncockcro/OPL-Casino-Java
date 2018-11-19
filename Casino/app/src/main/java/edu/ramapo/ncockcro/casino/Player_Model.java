@@ -16,7 +16,7 @@ public class Player_Model {
     private Vector<Card_Model> uniqueCards = deck.GetDeck();
     private boolean playerWantSave;
     private Card_Model playerCard;
-    private Vector<Card_Model> buildCards;
+    private Vector<Card_Model> buildCards = new Vector<Card_Model>();
     private char newOrExistingBuild;
     private Card_Model existingBuildCard;
     protected char playerMove;
@@ -156,20 +156,6 @@ public class Player_Model {
                 }
             }
         }
-    }
-
-    /** *********************************************************************
-     Function Name: GetBuildCards
-     Purpose: Retrieve the build cards
-     Parameters: None
-     Return Value: Void
-     Local Variables: None
-     Algorithm:
-     1) Return the buildCards
-     Assistance Received: none
-      ********************************************************************* */
-    Vector<Card_Model> GetBuildCards() {
-        return buildCards;
     }
 
     /** *********************************************************************
@@ -323,6 +309,20 @@ public class Player_Model {
                 playerBuildCards.add(buildCard);
             }
         }
+    }
+
+    /** *********************************************************************
+     Function Name: GetBuildCards
+     Purpose: Retrieve the build cards
+     Parameters: None
+     Return Value: Void
+     Local Variables: None
+     Algorithm:
+     1) Return the buildCards
+     Assistance Received: none
+     ********************************************************************* */
+    Vector<Card_Model> GetBuildCards() {
+        return buildCards;
     }
 
 
@@ -1157,6 +1157,53 @@ public class Player_Model {
     void ClearPlayerMultipleSets() {
         playerMultipleSetCards.clear();
     }
+
+    void SetPlayerWantNewOrExisting(char choice) {
+
+        if(choice == 'y' || choice == 'n') {
+            newOrExistingBuild = choice;
+        }
+        else {
+            Log.d("MyError", "Error in setting the new or existing variable in player model class.");
+        }
+    }
+
+    char GetPlayerMove() {
+        return playerMove;
+    }
+
+    void SetPlayerBuildCards(Vector<Card_Model> passedBuildCards) {
+
+        int count = 0;
+        for(int i = 0; i < uniqueCards.size(); i++) {
+            for(int j = 0; j < passedBuildCards.size(); j++) {
+                if(uniqueCards.get(i).GetCard().equals(passedBuildCards.get(j).GetCard())) {
+                    count++;
+                }
+            }
+        }
+
+        if(count == passedBuildCards.size()) {
+            playerBuildCards = passedBuildCards;
+        }
+    }
+
+    void SetBuildCards(Vector<Card_Model> passedBuildCards) {
+        int count = 0;
+        for(int i = 0; i < uniqueCards.size(); i++) {
+            for(int j = 0; j < passedBuildCards.size(); j++) {
+                if(uniqueCards.get(i).GetCard().equals(passedBuildCards.get(j).GetCard())) {
+                    count++;
+                }
+            }
+        }
+
+        if(count == passedBuildCards.size()) {
+            buildCards = passedBuildCards;
+        }
+    }
+
+
 
 }
 

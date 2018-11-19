@@ -31,7 +31,7 @@ public class Card_View {
     Card_View(Card_Model passedCard) {
         card = passedCard.GetCard();
         suit = passedCard.GetSuit();
-        number = passedCard.GetSuit();
+        number = passedCard.GetNumber();
     }
 
     /** *********************************************************************

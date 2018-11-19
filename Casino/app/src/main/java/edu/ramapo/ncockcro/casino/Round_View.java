@@ -42,9 +42,12 @@ public class Round_View extends MainGame_Activity {
     private Button captureButton;
     private Button captureBuildButton;
     private Button captureSetButton;
-    private Button captureDoneButton;
+    private Button DoneButton;
     private Button captureAddSetButton;
     private Button backButton;
+    private Button buildButton;
+    private Button newBuildButton;
+    private Button existingBuildButton;
 
     private Vector<Card_View> playerCards = new Vector<Card_View>();
     private Vector<Card_View> computerCards = new Vector<Card_View>();
@@ -58,6 +61,9 @@ public class Round_View extends MainGame_Activity {
     private Vector<Card_View> setHighlightedTableCard = new Vector<Card_View>();
     private int tableIdCounter = 0;
     private int setCardPickedCounter = 0;
+    private Vector<Card_View> buildHighlightedTableCards = new Vector<Card_View>();
+    private Vector<Build_Model> multipleBuildCards = new Vector<Build_Model>();
+    private Vector<Card_View> singleBuildCards = new Vector<Card_View>();
 
     /** *********************************************************************
      Function Name: Round_View
@@ -121,9 +127,12 @@ public class Round_View extends MainGame_Activity {
         captureButton = (Button) activity.findViewById(R.id.captureButton);
         captureBuildButton = (Button) activity.findViewById(R.id.captureBuildButton);
         captureSetButton = (Button) activity.findViewById(R.id.captureSetButton);
-        captureDoneButton = (Button) activity.findViewById(R.id.captureDoneButton);
+        DoneButton = (Button) activity.findViewById(R.id.doneButton);
         captureAddSetButton = (Button) activity.findViewById(R.id.addSetButton);
         backButton = (Button) activity.findViewById(R.id.backButton);
+        buildButton = (Button) activity.findViewById(R.id.buildButton);
+        newBuildButton = (Button) activity.findViewById(R.id.buildNewButton);
+        existingBuildButton = (Button) activity.findViewById(R.id.existingBuildButton);
 
     }
 
@@ -215,12 +224,41 @@ public class Round_View extends MainGame_Activity {
         // Clear what is on the table and get the current table cards
         table.clear();
         tableCards.clear();
+        multipleBuildCards.clear();
+        singleBuildCards.clear();
         tableLinearLayout.removeAllViews();
         tableCards = cardView.ConvertModelToView(roundModel.GetTable());
+        multipleBuildCards = roundModel.GetTableBuilds();
 
-        for(int i = 0; i < tableCards.size(); i++) {
+        int numOfBuildCards = 0;
+        String greenColor = "#0x4033FF42";
+        String blueColor = "0x403336FF";
+
+
+        for(int i = 0; i < multipleBuildCards.size(); i++) {
+
+            singleBuildCards = cardView.ConvertModelToView(multipleBuildCards.get(i).GetBuildOfCards());
+
+            for(int j = numOfBuildCards; j < singleBuildCards.size(); j++) {
+                Log.d("buildInView", singleBuildCards.get(i).GetCard());
+                table.add(AddCardToTable(context));
+                singleBuildCards.get(j).DrawImageCard(table.get(j));
+
+                if(i % 2 == 0) {
+                    table.get(j).setColorFilter(0x4033FF42);
+                }
+                else {
+                    table.get(j).setColorFilter(0x403336FF);
+                }
+                numOfBuildCards++;
+            }
+        }
+
+        for(int i = numOfBuildCards; i < tableCards.size(); i++) {
             table.add(AddCardToTable(context));
             tableCards.get(i).DrawImageCard(table.get(i));
+            Log.d("Tabllllle", tableCards.get(i).GetCard());
+            Log.d("Tabllllle", Character.toString(tableCards.get(i).GetNumber()));
         }
     }
 
@@ -487,6 +525,11 @@ public class Round_View extends MainGame_Activity {
      ********************************************************************* */
     void HighlightTableCard(View view) {
 
+        for(int i = 0; i < multipleBuildCards.size(); i++) {
+
+            //singleBuildCards = multipleBuildCards.get(i).GetBuildOfCards()
+        }
+
         // If the player is capturing a set...
         if(roundModel.GetPlayerModelWantSet() == 'y') {
 
@@ -500,6 +543,16 @@ public class Round_View extends MainGame_Activity {
                         setHighlightedTableCard.add(tableCards.get(i));
                         table.get(i).setEnabled(false);
                     }
+                }
+            }
+        }
+
+        else if(roundModel.GetPlayerMove() == 'b') {
+            for(int i = 0; i < table.size(); i++) {
+                if(view.getId() == table.get(i).getId()) {
+                    table.get(i).setColorFilter(0x40ff0000);
+                    buildHighlightedTableCards.add(tableCards.get(i));
+                    table.get(i).setEnabled(false);
                 }
             }
         }
@@ -523,14 +576,17 @@ public class Round_View extends MainGame_Activity {
             // Once the user has clicked two cards, allow them to press the buttons to add the set
             if(setCardPickedCounter > 1) {
                 captureAddSetButton.setEnabled(true);
-                captureDoneButton.setEnabled(true);
+                DoneButton.setEnabled(true);
             }
+        }
+        else if(roundModel.GetPlayerMove() == 'b') {
+            DoneButton.setEnabled(true);
         }
         // Otherwise, enable the capture buttons
         else {
             captureBuildButton.setEnabled(true);
             captureSetButton.setEnabled(true);
-            captureDoneButton.setEnabled(true);
+            DoneButton.setEnabled(true);
         }
     }
 
@@ -550,6 +606,21 @@ public class Round_View extends MainGame_Activity {
         playerWantCard = passedCard;
         playerModel.SetPlayerWantCard(passedCard.ConvertViewToModel(passedCard));
 
+    }
+
+    void SetBuildInfo() {
+        if(roundModel.GetPlayerModelWantNewOrExisting() == 'n') {
+
+            for(int i = 0; i < playerCards.size(); i++) {
+                if(highlightedCard.GetCard().equals(playerCards.get(i).GetCard())) {
+                    roundModel.SetPlayerCard(cardView.ConvertViewToModel(playerCards.get(i)));
+                }
+            }
+            for(int i = 0; i < buildHighlightedTableCards.size(); i++) {
+                Log.d("Build", Character.toString(buildHighlightedTableCards.get(i).GetNumber()));
+            }
+            roundModel.SetPlayerModelBuildCards(cardView.ConvertViewToModelVector(buildHighlightedTableCards));
+        }
     }
 
     /** *********************************************************************
@@ -725,6 +796,7 @@ public class Round_View extends MainGame_Activity {
         HideAllButtons();
         trailButton.setVisibility(View.VISIBLE);
         captureButton.setVisibility(View.VISIBLE);
+        buildButton.setVisibility(View.VISIBLE);
 
         // Disable the main input buttons
         DisableMainInputButtons();
@@ -776,8 +848,8 @@ public class Round_View extends MainGame_Activity {
         captureBuildButton.setEnabled(false);
         captureSetButton.setVisibility(View.VISIBLE);
         captureSetButton.setEnabled(false);
-        captureDoneButton.setVisibility(View.VISIBLE);
-        captureDoneButton.setEnabled(false);
+        DoneButton.setVisibility(View.VISIBLE);
+        DoneButton.setEnabled(false);
 
     }
 
@@ -797,9 +869,22 @@ public class Round_View extends MainGame_Activity {
         HideAllButtons();
         captureAddSetButton.setVisibility(View.VISIBLE);
         captureAddSetButton.setEnabled(false);
-        captureDoneButton.setVisibility(View.GONE);
-        captureDoneButton.setEnabled(false);
+        DoneButton.setVisibility(View.GONE);
+        DoneButton.setEnabled(false);
         backButton.setVisibility(View.VISIBLE);
+    }
+
+    void ShowBuildButtons() {
+        HideAllButtons();
+        newBuildButton.setVisibility(View.VISIBLE);
+        existingBuildButton.setVisibility(View.VISIBLE);
+    }
+
+    void ShowNewOrExistingBuildButtons() {
+        HideAllButtons();
+        backButton.setVisibility(View.VISIBLE);
+        DoneButton.setVisibility(View.VISIBLE);
+        DoneButton.setEnabled(false);
     }
 
     /** *********************************************************************
@@ -817,6 +902,7 @@ public class Round_View extends MainGame_Activity {
 
         trailButton.setEnabled(true);
         captureButton.setEnabled(true);
+        buildButton.setEnabled(true);
     }
 
     /** *********************************************************************
@@ -832,6 +918,7 @@ public class Round_View extends MainGame_Activity {
     void DisableMainInputButtons() {
         trailButton.setEnabled(false);
         captureButton.setEnabled(false);
+        buildButton.setEnabled(false);
     }
 
     /** *********************************************************************
@@ -851,9 +938,13 @@ public class Round_View extends MainGame_Activity {
         captureButton.setVisibility(View.GONE);
         captureBuildButton.setVisibility(View.GONE);
         captureSetButton.setVisibility(View.GONE);
-        captureDoneButton.setVisibility(View.GONE);
+        DoneButton.setVisibility(View.GONE);
         captureAddSetButton.setVisibility(View.GONE);
         backButton.setVisibility(View.GONE);
+        buildButton.setVisibility(View.GONE);
+        newBuildButton.setVisibility(View.GONE);
+        existingBuildButton.setVisibility(View.GONE);
+
     }
 
     /** *********************************************************************
@@ -1000,7 +1091,7 @@ public class Round_View extends MainGame_Activity {
         Set_Model tempSet = new Set_Model();
         tempSet.SetCardsOfSet(cardView.ConvertViewToModelVector(setHighlightedTableCard));
         roundModel.SetPlayerModelAddSet(tempSet);
-        captureDoneButton.setVisibility(View.VISIBLE);
+        DoneButton.setVisibility(View.VISIBLE);
 
     }
 
@@ -1021,6 +1112,9 @@ public class Round_View extends MainGame_Activity {
         roundModel.PlayerModelClearPlayerMultipleSets();
         setCardPickedCounter = 0;
         roundModel.SetPlayerModelWantSet('n');
+
+        setHighlightedTableCard.clear();
+        buildHighlightedTableCards.clear();
     }
 
 }

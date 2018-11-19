@@ -362,13 +362,13 @@
         app:layout_constraintEnd_toEndOf="parent" />
 
     <Button
-        android:id="@+id/captureDoneButton"
+        android:id="@+id/doneButton"
         android:layout_width="160dp"
         android:layout_height="100dp"
         android:layout_marginEnd="60dp"
         android:layout_marginRight="60dp"
         android:layout_marginBottom="130dp"
-        android:onClick="CaptureDoneButtonPressed"
+        android:onClick="DoneButtonPressed"
         android:text="@string/captureDoneButton"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
@@ -440,6 +440,42 @@
         android:layout_marginBottom="30dp"
         android:onClick="BackButtonPressed"
         android:text="@string/backButton"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <Button
+        android:id="@+id/buildButton"
+        android:layout_width="160dp"
+        android:layout_height="100dp"
+        android:layout_marginEnd="250dp"
+        android:layout_marginRight="250dp"
+        android:layout_marginBottom="130dp"
+        android:onClick="BuildButtonPressed"
+        android:text="@string/buildButton"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <Button
+        android:id="@+id/buildNewButton"
+        android:layout_width="160dp"
+        android:layout_height="100dp"
+        android:layout_marginEnd="250dp"
+        android:layout_marginRight="250dp"
+        android:layout_marginBottom="130dp"
+        android:onClick="NewBuildButtonPressed"
+        android:text="@string/buildNewButton"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <Button
+        android:id="@+id/existingBuildButton"
+        android:layout_width="160dp"
+        android:layout_height="100dp"
+        android:layout_marginEnd="60dp"
+        android:layout_marginRight="60dp"
+        android:layout_marginBottom="130dp"
+        android:onClick="ExistingBuildButtonPressed"
+        android:text="@string/existinbBuilButton"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 

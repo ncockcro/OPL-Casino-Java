@@ -8,7 +8,7 @@ public class Build_Model {
 
     private int owner;
     private int cardValueOfBuild;
-    private Vector<Card_Model> buildOfCards;
+    private Vector<Card_Model> buildOfCards = new Vector<Card_Model>();
     private Card_Model captureCardOfBuild;
     private Deck_Model deck = new Deck_Model();
     private Vector<Card_Model> uniqueCards = deck.GetDeck();
@@ -253,7 +253,8 @@ public class Build_Model {
             cardValueOfBuild = value;
         }
         else {
-            Log.d("ERROR", "Error in setting the value of a build in the build class.");
+            Log.d("ERROR", Integer.toString(value));
+            Log.d("MyError", "Error in setting the value of a build in the build class.");
         }
     }
 

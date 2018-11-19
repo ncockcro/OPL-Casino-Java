@@ -66,6 +66,36 @@ public class MainGame_Activity extends AppCompatActivity {
     }
 
     /** *********************************************************************
+     Function Name: BuildButtonPressed
+     Purpose: When the player wants to build, it sets the move and changes the buttons
+     Parameters:
+     @param view
+     Return Value: Void
+     Local Variables:None
+     Algorithm:
+     1) Set the build info for the card the player is building with
+     2) Enable the build buttons for further gameplay
+     Assistance Received: none
+      ********************************************************************* */
+    public void BuildButtonPressed(View view) {
+
+        roundView.PrintTableToOutput();
+        roundView.EnableTableButtons();
+        roundModel.SetPlayerMove('b');
+        roundView.ShowBuildButtons();
+    }
+
+    public void NewBuildButtonPressed(View view) {
+        roundModel.SetPlayerModelWantNewOrExisting('n');
+        roundView.ShowNewOrExistingBuildButtons();
+    }
+
+    public void ExistingBuildButtonPressed(View view) {
+        roundModel.SetPlayerModelWantNewOrExisting('e');
+        roundView.ShowNewOrExistingBuildButtons();
+    }
+
+    /** *********************************************************************
      Function Name: CaptureButtonPressed
      Purpose: When the player wants to capture, it sets the move and changes the buttons
      Parameters:
@@ -117,10 +147,14 @@ public class MainGame_Activity extends AppCompatActivity {
      dealing cards
      Assistance Received: none
       ********************************************************************* */
-    public void CaptureDoneButtonPressed(View view) {
+    public void DoneButtonPressed(View view) {
 
-
-        roundView.SetCaptureInfo();
+        if(roundModel.GetPlayerMove() == 'c') {
+            roundView.SetCaptureInfo();
+        }
+        else {
+            roundView.SetBuildInfo();
+        }
         roundModel.PlayerMakeMove();
 
         if(!roundView.PrintErrors()) {

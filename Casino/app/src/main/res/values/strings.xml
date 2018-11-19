@@ -51,4 +51,7 @@
     <string name="addSetButton">Add Set</string>
     <string name="movesTextView">Moves</string>
     <string name="backButton">Back</string>
+    <string name="buildButton">Build</string>
+    <string name="buildNewButton">New Build</string>
+    <string name="existinbBuilButton">Existing Build</string>
 </resources>

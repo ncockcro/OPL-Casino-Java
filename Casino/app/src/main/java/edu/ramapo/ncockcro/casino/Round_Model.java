@@ -294,6 +294,10 @@ public class Round_Model {
         // Getting the card on the table that the player wants to use for a build
         playerTableBuildCards = player.get(currentPlayer).GetBuildCards();
 
+        for(int i = 0; i < playerTableBuildCards.size(); i++) {
+            Log.d("playerTable", playerTableBuildCards.get(i).GetCard());
+        }
+
         int buildSize = playerTableBuildCards.size();
         int count = 0;
         boolean addExistingBuildSuccessful = false;
@@ -308,7 +312,7 @@ public class Round_Model {
 
             // This is checking to make sure that the cards the user entered in to make a build are actually on the table
             for(int i = 0; i < table.size(); i++) {
-                for(int j = 0; j < playerTableBuildCards.size(); i++) {
+                for(int j = 0; j < playerTableBuildCards.size(); j++) {
                     if(table.get(i).GetCard().equals(playerTableBuildCards.get(j).GetCard())) {
                         count++;
                     }
@@ -397,12 +401,20 @@ public class Round_Model {
         int aceAs14 = 0;
         Vector<Card_Model> playerHand = player.get(currentPlayer).GetHand();
         boolean hasRightCards = false;
+        Vector<Card_Model> tempPlayerBuildCards = new Vector<Card_Model>();
+        //tempPlayerBuildCards = playerBuildCards;
 
+        for(int i = 0; i < playerTableBuildCards.size(); i++) {
+            Log.d("playerTable", playerTableBuildCards.get(i).GetCard());
+        }
         playerBuildCards.add(playerCard);
+        //tempPlayerBuildCards.add(playerCard);
 
         // Iterate through the cards the player wants to build with and count their values
         for(int i = 0; i < playerBuildCards.size(); i++) {
 
+
+            Log.d("InBuildNumbers", Character.toString(playerBuildCards.get(i).GetNumber()));
             // If the card is an ace, we must increment the two different counts with 1 and 14 as the ace card
             if(playerBuildCards.get(i).GetNumber() == 'A') {
                 aceAs1++;
@@ -422,6 +434,7 @@ public class Round_Model {
                     player.get(currentPlayer).CardNumber(playerHand.get(i).GetNumber()) == aceAs14) {
                 hasRightCards = true;
                 player.get(currentPlayer).AddToPlayerBuildCards(playerHand.get(i));
+                playerTableBuildCards.remove(playerTableBuildCards.size() - 1);
                 return hasRightCards;
             }
 
@@ -429,6 +442,7 @@ public class Round_Model {
             if(playerHand.get(i).GetNumber() == 'A' && aceAs14 == 14 || aceAs1 == 14) {
                 hasRightCards = true;
                 player.get(currentPlayer).AddToPlayerBuildCards(playerHand.get(i));
+                playerTableBuildCards.remove(playerTableBuildCards.size() - 1);
                 return hasRightCards;
             }
         }
@@ -453,6 +467,10 @@ public class Round_Model {
     ********************************************************************* */
     void CreatePlayerBuild() {
 
+        for(int i = 0; i < playerTableBuildCards.size(); i++) {
+            Log.d("PlayerBuilds", playerTableBuildCards.get(i).GetCard());
+        }
+
         Vector<Card_Model> playersBuildCards = player.get(currentPlayer).GetPlayerBuildCards();
         char lastAddedCard = playersBuildCards.lastElement().GetNumber();
         Vector<Card_Model> handCards = new Vector<Card_Model>();
@@ -471,10 +489,12 @@ public class Round_Model {
         // This is used for counting up the total value of a build and setting it right after to the specific build
         int countOfBuild = 0;
         for(int i = 0; i < playerTableBuildCards.size(); i++) {
+            Log.d("CountOfBuild", Integer.toString(player.get(currentPlayer).CardNumber(playerTableBuildCards.get(i).GetNumber())));
             countOfBuild += player.get(currentPlayer).CardNumber(playerTableBuildCards.get(i).GetNumber());
         }
 
         countOfBuild += player.get(currentPlayer).CardNumber(playerHandBuildCard.GetNumber());
+        Log.d("CountOfBuild", Integer.toString(countOfBuild));
         tableBuilds.get(buildCounter).SetValueOfBuild(countOfBuild);
 
         // This is for setting the card that is needed for capturing the build
@@ -1119,6 +1139,30 @@ public class Round_Model {
 
     void PlayerModelClearPlayerMultipleSets() {
         player.get(currentPlayer).ClearPlayerMultipleSets();
+    }
+
+    void SetPlayerModelWantNewOrExisting(char choice) {
+        player.get(currentPlayer).SetPlayerWantNewOrExisting(choice);
+    }
+
+    char GetPlayerModelWantNewOrExisting() {
+        return player.get(currentPlayer).GetNewOrExistingBuild();
+    }
+
+    char GetPlayerMove() {
+        return player.get(currentPlayer).GetPlayerMove();
+    }
+
+    void SetPlayerModelBuildCards(Vector<Card_Model> passedBuildCards) {
+
+        for(int i = 0; i < passedBuildCards.size(); i++) {
+            Log.d("In round build", passedBuildCards.get(i).GetCard());
+        }
+        player.get(currentPlayer).SetBuildCards(passedBuildCards);
+    }
+
+    Vector<Build_Model> GetTableBuilds() {
+        return tableBuilds;
     }
 
 
