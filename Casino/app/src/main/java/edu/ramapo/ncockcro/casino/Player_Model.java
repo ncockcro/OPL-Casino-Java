@@ -325,6 +325,7 @@ public class Player_Model {
         }
     }
 
+
     /** *********************************************************************
     Function Name: GetPlayerBuildCards
     Purpose: To retrieve the cards the player must use for a build
@@ -1066,6 +1067,19 @@ public class Player_Model {
         }
     }
 
+    /** *********************************************************************
+     Function Name: SetTableCardToBeCaptured
+     Purpose: To set the table cards the player wants to capture
+     Parameters:
+     @param passedCards Vector of card_model, holds the cards to be captured from the table
+     Return Value: Void
+     Local Variables: None
+     Algorithm:
+     1) Clear what was in the vector to begin with
+     2) Make sure the cards passed in were valid and add them to the variable to be used
+     when checking if the capture was valid in the round_model
+     Assistance Received: none
+      ********************************************************************* */
     void SetTableCardToBeCaptured(Vector<Card_Model> passedCards) {
 
         tableCardsToBeCaptured.clear();
@@ -1079,10 +1093,33 @@ public class Player_Model {
         }
     }
 
+    /** *********************************************************************
+     Function Name: GetTableCardsToBeCaptured
+     Purpose: To retrive the table cards that are meant to be captured
+     Parameters: None
+     Return Value:
+     @return Vector<Card_Model>
+     Local Variables: None
+     Algorithm:
+     1) Return the tableCardsToBeCaptured variable
+     Assistance Received: none
+      ********************************************************************* */
     Vector<Card_Model> GetTableCardsToBeCaptured() {
         return tableCardsToBeCaptured;
     }
 
+    /** *********************************************************************
+     Function Name: SetPlayerWantSet
+     Purpose: To set the playerWantSet variable either 'y' or 'n'
+     Parameters:
+     @param choice a char, holds the character for capturing a set
+     Return Value: Void
+     Local Variables: None
+     Algorithm:
+     1) If the choice passed in was 'y' or 'n', set the variable to what was passed in
+     2) Otherwise, report an error to the log
+     Assistance Received: none
+      ********************************************************************* */
     void SetPlayerWantSet(char choice) {
         if(choice == 'y' || choice == 'n') {
             playerWantSet = choice;
@@ -1092,10 +1129,31 @@ public class Player_Model {
         }
     }
 
+    /** *********************************************************************
+     Function Name: AddSetToPlayer
+     Purpose: To add a set to the vector of sets to be captured
+     Parameters:
+     @param setCards Set_Model object, holds the set of two cards to be added
+     Return Value: Void
+     Local Variables: None
+     Algorithm:
+     1) Add the set object to the vector of set objects
+     Assistance Received: none
+      ********************************************************************* */
     void AddSetToPlayer(Set_Model setCards) {
         playerMultipleSetCards.add(setCards);
     }
 
+    /** *********************************************************************
+     Function Name: ClearPlayerMultipleSets
+     Purpose: To empty everything out of the vector of set objects
+     Parameters: None
+     Return Value: Void
+     Local Variables: None
+     Algorithm:
+     1) Clear the playerMultipleSetCards vector
+     Assistance Received: none
+      ********************************************************************* */
     void ClearPlayerMultipleSets() {
         playerMultipleSetCards.clear();
     }

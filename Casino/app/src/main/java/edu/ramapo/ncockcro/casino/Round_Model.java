@@ -27,8 +27,8 @@ public class Round_Model {
     private Human_Model p1 = new Human_Model();
     private Computer_Model p2 = new Computer_Model();
     private Vector<Player_Model> player = new Vector<Player_Model>();
-    private Card_Model playerHandBuiltCard;
-    private Vector<Card_Model> playerTableBuildCards;
+    private Card_Model playerHandBuildCard;
+    private Vector<Card_Model> playerTableBuildCards = new Vector<Card_Model>();
     private Vector<Build_Model> tableBuilds = new Vector<Build_Model>();
     private int buildCounter;
     private Card_Model playerHandCaptureCard;
@@ -269,6 +269,242 @@ public class Round_Model {
     }
 
     /** *********************************************************************
+    Function Name: CheckBuild
+    Purpose: To check if the user is able to make a build based on the cards they entered
+    Parameters: None
+    Return Value:
+     @return boolean, Whether the player was able to build or not, a boolean value
+    Local Variables:
+    buildSize, an integer used for holding how many cards the user wants to build with
+    count, an integer used for making sure the cards the user entered are on the table
+    addExistingBuildSuccessful, a boolean for seeing if the player can add to a build or not
+    Algorithm:
+    1) Get the player's hand card used for the build and the cards from the table they want to build with
+    2) Go through the table cards and make sure the cards they entered are on the table
+    3) Have an if statement to check and make sure that if the cards add up to be able to make a build
+    4) If the cards are able to make a build, call another function to handle removing cards from the
+    player's hand and table and add them to the player's pile
+    Assistance Received: none
+    ********************************************************************* */
+    boolean CheckBuild() {
+
+        // Getting the player card that they want to put on the build
+        playerHandBuildCard = player.get(currentPlayer).GetPlayerCard();
+
+        // Getting the card on the table that the player wants to use for a build
+        playerTableBuildCards = player.get(currentPlayer).GetBuildCards();
+
+        int buildSize = playerTableBuildCards.size();
+        int count = 0;
+        boolean addExistingBuildSuccessful = false;
+
+        // If the player is creating a new build...
+        if(Character.toLowerCase(player.get(currentPlayer).GetNewOrExistingBuild()) == 'n') {
+
+            if(playerTableBuildCards.size() < 1) {
+                errorReason = "No cards selected from a build.";
+                return false;
+            }
+
+            // This is checking to make sure that the cards the user entered in to make a build are actually on the table
+            for(int i = 0; i < table.size(); i++) {
+                for(int j = 0; j < playerTableBuildCards.size(); i++) {
+                    if(table.get(i).GetCard().equals(playerTableBuildCards.get(j).GetCard())) {
+                        count++;
+                    }
+                }
+            }
+
+            // If one of the cards the player entered did not match any on the table, they entered a wrong card
+            if(count != buildSize) {
+                errorReason = "You can not make a build with those cards.";
+                return false;
+            }
+
+            // If the cards are suitable for a build , then the build will be created
+            if(CheckBuildNumbers(playerHandBuildCard, playerTableBuildCards)) {
+                CreatePlayerBuild();
+            }
+            else {
+                errorReason = "You can not make a build with the cards you tried using.";
+                return false;
+            }
+            return true;
+        }
+
+        // If the player wants to add to an existing build, then we will go through each build to find which one
+        // they want to add to and if it is possible
+        else if(Character.toLowerCase(player.get(currentPlayer).GetNewOrExistingBuild()) == 'e') {
+
+            for(int i = 0; i < tableBuilds.size(); i++) {
+
+                // If this function that is called returns true, then it was successful in validating the new build with the
+                // card added and created the new build already so all that is left to do is return true
+                // Here, we are also passing into the function the card to be added, the existing build, the current player,
+                // and the current player's hand
+                if(tableBuilds.get(i).CheckAndAddCardInBuild(playerHandBuildCard, player.get(currentPlayer).GetExistingBuildCard(),
+                currentPlayer, player.get(currentPlayer).GetHand())) {
+
+                    // Removing the card the player added from the player's hand
+                    player.get(currentPlayer).SetPrintTableBuildCards(tableBuilds.get(i).GetBuildOfCards());
+                    player.get(currentPlayer).RemoveCard(playerHandBuildCard);
+                    addExistingBuildSuccessful = true;
+                }
+            }
+
+            // If addExistingBuildSuccessful is true, then that means the card was added to the build successfully
+            if(addExistingBuildSuccessful) {
+                return true;
+            }
+
+            // Otherwise, they were not able to add the card to the build they specified
+            else {
+                errorReason = "There are no builds you can add with those cards.";
+                return false;
+            }
+        }
+
+        // Error handling in case something really got messed up and the program can't determine
+        // if the user wants a new or existing build
+        else {
+            Log.d("MyError", "Error, don't know if it is a new or existing build in round class.");
+            return false;
+        }
+    }
+
+    /** *********************************************************************
+     Function Name: CheckBuildNumbers
+     Purpose: To figure out if the cards that a player wants to use to build adds up to something in their deck and
+     if those cards they chose to build with are on the table.
+     Parameters:
+     @param playerCard, a card object, the card the player wants to build with
+     @param playerBuildCards, a vector of cards, card(s) the player wants to build with from the table
+     Return Value:
+     @return Boolean
+     Local Variables:
+     aceAs1, an int for counting cards when ace is 1
+     aceAs14, an int for counts cards when ace is 14
+     playerHand, a vector of cards which holds the current cards in a players hand
+     hasRightCards, a boolean which is true if everything is valid, false otherwise
+     Algorithm:
+     Still working on!
+     Assistance Received: none
+     ********************************************************************* */
+    boolean CheckBuildNumbers(Card_Model playerCard, Vector<Card_Model> playerBuildCards) {
+
+        // Local variables
+        int aceAs1 = 0;
+        int aceAs14 = 0;
+        Vector<Card_Model> playerHand = player.get(currentPlayer).GetHand();
+        boolean hasRightCards = false;
+
+        playerBuildCards.add(playerCard);
+
+        // Iterate through the cards the player wants to build with and count their values
+        for(int i = 0; i < playerBuildCards.size(); i++) {
+
+            // If the card is an ace, we must increment the two different counts with 1 and 14 as the ace card
+            if(playerBuildCards.get(i).GetNumber() == 'A') {
+                aceAs1++;
+                aceAs14 += 14;
+            }
+
+            // Otherwise, just increment with whatever the number is
+            else {
+                aceAs1 += player.get(currentPlayer).CardNumber(playerBuildCards.get(i).GetNumber());
+                aceAs14 += player.get(currentPlayer).CardNumber(playerBuildCards.get(i).GetNumber());
+            }
+        }
+
+        // If the player has a card that equals the total value of the build, then return true
+        for(int i = 0; i < playerHand.size(); i++) {
+            if(player.get(currentPlayer).CardNumber(playerHand.get(i).GetNumber()) == aceAs1 ||
+                    player.get(currentPlayer).CardNumber(playerHand.get(i).GetNumber()) == aceAs14) {
+                hasRightCards = true;
+                player.get(currentPlayer).AddToPlayerBuildCards(playerHand.get(i));
+                return hasRightCards;
+            }
+
+            // If the player is creating a build with an ace as the card they will use to capture it with later...
+            if(playerHand.get(i).GetNumber() == 'A' && aceAs14 == 14 || aceAs1 == 14) {
+                hasRightCards = true;
+                player.get(currentPlayer).AddToPlayerBuildCards(playerHand.get(i));
+                return hasRightCards;
+            }
+        }
+
+        return hasRightCards;
+    }
+
+    /** *********************************************************************
+    Function Name: CreatePlayerBuild
+    Purpose: To remove the cards from the table and player and incorporate them into a build object
+    Parameters: None
+    Return Value: Void
+    Local Variables:
+     playersBuildCards, a Vector<Card_Model>, for holding the builds cards part of a build
+     lastAddedCard, a char, the number of the last added card
+     handCards, a Vector<Card_Model>, the player's hand cards
+     countOfBuild, an int, holds the number value of a build
+    Algorithm:
+    1) Set the owner of the build based on the player currently playing
+    2) Add the cards to the build object and remove them from the table and player hand
+    Assistance Received: none
+    ********************************************************************* */
+    void CreatePlayerBuild() {
+
+        Vector<Card_Model> playersBuildCards = player.get(currentPlayer).GetPlayerBuildCards();
+        char lastAddedCard = playersBuildCards.lastElement().GetNumber();
+        Vector<Card_Model> handCards = new Vector<Card_Model>();
+
+        // Initialize a build
+        tableBuilds.add(new Build_Model());
+
+        // Setting the owner of a particular build
+        if(currentPlayer == 0) {
+            tableBuilds.get(buildCounter).SetOwner(0);
+        }
+        else {
+            tableBuilds.get(buildCounter).SetOwner(1);
+        }
+
+        // This is used for counting up the total value of a build and setting it right after to the specific build
+        int countOfBuild = 0;
+        for(int i = 0; i < playerTableBuildCards.size(); i++) {
+            countOfBuild += player.get(currentPlayer).CardNumber(playerTableBuildCards.get(i).GetNumber());
+        }
+
+        countOfBuild += player.get(currentPlayer).CardNumber(playerHandBuildCard.GetNumber());
+        tableBuilds.get(buildCounter).SetValueOfBuild(countOfBuild);
+
+        // This is for setting the card that is needed for capturing the build
+        handCards = player.get(currentPlayer).GetHand();
+        for(int i = 0; i < handCards.size(); i++) {
+            if(player.get(currentPlayer).CardNumber(handCards.get(i).GetNumber()) == countOfBuild) {
+                tableBuilds.get(buildCounter).SetCaptureCardOfBuild(handCards.get(i));
+                break;
+            }
+        }
+
+        // Saving the build cards to be outputted after the move is done
+        player.get(currentPlayer).SetPrintTableBuildCards(playerTableBuildCards);
+
+        // Adding the card from the player's hand onto the build that way I can send all the cards to be added to build object
+        playerTableBuildCards.add(playerHandBuildCard);
+
+        // With all the cards being used for a build, we push them onto the vector of builds
+        tableBuilds.get(buildCounter).SetBuildOfCards(playerTableBuildCards);
+
+        // Then remove the cards from the player's hand and the table since those cards are now part of a build
+        RemoveTableCards(playerTableBuildCards);
+        player.get(currentPlayer).RemoveCard(playerHandBuildCard);
+
+        buildCounter++;
+
+    }
+
+
+    /** *********************************************************************
     Function Name: CheckCapture
     Purpose: To check if the player is elegible to make a capture based on what they entered
     Parameters: None
@@ -315,13 +551,14 @@ public class Round_Model {
             for(int i = 0; i < playerSets.size(); i++) {
 
                 cardsOfSet = playerSets.get(i).GetCardOfSet();
+                Log.d("no2222", Integer.toString(cardsOfSet.size()));
 
                 // For each set, we must check and make sure that the cards are actually on the table
                 for(int j = 0; j < table.size(); j++) {
                     for(int k = 0; k < cardsOfSet.size(); k++) {
                         Log.d("Set", cardsOfSet.get(k).GetCard());
                         // If the card is on the table, push it onto the pile vector to be added later
-                        if(table.get(j).GetNumber() == cardsOfSet.get(k).GetNumber()) {
+                        if(table.get(j).GetCard().equals(cardsOfSet.get(k).GetCard())) {
                             Log.d("Add", "Adding set cards for computer to pile");
                             pile.add(table.get(j));
                             removeTableCards.add(table.get(j));
@@ -531,6 +768,7 @@ public class Round_Model {
             }
         }
 
+        // Checking if the player is able to capture with a same value card
         for(int i = 0; i < table.size(); i++) {
             for(int j = 0 ; j < playerHand.size(); j++) {
                 if(table.get(i).GetNumber() == playerHand.get(j).GetNumber()) {
@@ -544,8 +782,9 @@ public class Round_Model {
 
         Vector<Card_Model> trailCard = new Vector<Card_Model>();
         trailCard.add(passedCard);
-        AddCardsToTable(trailCard);
 
+        // Adding the trail card to the table
+        AddCardsToTable(trailCard);
         return true;
 
     }
@@ -685,14 +924,21 @@ public class Round_Model {
 
         Log.d("CurrentPlayer", Integer.toString(currentPlayer));
 
+        // Builds
         if(move == 'b') {
-            //build
+            if(CheckBuild()) {
+                SwitchPlayer();
+            }
         }
+
+        // Captures
         else if(move == 'c') {
             if(CheckCapture()) {
                 SwitchPlayer();
             }
         }
+
+        // Trailing
         else if(move == 't') {
             if(CheckTrail(player.get(currentPlayer).GetPlayerCard())) {
                 SwitchPlayer();
@@ -780,36 +1026,98 @@ public class Round_Model {
         player.get(currentPlayer).SetPlayerCard(passedPlayerCard);
     }
 
-    void SetCaptureInfo() {
-
-    }
-
+    /** *********************************************************************
+     Function Name: SetTableCardsToBeCaptured
+     Purpose: To pass the table cards to be captured to the player class
+     Parameters:
+     @param passedCards Vector of card_model, holds the cards to be captured
+     Return Value: Void
+     Local Variables: None
+     Algorithm:
+     1) Send the passed cards to the player class
+     Assistance Received: none
+      ********************************************************************* */
     void SetTableCardsToBeCaptured(Vector<Card_Model> passedCards) {
         player.get(currentPlayer).SetTableCardToBeCaptured(passedCards);
     }
 
+    /** *********************************************************************
+     Function Name: GetPlayerPile
+     Purpose: To get the player's pile, whoever was passed in
+     Parameters:
+     @param passedPlayer, an integer, the player
+     Return Value:
+     @return Vector<Card_Model>
+     Local Variables: None
+     Algorithm:
+     1) To retrieve a player's pile
+     Assistance Received: none
+      ********************************************************************* */
     Vector<Card_Model> GetPlayerPile(int passedPlayer) {
         return player.get(passedPlayer).GetPile();
     }
 
+    /** *********************************************************************
+     Function Name: ClearErrorReason
+     Purpose: To clear the error reason to "None"
+     Parameters: None
+     Return Value: Void
+     Local Variables: None
+     Algorithm:
+     1) Set the errorReason to "None"
+     Assistance Received: none
+     ********************************************************************* */
     void ClearErrorReason() {
         errorReason = "None";
     }
 
+    /** *********************************************************************
+     Function Name: SetPlayerModelWantSet
+     Purpose: To set if the player wants a set or not
+     Parameters:
+     @param choice, a char, either 'y' or 'n' for if the player wants a set
+     Return Value: Void
+     Local Variables: None
+     Algorithm:
+     1) Send the player's choice to the player class
+     Assistance Received: none
+     ********************************************************************* */
     void SetPlayerModelWantSet(char choice) {
         player.get(currentPlayer).SetPlayerWantSet(choice);
     }
 
+    /** *********************************************************************
+     Function Name: GetPlayerModelWantSet
+     Purpose: Retrieve if the player wants a set or not
+     Parameters: None
+     Return Value:
+     @return char, the player's choice for wanting a set
+     Local Variables: None
+     Algorithm:
+     1) Retrieve the playerWantSet variable from the player class
+     Assistance Received: none
+     ********************************************************************* */
     char GetPlayerModelWantSet() {
         return player.get(currentPlayer).GetPlayerWantSet();
     }
 
+    /** *********************************************************************
+     Function Name: SetPlayerModelAddSet
+     Purpose: To add a set object to the vector of set ojects in the player class
+     Parameters:
+     @param set, Set_Model oject, a set of two cards
+     Return Value: Void
+     Local Variables: None
+     Algorithm:
+     1) Pass the set object to the player class to be added to the player class
+     Assistance Received: none
+     ********************************************************************* */
     void SetPlayerModelAddSet(Set_Model set) {
         Log.d("Adding to set in round", set.GetCardOfSet().get(0).GetCard());
         player.get(currentPlayer).AddSetToPlayer(set);
     }
 
-    void PlayerModelClearPlayerMulitpleSets() {
+    void PlayerModelClearPlayerMultipleSets() {
         player.get(currentPlayer).ClearPlayerMultipleSets();
     }
 

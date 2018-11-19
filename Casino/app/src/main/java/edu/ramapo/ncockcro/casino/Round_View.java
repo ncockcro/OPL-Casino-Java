@@ -44,6 +44,7 @@ public class Round_View extends MainGame_Activity {
     private Button captureSetButton;
     private Button captureDoneButton;
     private Button captureAddSetButton;
+    private Button backButton;
 
     private Vector<Card_View> playerCards = new Vector<Card_View>();
     private Vector<Card_View> computerCards = new Vector<Card_View>();
@@ -122,6 +123,7 @@ public class Round_View extends MainGame_Activity {
         captureSetButton = (Button) activity.findViewById(R.id.captureSetButton);
         captureDoneButton = (Button) activity.findViewById(R.id.captureDoneButton);
         captureAddSetButton = (Button) activity.findViewById(R.id.addSetButton);
+        backButton = (Button) activity.findViewById(R.id.backButton);
 
     }
 
@@ -795,8 +797,9 @@ public class Round_View extends MainGame_Activity {
         HideAllButtons();
         captureAddSetButton.setVisibility(View.VISIBLE);
         captureAddSetButton.setEnabled(false);
-        captureDoneButton.setVisibility(View.VISIBLE);
+        captureDoneButton.setVisibility(View.GONE);
         captureDoneButton.setEnabled(false);
+        backButton.setVisibility(View.VISIBLE);
     }
 
     /** *********************************************************************
@@ -850,6 +853,7 @@ public class Round_View extends MainGame_Activity {
         captureSetButton.setVisibility(View.GONE);
         captureDoneButton.setVisibility(View.GONE);
         captureAddSetButton.setVisibility(View.GONE);
+        backButton.setVisibility(View.GONE);
     }
 
     /** *********************************************************************
@@ -870,16 +874,22 @@ public class Round_View extends MainGame_Activity {
         setCardPickedCounter = 0;
         setHighlightedTableCard.clear();
         roundModel.SetPlayerModelWantSet('n');
-        roundModel.PlayerModelClearPlayerMulitpleSets();
+        roundModel.PlayerModelClearPlayerMultipleSets();
 
+        // If there was an error reason...
         if(!roundModel.GetErrorReason().equals("None")) {
+
+            // Output the error reason to the text view
             outputTextView.append(roundModel.GetErrorReason());
             outputTextView.append("\n");
             outputTextView.append("\n");
+
+            // Clear the reason and have the human play again
             roundModel.ClearErrorReason();
             HideAllButtons();
             ShowHumanButtons();
 
+            // Unhighlight the cards on the table and re enable them
             for(int i = 0; i < tableCards.size(); i++) {
                 table.get(i).setColorFilter(null);
                 highlightedTableCard.clear();
@@ -888,12 +898,26 @@ public class Round_View extends MainGame_Activity {
 
             return true;
         }
+
+        // Otherwise, switch to the computer's button for their move
         else {
             ShowComputerButtons();
             return false;
         }
     }
 
+    /** *********************************************************************
+     Function Name: PrintErrors
+     Purpose: If there were any errors in making moves, this will output them to the text box
+     Parameters: None
+     Return Value:
+     @return boolean, true if there was an error, false otherwise
+     Local Variables: None
+     Algorithm:
+     1) If there was an error, output and return true
+     2) Otherwise, show the computer buttons and output false
+     Assistance Received: none
+      ********************************************************************* */
     void EnableTableButtons() {
 
         Log.d("TableSize", Integer.toString(table.size()));
@@ -902,23 +926,56 @@ public class Round_View extends MainGame_Activity {
         }
     }
 
+    /** *********************************************************************
+     Function Name: DisableTableButtons
+     Purpose: Disable the image buttons on the table when the user isn't allowed to click them
+     Parameters: None
+     Return Value: Void
+     Local Variables: None
+     Algorithm:
+     1) Cycle through the table cards and disable each one
+     Assistance Received: none
+      ********************************************************************* */
     void DisableTableButtons() {
         for(int i = 0; i < table.size(); i++) {
             table.get(i).setEnabled(false);
         }
     }
 
+    /** *********************************************************************
+     Function Name: SetPlayersHandsVisible
+     Purpose: Set both of the player's hands visible when both player's use all of their cards
+     Parameters: None
+     Return Value: Void
+     Local Variables: None
+     Algorithm:
+     1) Cycle through the human's cards and set visible
+     2) Cycle through the computer's cards and set visible
+     Assistance Received: none
+      ********************************************************************* */
     void SetPlayersHandsVisible() {
 
+        // Human's cards
         for(int i = 0; i < 4; i++) {
             playerImageButtonHand.get(i).setVisibility(View.VISIBLE);
         }
 
+        // Computer's cards
         for(int i = 0; i < 4; i++) {
             computerImageViewHand.get(i).setVisibility(View.VISIBLE);
         }
     }
 
+    /** *********************************************************************
+     Function Name: PrintTableToOutput
+     Purpose: Print the table to the output text view
+     Parameters: None
+     Return Value: Void
+     Local Variables: None
+     Algorithm:
+     1) Print the table to the output text view
+     Assistance Received: none
+      ********************************************************************* */
     void PrintTableToOutput() {
 
         outputTextView.append("TABLE: ");
@@ -928,11 +985,42 @@ public class Round_View extends MainGame_Activity {
         outputTextView.append("\n");
     }
 
+    /** *********************************************************************
+     Function Name: AddSetToPlayer
+     Purpose: Take the set cards the user entered earlier, put them in a set, and add to the player
+     Parameters: None
+     Return Value: Void
+     Local Variables: None
+     Algorithm:
+     1) Put the sets cards into a set object
+     2) Send the set object to the player classed to be added
+     Assistance Received: none
+      ********************************************************************* */
     void AddSetToPlayer() {
         Set_Model tempSet = new Set_Model();
         tempSet.SetCardsOfSet(cardView.ConvertViewToModelVector(setHighlightedTableCard));
         roundModel.SetPlayerModelAddSet(tempSet);
+        captureDoneButton.setVisibility(View.VISIBLE);
 
+    }
+
+    void ClearData() {
+
+        HideAllButtons();
+        ShowHumanButtons();
+
+        //Unhighlight player's cards
+        for(int i = 0; i < playerCards.size(); i++) {
+            playerImageButtonHand.get(i).setColorFilter(null);
+        }
+
+        // Unhighlight table cards
+        for(int i = 0; i < tableCards.size(); i++) {
+            table.get(i).setColorFilter(null);
+        }
+        roundModel.PlayerModelClearPlayerMultipleSets();
+        setCardPickedCounter = 0;
+        roundModel.SetPlayerModelWantSet('n');
     }
 
 }

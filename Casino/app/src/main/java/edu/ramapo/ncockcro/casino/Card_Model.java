@@ -18,8 +18,7 @@ public class Card_Model {
      Purpose: To set a card to the value that was passed in
      Parameters:
      @param passedCard String, holds the value of a card
-     Return Value:
-     @return void
+     Return Value: Void
      Local Variables: None
      Algorithm:
      1) If the passed in card has a valid suit and valid number...
@@ -49,7 +48,7 @@ public class Card_Model {
      1) Return the string card value
      Assistance Received: none
       ********************************************************************* */
-    final String GetCard() {
+    String GetCard() {
         return card;
     }
 
@@ -64,7 +63,7 @@ public class Card_Model {
      1) Return the suit of a card
      Assistance Received: none
       ********************************************************************* */
-    final char GetSuit() {
+    char GetSuit() {
         return suit;
     }
 
@@ -79,7 +78,7 @@ public class Card_Model {
      1) Return the number of a card
      Assistance Received: none
       ********************************************************************* */
-    final char GetNumber() {
+    char GetNumber() {
         return number;
     }
 

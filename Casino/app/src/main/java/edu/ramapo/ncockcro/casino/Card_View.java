@@ -103,12 +103,40 @@ public class Card_View {
         return tempCards;
     }
 
+    /** *********************************************************************
+     Function Name: ConvertViewToModel
+     Purpose: To convect a view object card to a model object card
+     Parameters:
+     @param passedCard card_model, holds the cards to be converted to card_view
+     Return Value:
+     @return Card_Model
+     Local Variables:
+     modelCard, a card_model object that gets returned
+     Algorithm:
+     1) Set the model card object to what was in the card view object
+     2) Return that model object
+     Assistance Received: none
+      ********************************************************************* */
     Card_Model ConvertViewToModel(Card_View passedCard) {
         Card_Model modelCard = new Card_Model();
 
         modelCard.SetCard(passedCard.GetCard());
         return modelCard;
     }
+
+    /** *********************************************************************
+     Function Name: ConvertViewToModelVector
+     Purpose: To convert a vector of card_view's to a vector of card_model's
+     Parameters:
+     @param passedCards Vector of card_view, holds the cards to be converted to card_model
+     Return Value:
+     @return Vector<Card_Model>
+     Local Variables:
+     modelCards, the Vector of card_model's which is what will get returned
+     Algorithm:
+     1) Cycle through the card view's passed in and store them in the vector of card_model
+     Assistance Received: none
+      ********************************************************************* */
     Vector<Card_Model> ConvertViewToModelVector(Vector<Card_View> passedCards) {
         Vector<Card_Model> modelCards = new Vector<Card_Model>();
 

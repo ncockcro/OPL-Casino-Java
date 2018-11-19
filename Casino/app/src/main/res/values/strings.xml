@@ -14,7 +14,7 @@
     <string name="humanHandTextView">Your Hand</string>
     <string name="outputConsole">Console</string>
     <string name="computerHandTextView">Computer Hand</string>
-    <string name="humanPileTextView">Human Pile</string>
+    <string name="humanPileTextView">Your Pile</string>
     <string name="computerPileTextView">Computer Pile</string>
     <string name="computerHandCard1">Chand1</string>
     <string name="computerHandCard2">Chand2</string>
@@ -49,4 +49,6 @@
     <string name="captureSameValueButton">Capture Same Value Card</string>
     <string name="captureDoneButton">Done</string>
     <string name="addSetButton">Add Set</string>
+    <string name="movesTextView">Moves</string>
+    <string name="backButton">Back</string>
 </resources>

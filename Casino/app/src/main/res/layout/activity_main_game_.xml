@@ -11,12 +11,12 @@
     <TextView
         android:id="@+id/outputTextView"
         android:layout_width="364dp"
-        android:layout_height="155dp"
+        android:layout_height="210dp"
         android:layout_marginEnd="50dp"
         android:layout_marginRight="50dp"
         android:layout_marginBottom="270dp"
         android:background="#FFFFFFFF"
-        android:scrollbars = "vertical"
+        android:scrollbars="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
@@ -160,8 +160,8 @@
         android:id="@+id/humanPileTextView"
         android:layout_width="wrap_content"
         android:layout_height="18dp"
-        android:layout_marginStart="406dp"
-        android:layout_marginLeft="406dp"
+        android:layout_marginStart="360dp"
+        android:layout_marginLeft="360dp"
         android:layout_marginBottom="175dp"
         android:text="@string/humanPileTextView"
         android:textColor="#FFFFFFFF"
@@ -173,11 +173,11 @@
         android:layout_width="91dp"
         android:layout_height="82dp"
         android:layout_marginTop="48dp"
-        android:layout_marginEnd="188dp"
-        android:layout_marginRight="188dp"
+        android:layout_marginEnd="250dp"
+        android:layout_marginRight="250dp"
+        android:background="#00000000"
         android:contentDescription="@string/saveButton"
         android:scaleType="fitXY"
-        android:background="#00000000"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/save" />
@@ -201,8 +201,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="25dp"
-        android:layout_marginEnd="220dp"
-        android:layout_marginRight="220dp"
+        android:layout_marginEnd="280dp"
+        android:layout_marginRight="280dp"
         android:text="@string/saveTextView"
         android:textColor="#FFFFFFFF"
         app:layout_constraintEnd_toEndOf="parent"
@@ -226,7 +226,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="230dp"
         android:layout_marginLeft="230dp"
-        android:layout_marginTop="225dp"
+        android:layout_marginTop="210dp"
         android:text="@string/tableTextView"
         android:textColor="#FFFFFFFF"
         app:layout_constraintStart_toStartOf="parent"
@@ -236,8 +236,8 @@
         android:id="@+id/computerPileTextView"
         android:layout_width="wrap_content"
         android:layout_height="15dp"
-        android:layout_marginStart="406dp"
-        android:layout_marginLeft="406dp"
+        android:layout_marginStart="315dp"
+        android:layout_marginLeft="315dp"
         android:layout_marginTop="30dp"
         android:text="@string/computerPileTextView"
         android:textColor="#FFFFFFFF"
@@ -248,9 +248,9 @@
         android:id="@+id/consoleTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="165dp"
-        android:layout_marginRight="165dp"
-        android:layout_marginBottom="38dp"
+        android:layout_marginEnd="200dp"
+        android:layout_marginRight="200dp"
+        android:layout_marginBottom="10dp"
         android:text="@string/consoleTextView"
         android:textColor="#FFFFFFFF"
         app:layout_constraintBottom_toTopOf="@+id/outputTextView"
@@ -260,9 +260,9 @@
         android:id="@+id/deckTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="175dp"
-        android:layout_marginEnd="650dp"
-        android:layout_marginRight="650dp"
+        android:layout_marginTop="170dp"
+        android:layout_marginEnd="610dp"
+        android:layout_marginRight="610dp"
         android:text="@string/deckTextView"
         android:textColor="#FFFFFFFF"
         app:layout_constraintEnd_toEndOf="parent"
@@ -270,11 +270,11 @@
 
     <HorizontalScrollView
         android:id="@+id/tableHorizontalView"
-        android:layout_width="426dp"
-        android:layout_height="176dp"
-        android:layout_marginStart="46dp"
-        android:layout_marginLeft="46dp"
-        android:layout_marginTop="20dp"
+        android:layout_width="400dp"
+        android:layout_height="215dp"
+        android:layout_marginStart="40dp"
+        android:layout_marginLeft="40dp"
+        android:layout_marginTop="10dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tableTextView">
 
@@ -287,11 +287,11 @@
 
     <Button
         android:id="@+id/trailButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="76dp"
-        android:layout_marginRight="76dp"
-        android:layout_marginBottom="96dp"
+        android:layout_width="160dp"
+        android:layout_height="100dp"
+        android:layout_marginEnd="160dp"
+        android:layout_marginRight="160dp"
+        android:layout_marginBottom="30dp"
         android:onClick="TrailCardPressed"
         android:text="@string/trailButton"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -301,9 +301,9 @@
         android:id="@+id/deckHorizontalView"
         android:layout_width="378dp"
         android:layout_height="215dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginBottom="15dp"
         app:layout_constraintBottom_toTopOf="@+id/humanPileTextView"
         app:layout_constraintEnd_toStartOf="@+id/outputTextView">
 
@@ -316,45 +316,46 @@
 
     <Button
         android:id="@+id/computerMoveButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="94dp"
-        android:layout_marginRight="94dp"
-        android:layout_marginBottom="96dp"
+        android:layout_width="237dp"
+        android:layout_height="146dp"
+        android:layout_marginEnd="110dp"
+        android:layout_marginRight="110dp"
+        android:layout_marginBottom="60dp"
         android:onClick="ComputerMoveButtonPressed"
         android:text="@string/computerMoveButton"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/trailButton" />
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <Button
         android:id="@+id/captureButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="85dp"
-        android:layout_marginRight="85dp"
-        android:layout_marginBottom="9dp"
+        android:layout_width="160dp"
+        android:layout_height="100dp"
+        android:layout_marginEnd="60dp"
+        android:layout_marginRight="60dp"
+        android:layout_marginBottom="130dp"
         android:onClick="CaptureButtonPressed"
         android:text="@string/captureButton"
-        app:layout_constraintBottom_toTopOf="@+id/trailButton"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
     <Button
         android:id="@+id/captureBuildButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="82dp"
-        android:layout_marginRight="82dp"
+        android:layout_width="160dp"
+        android:layout_height="100dp"
+        android:layout_marginEnd="250dp"
+        android:layout_marginRight="250dp"
+        android:layout_marginBottom="130dp"
         android:text="@string/captureBuildButton"
-        app:layout_constraintBottom_toTopOf="@+id/captureDoneButton"
-        app:layout_constraintEnd_toStartOf="@+id/captureSetButton" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <Button
         android:id="@+id/captureSetButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="72dp"
-        android:layout_marginRight="72dp"
-        android:layout_marginBottom="200dp"
+        android:layout_width="160dp"
+        android:layout_height="100dp"
+        android:layout_marginEnd="160dp"
+        android:layout_marginRight="160dp"
+        android:layout_marginBottom="30dp"
         android:onClick="CaptureSetButtonPressed"
         android:text="@string/captureSetButton"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -362,15 +363,15 @@
 
     <Button
         android:id="@+id/captureDoneButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="65dp"
-        android:layout_marginRight="65dp"
-        android:layout_marginBottom="150dp"
+        android:layout_width="160dp"
+        android:layout_height="100dp"
+        android:layout_marginEnd="60dp"
+        android:layout_marginRight="60dp"
+        android:layout_marginBottom="130dp"
         android:onClick="CaptureDoneButtonPressed"
         android:text="@string/captureDoneButton"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/captureButton" />
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <HorizontalScrollView
         android:id="@+id/playerPileHorizontalView"
@@ -391,7 +392,7 @@
 
     <HorizontalScrollView
         android:id="@+id/computerPileHorizontalView"
-        android:layout_width="452dp"
+        android:layout_width="300dp"
         android:layout_height="157dp"
         android:layout_marginStart="500dp"
         android:layout_marginLeft="500dp"
@@ -408,13 +409,37 @@
 
     <Button
         android:id="@+id/addSetButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="51dp"
-        android:layout_marginRight="51dp"
-        android:layout_marginBottom="29dp"
+        android:layout_width="160dp"
+        android:layout_height="100dp"
+        android:layout_marginEnd="250dp"
+        android:layout_marginRight="250dp"
+        android:layout_marginBottom="130dp"
         android:onClick="AddSetButtonPressed"
         android:text="@string/addSetButton"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <TextView
+        android:id="@+id/MovesTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="210dp"
+        android:layout_marginRight="210dp"
+        android:layout_marginBottom="235dp"
+        android:text="@string/movesTextView"
+        android:textColor="#FFFFFFFF"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <Button
+        android:id="@+id/backButton"
+        android:layout_width="160dp"
+        android:layout_height="100dp"
+        android:layout_marginEnd="160dp"
+        android:layout_marginRight="160dp"
+        android:layout_marginBottom="30dp"
+        android:onClick="BackButtonPressed"
+        android:text="@string/backButton"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 

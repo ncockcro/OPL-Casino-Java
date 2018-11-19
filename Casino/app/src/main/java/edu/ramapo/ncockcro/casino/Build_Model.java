@@ -18,8 +18,7 @@ public class Build_Model {
     Function Name: Build_Model
     Purpose: Deafult constructor for Build_Model
     Parameters: None
-    Return Value:
-    @return Void
+    Return Value: Void
     Local Variables: None
     Algorithm:
     1) None
@@ -34,8 +33,7 @@ public class Build_Model {
     Purpose: To set the owner of a build
     Parameters:
     @param passedOwner, an integer passed by value. It holds the passed in owner of a build
-    Return Value:
-    @return Void
+    Return Value: Void
     Local Variables: None
     Algorithm:
     1) Check and make sure the passed in owner is either 0 or 1
@@ -47,7 +45,7 @@ public class Build_Model {
             owner = passedOwner;
         }
         else {
-            Log.d("ERROR", "Error in setting the owner of a build in the build class.");
+            Log.d("MyError", "Error in setting the owner of a build in the build class.");
         }
     }
 
@@ -71,14 +69,14 @@ public class Build_Model {
     Purpose: Set the vector of cards of a build
     Parameters:
     @param buildCards, an vector of cards passed by value. It holds the cards to be made of a build
-    Return Value:
-    @return Void
+    Return Value: Void
     Local Variables: None
     Algorithm:
     1) Set the buildOfCards to be the set passed in
     Assistance Received: none
     ********************************************************************* */
     void SetBuildOfCards(Vector<Card_Model> buildCards) {
+
         for(int i = 0; i < buildCards.size(); i++) {
             for(int j = 0; j < uniqueCards.size(); j++) {
                 if(buildCards.get(i).GetCard().equals(uniqueCards.get(j).GetCard())) {
@@ -246,8 +244,8 @@ public class Build_Model {
     Algorithm:
     1) If the value is greater than 0 and less than 15
     2) Set the value of the build to what was passed in
-Assistance Received: none
-********************************************************************* */
+    Assistance Received: none
+    ********************************************************************* */
     void SetValueOfBuild(int value) {
 
         // Value must be greater than 0 and less than 15 to remain in the size of a build
@@ -286,7 +284,7 @@ Assistance Received: none
     3) Otherwise, print out an error message
     Assistance Received: none
     ********************************************************************* */
-    void SetCaptuerCardOfBuild(Card_Model card) {
+    void SetCaptureCardOfBuild(Card_Model card) {
 
         // If the card is an actual card being passed in, then set the value
         for(int i = 0; i < uniqueCards.size(); i++) {
@@ -296,7 +294,7 @@ Assistance Received: none
             }
         }
 
-        Log.d("ERROR", "Error in setting the capture card of a build in build class.");
+        Log.d("MyError", "Error in setting the capture card of a build in build class.");
     }
 
     /** *********************************************************************

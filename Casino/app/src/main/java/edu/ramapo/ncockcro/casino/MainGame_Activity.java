@@ -84,14 +84,39 @@ public class MainGame_Activity extends AppCompatActivity {
         roundView.EnableTableButtons();
         roundModel.SetPlayerMove('c');
         roundView.ShowCaptureButtons();
-        roundModel.SetCaptureInfo();
     }
 
+    /** *********************************************************************
+     Function Name: CaptureSetButtonPressed
+     Purpose: Let the model know the user is capturing a set and show the capture buttons
+     Parameters:
+     @param view View object, holds the button that was pressed
+     Return Value: Void
+     Local Variables: None
+     Algorithm:
+     1) Set the playerWantSet to 'y' in the model
+     2) Show the capture buttons for gettings sets
+     Assistance Received: none
+      ********************************************************************* */
     public void CaptureSetButtonPressed(View view) {
         roundModel.SetPlayerModelWantSet('y');
         roundView.ShowCaptureSetButtons();
     }
 
+    /** *********************************************************************
+     Function Name: CaptureDoneButtonPressed
+     Purpose: To make a capture move when the capture done button is pressed
+     Parameters:
+     @param view View object, holds the button that was pressed
+     Return Value: Void
+     Local Variables: None
+     Algorithm:
+     1) Send the capture info over to the model
+     2) Have the player make a move
+     3) If there were no errors, then switch the UI for a computer move and check for
+     dealing cards
+     Assistance Received: none
+      ********************************************************************* */
     public void CaptureDoneButtonPressed(View view) {
 
 
@@ -100,12 +125,22 @@ public class MainGame_Activity extends AppCompatActivity {
 
         if(!roundView.PrintErrors()) {
             roundView.DisableTableButtons();
-            //roundView.ShowComputerButtons();
             roundView.CheckForDealingCards();
             roundView.UpdateScreen(this);
         }
     }
 
+    /** *********************************************************************
+     Function Name: ConvertModelToView
+     Purpose: To convert a vector of card_model's to card_view's
+     Parameters:
+     @param view View object, holds the button that was pressed
+     Return Value: Void
+     Local Variables: None
+     Algorithm:
+     1) Add the two cards the user clicked and send them to the model
+     Assistance Received: none
+      ********************************************************************* */
     public void AddSetButtonPressed(View view) {
         roundView.AddSetToPlayer();
     }
@@ -157,5 +192,9 @@ public class MainGame_Activity extends AppCompatActivity {
             roundView.ShowHumanButtons();
         }
 
+    }
+
+    public void BackButtonPressed(View view) {
+        roundView.ClearData();
     }
 }
