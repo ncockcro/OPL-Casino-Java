@@ -1051,12 +1051,34 @@ public class Round_View extends MainGame_Activity {
         backButton.setVisibility(View.VISIBLE);
     }
 
+    /** *********************************************************************
+     Function Name: ShowBuildButtons
+     Purpose: To show just the buttons needed making a new or existing build
+     Parameters: None
+     Return Value: Void
+     Local Variables: None
+     Algorithm:
+     1) Hide all of the buttons
+     2) Just show the buttons for adding making a new or existing build
+     Assistance Received: none
+     ********************************************************************* */
     void ShowBuildButtons() {
         HideAllButtons();
         newBuildButton.setVisibility(View.VISIBLE);
         existingBuildButton.setVisibility(View.VISIBLE);
     }
 
+    /** *********************************************************************
+     Function Name: ShowNewOrExistingBuildButtons
+     Purpose: To show just the buttons needed for finishing a new or existing build
+     Parameters: None
+     Return Value: Void
+     Local Variables: None
+     Algorithm:
+     1) Hide all of the buttons
+     2) Just show the buttons for finishing a new or existing build
+     Assistance Received: none
+     ********************************************************************* */
     void ShowNewOrExistingBuildButtons() {
         HideAllButtons();
         backButton.setVisibility(View.VISIBLE);
@@ -1064,6 +1086,17 @@ public class Round_View extends MainGame_Activity {
         DoneButton.setEnabled(false);
     }
 
+    /** *********************************************************************
+     Function Name: ShopwCaptureBuildButtons
+     Purpose: To show just the buttons needed for capturing a build
+     Parameters: None
+     Return Value: Void
+     Local Variables: None
+     Algorithm:
+     1) Hide all of the buttons
+     2) Just show the buttons for adding a build
+     Assistance Received: none
+     ********************************************************************* */
     void ShowCaptureBuildButtons() {
 
         HideAllButtons();
@@ -1206,8 +1239,20 @@ public class Round_View extends MainGame_Activity {
         }
     }
 
+    /** *********************************************************************
+     Function Name: CaptureBuildPrintError
+     Purpose: To show any errors that might happen when trying to capture a build
+     Parameters: None
+     Return Value: Void
+     Local Variables: None
+     Algorithm:
+     1) If there was an error, output it and send the human back to the main buttons
+     2) Otherwise, just return false
+     Assistance Received: none
+     ********************************************************************* */
     boolean CaptureBuildPrintError() {
 
+        // If there was an error...
         if(!roundModel.GetErrorReason().equals("None")) {
             // Output the error reason to the text view
             outputTextView.append(roundModel.GetErrorReason());
@@ -1223,6 +1268,7 @@ public class Round_View extends MainGame_Activity {
 
             return true;
         }
+        // Otherwise, just return false
         else {
             return false;
         }
@@ -1337,8 +1383,6 @@ public class Round_View extends MainGame_Activity {
         }
 
         int numOfBuildCards = 0;
-        String greenColor = "#0x4033FF42";
-        String blueColor = "0x403336FF";
 
 
         for(int i = 0; i < multipleBuildCards.size(); i++) {
