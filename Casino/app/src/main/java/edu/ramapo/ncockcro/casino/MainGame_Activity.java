@@ -83,16 +83,19 @@ public class MainGame_Activity extends AppCompatActivity {
         roundView.EnableTableButtons();
         roundModel.SetPlayerMove('b');
         roundView.ShowBuildButtons();
+        roundView.DisableTableButtons();
     }
 
     public void NewBuildButtonPressed(View view) {
         roundModel.SetPlayerModelWantNewOrExisting('n');
         roundView.ShowNewOrExistingBuildButtons();
+        roundView.EnableTableButtons();
     }
 
     public void ExistingBuildButtonPressed(View view) {
         roundModel.SetPlayerModelWantNewOrExisting('e');
         roundView.ShowNewOrExistingBuildButtons();
+        roundView.EnableTableButtons();
     }
 
     /** *********************************************************************
@@ -114,6 +117,28 @@ public class MainGame_Activity extends AppCompatActivity {
         roundView.EnableTableButtons();
         roundModel.SetPlayerMove('c');
         roundView.ShowCaptureButtons();
+    }
+
+    public void CaptureBuildButtonPressed(View view) {
+
+        roundModel.CheckForBuilds();
+        if(!roundView.CaptureBuildPrintError()) {
+            Log.d("Yes", "Sending yes to the model");
+            roundModel.SetPlayerModelWantBuild('y');
+            roundView.ShowCaptureBuildButtons();
+
+        }
+    }
+
+    public void InsideCaptureBuildButtonPressed(View view) {
+
+        roundModel.PlayerMakeMove();
+
+        if(!roundView.PrintErrors()) {
+            roundView.DisableTableButtons();
+            roundView.CheckForDealingCards(this);
+            roundView.UpdateScreen(this);
+        }
     }
 
     /** *********************************************************************
@@ -159,7 +184,7 @@ public class MainGame_Activity extends AppCompatActivity {
 
         if(!roundView.PrintErrors()) {
             roundView.DisableTableButtons();
-            roundView.CheckForDealingCards();
+            roundView.CheckForDealingCards(this);
             roundView.UpdateScreen(this);
         }
     }
@@ -199,7 +224,7 @@ public class MainGame_Activity extends AppCompatActivity {
         roundModel.PlayerMakeMove();
 
         if(!roundView.PrintErrors()) {
-            roundView.CheckForDealingCards();
+            roundView.CheckForDealingCards(this);
             roundView.UpdateScreen(this);
         }
     }
@@ -219,9 +244,11 @@ public class MainGame_Activity extends AppCompatActivity {
     public void ComputerMoveButtonPressed(View view) {
 
         roundView.PrintTableToOutput();
+
         roundModel.PlayerMakeMove();
+
         if(!roundView.PrintErrors()) {
-            roundView.CheckForDealingCards();
+            roundView.CheckForDealingCards(this);
             roundView.UpdateScreen(this);
             roundView.ShowHumanButtons();
         }
@@ -230,5 +257,30 @@ public class MainGame_Activity extends AppCompatActivity {
 
     public void BackButtonPressed(View view) {
         roundView.ClearData();
+    }
+
+    public void SeeResultsButtonPressed(View view) {
+        Intent intentResults = new Intent(this, RoundEnd_Activity.class);
+        Vector<Card_Model> tempPlayerPile = roundModel.GetPlayerPile(0);
+        Vector<Card_Model> tempComputerPile = roundModel.GetPlayerPile(1);
+
+
+        for(int i = 0; i < tempPlayerPile.size(); i++) {
+            intentResults.putExtra("PlayerPile" + i, tempPlayerPile.get(i).GetCard());
+        }
+
+        String playerPileSize = Integer.toString(tempPlayerPile.size());
+        Log.d("playerPileSize", Integer.toString(tempPlayerPile.size()));
+        //intentResults.putExtra("PlayerPileSize", tempPlayerPile.size());
+        intentResults.putExtra("PlayerPileSize", playerPileSize);
+
+        for(int i = 0; i < tempComputerPile.size(); i++) {
+            intentResults.putExtra("ComputerPile" + i, tempComputerPile.get(i).GetCard());
+        }
+
+        String computerPileSize = Integer.toString(tempComputerPile.size());
+        intentResults.putExtra("ComputerPileSize", computerPileSize);
+
+        startActivity(intentResults);
     }
 }

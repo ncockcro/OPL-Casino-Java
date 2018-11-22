@@ -17,6 +17,12 @@ public class Card_View {
 
     }
 
+    Card_View(String passedCard) {
+        card = passedCard;
+        suit = passedCard.charAt(0);
+        number = passedCard.charAt(1);
+    }
+
     /** *********************************************************************
      Function Name: DrawFourCardsTable
      Purpose: To draw four cards to the table

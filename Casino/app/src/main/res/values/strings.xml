@@ -54,4 +54,13 @@
     <string name="buildButton">Build</string>
     <string name="buildNewButton">New Build</string>
     <string name="existinbBuilButton">Existing Build</string>
+    <string name="insideCaptureBuild">Capture Build</string>
+    <string name="mostCardsTextView">Most Cards</string>
+    <string name="mostSpadesTextView">Most spades</string>
+    <string name="tenOfDiamondsTextView">Ten of Diamons</string>
+    <string name="twoOfSpadesTextView">Two of Spades</string>
+    <string name="playNewRoundButton">Play new round!</string>
+    <string name="mostAcesTextView">Most Aces</string>
+    <string name="gameWonTextView">Game Won</string>
+    <string name="seeResultsButton">See Results</string>
 </resources>

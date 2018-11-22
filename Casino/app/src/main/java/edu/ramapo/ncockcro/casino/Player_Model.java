@@ -651,21 +651,28 @@ public class Player_Model {
 
         // Checking to see if any builds can be captured
 
+        Log.d("In AI", Integer.toString(tableBuilds.size()));
+
         // First we need to cycle through each of the builds on the table
         for(int i = 0; i < tableBuilds.size(); i++) {
             currentBuild = tableBuilds.get(i).GetBuildOfCards();
+            Log.d("AICaptureBuild", "Inside of capturing a build in AI");
 
             // Saving the current build of cards to be printed after the computer makes their move
             printTableBuildCards = tableBuilds.get(i).GetBuildOfCards();
 
             // Then cycle through all of the cards in a specific build and add up the value of the cards
             for(int j = 0; j < currentBuild.size(); j++) {
+                Log.d("Value of each card in ai", Integer.toString(CardNumber(currentBuild.get(j).GetNumber())));
                 count += CardNumber(currentBuild.get(j).GetNumber());
             }
 
             // Now we must go through the player's hand and see if any of the cards equal the sum of the build
             // If so, this function will return true and the build will be captured
             for(int j = 0; j < hand.size(); j++) {
+
+                Log.d("IncaptureBuild", hand.get(j).GetCard());
+                Log.d("Count", Integer.toString(count));
 
                 // Capturing the build with an ace
                 if(hand.get(j).GetNumber() == 'A' && count == 14) {
@@ -1160,7 +1167,7 @@ public class Player_Model {
 
     void SetPlayerWantNewOrExisting(char choice) {
 
-        if(choice == 'y' || choice == 'n') {
+        if(choice == 'n' || choice == 'e') {
             newOrExistingBuild = choice;
         }
         else {
@@ -1203,6 +1210,14 @@ public class Player_Model {
         }
     }
 
+    void SetExistingBuildCard(Card_Model passedCard) {
+
+        for(int i = 0; i < uniqueCards.size(); i++) {
+            if(uniqueCards.get(i).GetCard().equals(passedCard.GetCard())) {
+                existingBuildCard = passedCard;
+            }
+        }
+    }
 
 
 }

@@ -29,22 +29,61 @@ public class Tournament_Model {
     Vector<Build_Model> loadGameBuilds = new Vector<Build_Model>();
     Vector<Card_Model> loadGameDeck = new Vector<Card_Model>();
     String nextPlayer;
-    Vector<String> scoreOutputHuman = new Vector<String>();
-    Vector<String> scoreOutputComputer = new Vector<String>();
 
+    String mostCardsMessage;
+    String mostSpadesMessage;
+    String tenOfDiamondsMessage;
+    String twoOfSpadesMessage;
+    Vector<String> numAcesMessage;
+    String winnerMessage;
+
+    String mostCardsColor;
+    String mostSpadesColor;
+    String tenOfDiamondsColor;
+    String twoOfSpadesColor;
+    String winnerColor;
+
+    /** *********************************************************************
+     Function Name: Tournament_Model
+     Purpose: Default constructor
+     Parameters: None
+     Return Value: None
+     Local Variables: None
+     Algorithm:
+     1) Default constructor
+     Assistance Received: none
+      ********************************************************************* */
     Tournament_Model() {
 
     }
 
+    /** *********************************************************************
+     Function Name: Tournament_Model
+     Purpose: Overloaded default constructor with the activity
+     Parameters:
+     @param passedActivity, Activity object of the current activity were in
+     Return Value: None
+     Local Variables: None
+     Algorithm:
+     1) Set the private activity to what was passed in
+     Assistance Received: none
+      ********************************************************************* */
     Tournament_Model(Activity passedActivity) {
         activity = (Activity) passedActivity;
     }
 
-    public void PlayTournament() {
-    }
 
-
-    private void IncrementRound() {
+    /** *********************************************************************
+     Function Name: InrementRound
+     Purpose: To increment the round by 1
+     Parameters: None
+     Return Value: Void
+     Local Variables: None
+     Algorithm:
+     1) Increment the round by 1
+     Assistance Received: none
+      ********************************************************************* */
+    void IncrementRound() {
         round++;
     }
 
@@ -100,19 +139,29 @@ public class Tournament_Model {
         int humanAceCount = 0;
         int computerAceCount = 0;
 
+        // Cycling through the player's pile...
         for (int i = 0; i < passedHumanPile.size(); i++) {
 
+            // If the card is a Spade, increase the player's Spade count
             if (passedHumanPile.get(i).GetSuit() == 'S') {
                 humanSpadeCount++;
             }
+
+            // If the player has the S2, increment the count
             if (passedHumanPile.get(i).GetCard().equals("S2")) {
-                scoreOutputHuman.add("The human had the 2 of Spades, plus a point.");
+                twoOfSpadesColor = "Green";
+                twoOfSpadesMessage = "The human had the 2 of Spades, plus a point.";
                 humanRoundPoints++;
             }
+
+            // If the player has the DX, increment the count
             if (passedHumanPile.get(i).GetCard().equals("DX")) {
-                scoreOutputHuman.add("The human had the 10 of Diamonds, plus two points.");
+                tenOfDiamondsColor = "Green";
+                tenOfDiamondsMessage = "The human had the 10 of Diamonds, plus two points.";
                 humanRoundPoints += 2;
             }
+
+            // If the player has an ace in their pile, increment their score
             if (passedHumanPile.get(i).GetNumber() == 'A') {
                 humanAceCount++;
                 humanRoundPoints++;
@@ -120,35 +169,270 @@ public class Tournament_Model {
 
         }
 
+        // Cycling through the computer's pile...
         for (int i = 0; i < passedComputerPile.size(); i++) {
 
+            // If the card is a Spade, increment the computer's Spade count
             if (passedComputerPile.get(i).GetSuit() == 'S') {
                 computerSpadeCount++;
             }
+
+            // If the computer has the S2, increment their score
             if (passedComputerPile.get(i).GetCard().equals("S2")) {
-                scoreOutputComputer.add("The computer had the 2 of Spades, plus a point.");
+                twoOfSpadesColor = "Red";
+                twoOfSpadesMessage = "The computer had the 2 of Spades, plus a point.";
                 computerRoundPoints++;
             }
+
+            // If the computer has the DX, increment their score
             if (passedComputerPile.get(i).GetCard().equals("DX")) {
-                scoreOutputComputer.add("The computer had the 10 of Diamonds, plus two points.");
+                tenOfDiamondsColor = "Red";
+                tenOfDiamondsMessage = "The computer had the 10 of Diamons, plus two points,";
                 computerRoundPoints += 2;
             }
+
+            // If the computer has any aces, increment their score
             if (passedComputerPile.get(i).GetNumber() == 'A') {
                 computerAceCount++;
                 computerRoundPoints++;
             }
         }
 
+        // See if the player or computer has the most cards
         if (passedHumanPile.size() > passedComputerPile.size()) {
+            mostCardsColor = "Green";
+            mostCardsMessage = "The human had the most cards!";
             humanRoundPoints += 3;
-        } else if (passedHumanPile.size() < passedComputerPile.size()) {
+        }
+        else if (passedHumanPile.size() < passedComputerPile.size()) {
+            mostCardsColor = "Red";
+            mostCardsMessage = "The computer had the most cards.";
             computerRoundPoints += 3;
         }
+        else {
+            mostCardsColor = "Yellow";
+            mostCardsMessage = "Neither player had more cards!";
+        }
 
+        // Checking to see if either player has more Spades
         if (humanSpadeCount > computerSpadeCount) {
+            mostSpadesColor = "Green";
+            mostSpadesMessage = "The human had the most Spades!";
             humanRoundPoints++;
         } else if (humanSpadeCount < computerSpadeCount) {
+            mostSpadesColor = "Red";
+            mostSpadesMessage = "The computer had the most Spades.";
             computerSpadeCount++;
         }
+        else {
+            mostSpadesColor = "Yellow";
+            mostSpadesMessage = "Neither player had more Spades!";
+        }
+
+        // Set the overall scores to what was calculated by the round
+        humanPoints += humanRoundPoints;
+        computerPoints += computerRoundPoints;
+    }
+
+    /** *********************************************************************
+     Function Name: GameWon
+     Purpose: To check if the game has finished or not
+     Parameters: None
+     Return Value:
+     @return int, 1 if the human won, 2 if the computer won, or 3 if neither won
+     Local Variables: None
+     Algorithm:
+     1) If the human has more points, output they won
+     2) If the computer has more points, output they won
+     3) If neither has more points, output it was a tie
+     Assistance Received: none
+      ********************************************************************* */
+    int GameWon() {
+
+        // Human won
+        if(humanPoints >= 21 && computerPoints < 21) {
+            winnerColor = "Green";
+            winnerMessage = "You won!";
+            return 1;
+        }
+
+        // Computer won
+        else if(humanPoints < 21 && computerPoints >= 21) {
+            winnerColor = "Red";
+            winnerMessage = "The computer won.";
+            return 2;
+        }
+
+        // It was a tie
+        else {
+            winnerColor = "Yellow";
+            winnerMessage = "It was a tie!";
+            return 3;
+        }
+    }
+
+    /** *********************************************************************
+     Function Name: GetMostCardsMessage
+     Purpose: To retrieve the mostCardsMessage
+     Parameters: None
+     Return Value:
+     @return String, the variable
+     Local Variables: None
+     Algorithm:
+     1) Return mostCardsMessage
+     Assistance Received: none
+      ********************************************************************* */
+    String GetMostCardsMessage() {
+        return mostCardsMessage;
+    }
+
+    /** *********************************************************************
+     Function Name: GetMostSpadesMessage
+     Purpose: To retrieve the mostSpadesMessage
+     Parameters: None
+     Return Value:
+     @return String, the variable
+     Local Variables: None
+     Algorithm:
+     1) Return mostSpadesMessage
+     Assistance Received: none
+      ********************************************************************* */
+    String GetMostSpadesMessage() {
+        return mostSpadesMessage;
+    }
+
+    /** *********************************************************************
+     Function Name: GetTenOfDiamondsMessage
+     Purpose: To retrieve the tenOfDiamondsMessage
+     Parameters: None
+     Return Value:
+     @return String, the variable
+     Local Variables: None
+     Algorithm:
+     1) Return tenOfDiamondsMessage
+     Assistance Received: none
+      ********************************************************************* */
+    String GetTenOfDiamondsMessage() {
+        return tenOfDiamondsMessage;
+    }
+
+    /** *********************************************************************
+     Function Name: GetTwoOfSpadesMessage
+     Purpose: To retrieve the twoOfSpadesMessage
+     Parameters: None
+     Return Value:
+     @return String, the variable
+     Local Variables: None
+     Algorithm:
+     1) Return twoOfSpadesMessage
+     Assistance Received: none
+      ********************************************************************* */
+    String GetTwoOfSpadesMessage() {
+        return twoOfSpadesMessage;
+    }
+
+    /** *********************************************************************
+     Function Name: GetNumAcesMessage
+     Purpose: To retrieve the numAcesMessage
+     Parameters: None
+     Return Value:
+     @return Vector<String>, the variable
+     Local Variables: None
+     Algorithm:
+     1) Return numAcesMessage
+     Assistance Received: none
+      ********************************************************************* */
+    Vector<String> GetNumAcesMessage() {
+        return numAcesMessage;
+    }
+
+    /** *********************************************************************
+     Function Name: GetWinnerMessage
+     Purpose: To retrieve the winnerMessage
+     Parameters: None
+     Return Value:
+     @return String, the variable
+     Local Variables: None
+     Algorithm:
+     1) Return winnerMessage
+     Assistance Received: none
+      ********************************************************************* */
+    String GetWinnerMessage() {
+        return winnerMessage;
+    }
+
+    /** *********************************************************************
+     Function Name: GetMostCardsColor
+     Purpose: To retrieve the mostCardsColor
+     Parameters: None
+     Return Value:
+     @return String, the variable
+     Local Variables: None
+     Algorithm:
+     1) Return mostCardsColor
+     Assistance Received: none
+      ********************************************************************* */
+    String GetMostCardsColor() {
+        return mostCardsColor;
+    }
+
+    /** *********************************************************************
+     Function Name: GetMostSpadesColor
+     Purpose: To retrieve the mostSpadesColor
+     Parameters: None
+     Return Value:
+     @return String, the variable
+     Local Variables: None
+     Algorithm:
+     1) Return mostSpadesColor
+     Assistance Received: none
+      ********************************************************************* */
+    String GetMostSpadesColor() {
+        return mostSpadesColor;
+    }
+
+    /** *********************************************************************
+     Function Name: GetTenOfDiamondsColor
+     Purpose: To retrieve the tenOfDiamondsColor
+     Parameters: None
+     Return Value:
+     @return String, the variable
+     Local Variables: None
+     Algorithm:
+     1) Return tenOfDiamondsColor
+     Assistance Received: none
+      ********************************************************************* */
+    String GetTenOfDiamondsColor() {
+        return tenOfDiamondsColor;
+    }
+
+    /** *********************************************************************
+     Function Name: GetTwoOfSpadesColor
+     Purpose: To retrieve the twoOfSpadesColor
+     Parameters: None
+     Return Value:
+     @return String, the variable
+     Local Variables: None
+     Algorithm:
+     1) Return twoOfSpadesColor
+     Assistance Received: none
+      ********************************************************************* */
+    String GetTwoOfSpadesColor() {
+        return twoOfSpadesColor;
+    }
+
+    /** *********************************************************************
+     Function Name: GetWinnerColor
+     Purpose: To retrieve the winnerColor
+     Parameters: None
+     Return Value:
+     @return String, the variable
+     Local Variables: None
+     Algorithm:
+     1) Return winnerColor
+     Assistance Received: none
+      ********************************************************************* */
+    String winnerColor() {
+        return winnerColor;
     }
 }

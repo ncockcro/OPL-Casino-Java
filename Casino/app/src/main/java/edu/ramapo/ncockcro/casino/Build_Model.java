@@ -130,11 +130,16 @@ public class Build_Model {
         int aceAs1 = 0;
         int aceAs14 = 0;
 
+        Log.d("BuildOfCards", buildOfCards.get(0).GetCard());
+        Log.d("cardInBuild", cardInBuild.GetCard());
+
         for(int i = 0; i < buildOfCards.size(); i++) {
             if(buildOfCards.get(i).GetCard().equals(cardInBuild.GetCard())) {
                 isCardInBuild = true;
             }
         }
+
+        Log.d("But", "In build class");
 
         // If the card the user wants to add to a build exists and they are not the owner...
         if(isCardInBuild && owner != currentPlayer) {
@@ -211,6 +216,7 @@ public class Build_Model {
         // First checking to see if the build the user wants to capture exists by looking for the card they provided
         for(int i = 0; i < buildOfCards.size(); i++) {
             if(buildOfCards.get(i).GetCard().equals(cardInBuild.GetCard())) {
+                Log.d("Card", "Card is in the build");
                 isCardInBuild = true;
             }
         }
@@ -219,6 +225,8 @@ public class Build_Model {
         // wants to capture with is not an ace, then we need to make sure the card they are
         // capturing with is the same value as the total build
         if(isCardInBuild && cardToBeCaptured.GetNumber() != 'A') {
+            Log.d("CardValueOfBuild", Integer.toString(cardValueOfBuild));
+            Log.d("playerCard", Integer.toString(playerModel.CardNumber(cardToBeCaptured.GetNumber())));
             if(playerModel.CardNumber(cardToBeCaptured.GetNumber()) == cardValueOfBuild) {
                 return true;
             }

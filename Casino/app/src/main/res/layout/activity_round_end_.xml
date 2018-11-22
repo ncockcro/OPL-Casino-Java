@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FF000000"
+    tools:context=".RoundEnd_Activity">
+
+    <HorizontalScrollView
+        android:id="@+id/humanPileHorizontalView"
+        android:layout_width="970dp"
+        android:layout_height="69dp"
+        android:layout_marginTop="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:id="@+id/linearLayoutHumanPile"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="vertical" />
+    </HorizontalScrollView>
+
+    <HorizontalScrollView
+        android:id="@+id/computerPileHorizontalView"
+        android:layout_width="973dp"
+        android:layout_height="69dp"
+        android:layout_marginTop="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/humanPileHorizontalView">
+
+        <LinearLayout
+            android:id="@+id/linearLayoutComputerPile"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="vertical" />
+    </HorizontalScrollView>
+
+    <TextView
+        android:id="@+id/mostCardsTextView"
+        android:layout_width="500dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="30dp"
+        android:text="@string/mostCardsTextView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/computerPileHorizontalView" />
+
+    <TextView
+        android:id="@+id/mostSpadesTextView"
+        android:layout_width="500dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="610dp"
+        android:layout_marginLeft="610dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="612dp"
+        android:layout_marginRight="612dp"
+        android:text="@string/mostSpadesTextView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/mostCardsTextView" />
+
+    <TextView
+        android:id="@+id/tenOfDiamondsTextView"
+        android:layout_width="500dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="390dp"
+        android:layout_marginLeft="390dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="390dp"
+        android:layout_marginRight="390dp"
+        android:text="@string/tenOfDiamondsTextView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/mostSpadesTextView" />
+
+    <TextView
+        android:id="@+id/twoOfSpadesTextView"
+        android:layout_width="500dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="20dp"
+        android:text="@string/twoOfSpadesTextView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tenOfDiamondsTextView" />
+
+    <TextView
+        android:id="@+id/mostAcesTextView"
+        android:layout_width="500dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="20dp"
+        android:text="@string/mostAcesTextView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/twoOfSpadesTextView" />
+
+    <TextView
+        android:id="@+id/gameWonTextView"
+        android:layout_width="500dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="20dp"
+        android:text="@string/gameWonTextView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/mostAcesTextView" />
+
+    <Button
+        android:id="@+id/nextRoundButton"
+        android:layout_width="371dp"
+        android:layout_height="81dp"
+        android:layout_marginTop="20dp"
+        android:text="@string/playNewRoundButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/gameWonTextView" />
+</android.support.constraint.ConstraintLayout>

@@ -428,6 +428,8 @@ public class Round_Model {
             }
         }
 
+        /*for(int i = 0; i < )
+        Log.d("")*/
         // If the player has a card that equals the total value of the build, then return true
         for(int i = 0; i < playerHand.size(); i++) {
             if(player.get(currentPlayer).CardNumber(playerHand.get(i).GetNumber()) == aceAs1 ||
@@ -519,7 +521,15 @@ public class Round_Model {
         RemoveTableCards(playerTableBuildCards);
         player.get(currentPlayer).RemoveCard(playerHandBuildCard);
 
+        for(int i = 0; i < playerTableBuildCards.size(); i++) {
+            Log.d("PlayerBuilds", playerTableBuildCards.get(i).GetCard());
+        }
+
         buildCounter++;
+
+        // ADDED IN
+        playerTableBuildCards.clear();
+        Log.d("EndOfBuild", Integer.toString(tableBuilds.size()));
 
     }
 
@@ -616,6 +626,8 @@ public class Round_Model {
         // If the player wanted to build, then this function will check if it is possible based on
         // the information the user provided
         if(player.get(currentPlayer).GetPlayerWantBuild() == 'y') {
+            Log.d("Wherd", "Inside of capturing build");
+            Log.d("PlayerHandCard", playerHandCaptureCard.GetCard());
             if(CheckIfPlayerCanCaptureBuild(playerHandCaptureCard, playerHand)) {
                 canCapture = true;
 
@@ -730,9 +742,13 @@ public class Round_Model {
         Card_Model existingBuildCard = player.get(currentPlayer).GetExistingBuildCard();
         Vector<Card_Model> tempPile = new Vector<Card_Model>();
 
+        Log.d("CheckIf", Integer.toString(tableBuilds.size()));
+
         // Iterate through each of the builds on the table and check if any of them can be captured
         // based on the specifications the user entered in
         for(int i = 0; i < tableBuilds.size(); i++) {
+
+            Log.d("CheckInside", Integer.toString(tableBuilds.size()));
 
             // If there was a build that can be successfully captured after checking if possible, move the cards
             // from the build element into player's pile, move the card used for capture to player pile, and
@@ -756,6 +772,7 @@ public class Round_Model {
                     }
                 }
 
+                Log.d("bklrbktr", "Capturing a build");
                 tableBuilds.remove(tableBuilds.get(i));
                 player.get(currentPlayer).RemoveCard(playerHandCaptureCard);
                 return true;
@@ -795,6 +812,17 @@ public class Round_Model {
                     errorReason = "You can not trail with " + passedCard.GetCard() + " because there is a card with the same value on the table." + table.get(i).GetCard();
                     return false;
                 }
+            }
+        }
+
+        int tempOwner;
+        Vector<Card_Model> cardsFromBuild = new Vector<Card_Model>();
+        for(int i = 0; i < tableBuilds.size(); i++) {
+            tempOwner = tableBuilds.get(i).GetOwner();
+
+            if(currentPlayer == tempOwner) {
+                errorReason = "You can not trail because there is a build you can capture.";
+                return false;
             }
         }
 
@@ -940,7 +968,7 @@ public class Round_Model {
 
         // Clearing the error reason from before
         errorReason = "None";
-        move = player.get(currentPlayer).MakeMove(table, builds);
+        move = player.get(currentPlayer).MakeMove(table, tableBuilds);
 
         Log.d("CurrentPlayer", Integer.toString(currentPlayer));
 
@@ -967,6 +995,8 @@ public class Round_Model {
         else {
             Log.d("MyError", "Error in making a move in the round model class.");
         }
+
+        Log.d("Current player in round", Integer.toString(currentPlayer));
 
     }
 
@@ -1163,6 +1193,29 @@ public class Round_Model {
 
     Vector<Build_Model> GetTableBuilds() {
         return tableBuilds;
+    }
+
+    boolean CheckForBuilds() {
+        if(tableBuilds.size() > 0) {
+            return true;
+
+        }
+        else {
+            errorReason = "There are no builds on the table to capture.";
+            return false;
+        }
+    }
+
+    void SetPlayerModelWantBuild(char choice) {
+        player.get(currentPlayer).SetPlayerWantBuild(choice);
+    }
+
+    char GetPlayerModelWantCaptureBuild() {
+        return player.get(currentPlayer).GetPlayerWantBuild();
+    }
+
+    void SetPlayerModelExistingBuildCard(Card_Model passedCard) {
+        player.get(currentPlayer).SetExistingBuildCard(passedCard);
     }
 
 

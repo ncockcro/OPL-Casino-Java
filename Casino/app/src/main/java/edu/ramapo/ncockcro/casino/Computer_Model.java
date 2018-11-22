@@ -23,10 +23,11 @@ public class Computer_Model extends Player_Model {
      ********************************************************************* */
     @Override public char MakeMove(Vector<Card_Model> table, Vector<Build_Model> tableBuilds) {
         //Check for build
-        /*if(AICheckForBuild(table, tableBuilds)) {
+        Log.d("In computer", Integer.toString(tableBuilds.size()));
+        if(AICheckForBuild(table, tableBuilds)) {
             playerMove = 'b';
-            return;
-        }*/
+            return 'b';
+        }
 
         //Check for Capture
         if(AICheckForCapture(table, tableBuilds)) {
