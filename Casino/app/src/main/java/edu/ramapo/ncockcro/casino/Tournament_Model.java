@@ -4,6 +4,13 @@ import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.Scanner;
 import java.util.Vector;
 
 public class Tournament_Model {
@@ -469,6 +476,74 @@ public class Tournament_Model {
 
     String GetLastCapture() {
         return lastCaptured;
+    }
+
+    void LoadGame(Context context, String path, String fileName) {
+
+        String line = null;
+        Card_Model tempCard = new Card_Model();
+
+        try {
+            Log.d("jfoevr", "in tournament");
+            FileInputStream fileIS = new FileInputStream(new File(path + fileName));
+            InputStreamReader inputStreamReader = new InputStreamReader(fileIS);
+            BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+            StringBuilder stringBuilder = new StringBuilder();
+
+            Scanner input = new Scanner(inputStreamReader);
+
+            while(input.hasNext()) {
+                String currentWord = input.next();
+
+                if(currentWord.equals("Round:")) {
+                    currentWord = input.next();
+                    loadGameRound = Integer.parseInt(currentWord);
+                    Log.d("Round", Integer.toString(loadGameRound));
+                }
+
+                currentWord = input.next();
+                currentWord = input.next();
+
+                if(currentWord.equals("Score:")) {
+                    currentWord = input.next();
+                    loadGameComputerScore = Integer.parseInt(currentWord);
+                }
+
+                currentWord = input.next();
+                if(currentWord.equals("Hand:")) {
+                    currentWord = input.next();
+                    while(currentWord.length() == 2) {
+                        tempCard.SetCard(currentWord);
+                        loadGameComputerHand.add(tempCard);
+                        currentWord = input.next();
+                    }
+                }
+
+                if(currentWord.equals("Pile:")) {
+                    currentWord = input.next();
+                    while(currentWord.length() == 2) {
+                        tempCard.SetCard(currentWord);
+                        loadGameComputerPile.add(tempCard);
+                        currentWord = input.next();
+                    }
+                }
+
+                Log.d("Comp", Integer.toString(loadGameComputerScore));
+            }
+
+            while( (line = bufferedReader.readLine()) != null) {
+                Log.d("Line", line);
+            }
+        }
+        catch (FileNotFoundException e) {
+
+            Log.d("In", "In exception");
+        }
+        catch (IOException e) {
+
+            Log.d("In", "In exception");
+        }
+
     }
 
 

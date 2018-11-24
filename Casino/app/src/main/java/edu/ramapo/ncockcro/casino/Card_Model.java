@@ -9,6 +9,16 @@ public class Card_Model {
     private char suit;
     private char number;
 
+    /** *********************************************************************
+     Function Name: Card_Model
+     Purpose: Default Constructor
+     Parameters: None
+     Return Value: None
+     Local Variables: None
+     Algorithm:
+     1) Default constructor
+     Assistance Received: none
+      ********************************************************************* */
     Card_Model() {
 
     }

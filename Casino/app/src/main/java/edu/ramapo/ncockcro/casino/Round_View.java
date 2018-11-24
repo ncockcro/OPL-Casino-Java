@@ -1,13 +1,16 @@
 package edu.ramapo.ncockcro.casino;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -1443,6 +1446,33 @@ public class Round_View extends MainGame_Activity {
 
     int GetRound() {
         return round;
+    }
+
+    void ShowSaveTextInput(Context context) {
+        final EditText saveEditText = new EditText(context);
+        AlertDialog.Builder dialog = new AlertDialog.Builder(context);
+        dialog.setTitle("Save to a file");
+        dialog.setMessage("Enter a file name for your save.");
+        dialog.setView(saveEditText);
+        final Context innerContext = context;
+        dialog.setPositiveButton("Save", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+
+                roundModel.SaveGame(innerContext, saveEditText.getText().toString());
+            }
+
+        });
+
+        dialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                dialog.cancel();
+            }
+
+        });
+
+        dialog.create();
+        dialog.show();
+
     }
 
 }

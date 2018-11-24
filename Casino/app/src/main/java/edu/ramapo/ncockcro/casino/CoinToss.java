@@ -110,6 +110,25 @@ public class CoinToss extends AppCompatActivity {
         intent.putExtra("humanScore", "0");
         intent.putExtra("computerScore", "0");
         intent.putExtra("currentRound", "0");
+
+        // Information that would otherwise be used if we were loading into the
+        // round from a saved game
+        intent.putExtra("loadGame", "false");
+        intent.putExtra("computerHand", "0");
+        intent.putExtra("computerHandSize", "0");
+        intent.putExtra("computerPile", "0");
+        intent.putExtra("computerPileSize", "0");
+        intent.putExtra("humanHand", "0");
+        intent.putExtra("humanHandSize", "0");
+        intent.putExtra("humanPile", "0");
+        intent.putExtra("humanPileSize", "0");
+        intent.putExtra("table", "0");
+        intent.putExtra("tableSize", "0");
+        intent.putExtra("deck", "0");
+        intent.putExtra("deckSize", "0");
+        intent.putExtra("lastCapture", "0");
+        intent.putExtra("build", "0");
+        intent.putExtra("buildSize", "0");
         startActivity(intent);
     }
 }

@@ -680,7 +680,7 @@ public class Player_Model {
             // Then cycle through all of the cards in a specific build and add up the value of the cards
             Log.d("BuildSize", Integer.toString(currentBuild.size()));
             for(int j = 0; j < currentBuild.size(); j++) {
-                Log.d("Value of each card in ai", Integer.toString(CardNumber(currentBuild.get(j).GetNumber())));
+                Log.d("Value of card", Integer.toString(CardNumber(currentBuild.get(j).GetNumber())));
                 count += CardNumber(currentBuild.get(j).GetNumber());
             }
 
@@ -1185,6 +1185,18 @@ public class Player_Model {
         playerMultipleSetCards.clear();
     }
 
+    /** *********************************************************************
+     Function Name: SetPlayerWantNewOrExisting
+     Purpose: Set whether a player wants a new or existing build
+     Parameters:
+     @param choice, a char which holds the choice of the player
+     Return Value: Void
+     Local Variables:None
+     Algorithm:
+     1) If the choice is 'n' or 'e', set the choice
+     2) Otherwise, report an error
+     Assistance Received: none
+      ********************************************************************* */
     void SetPlayerWantNewOrExisting(char choice) {
 
         if(choice == 'n' || choice == 'e') {
@@ -1195,12 +1207,35 @@ public class Player_Model {
         }
     }
 
+    /** *********************************************************************
+     Function Name: GetPlayerMove
+     Purpose: To retrieve a player's move choice
+     Parameters: None
+     Return Value: char
+     Local Variables:None
+     Algorithm:
+     1) Return the playerMove variable
+     Assistance Received: none
+      ********************************************************************* */
     char GetPlayerMove() {
         return playerMove;
     }
 
+    /** *********************************************************************
+     Function Name: SetPlayerBuildCards
+     Purpose: To set the playerBuildCards variable to what was passed in
+     Parameters:
+     @param passedBuildCards, Vector<Card_Model>, the build cards a player wants to use
+     Return Value: Void
+     Local Variables:None
+     Algorithm:
+     1) If all of the cards in the vector are valid cards, set the buildCards to what was
+     passed in
+     Assistance Received: none
+      ********************************************************************* */
     void SetPlayerBuildCards(Vector<Card_Model> passedBuildCards) {
 
+        // Cycling through to make sure each card is valid
         int count = 0;
         for(int i = 0; i < uniqueCards.size(); i++) {
             for(int j = 0; j < passedBuildCards.size(); j++) {
@@ -1210,12 +1245,27 @@ public class Player_Model {
             }
         }
 
+        // If the count matches the size of the vector, then all of the cards were valid
         if(count == passedBuildCards.size()) {
             playerBuildCards = passedBuildCards;
         }
     }
 
+    /** *********************************************************************
+     Function Name: SetBuildCards
+     Purpose: To set the buildCards variable to what was passed in
+     Parameters:
+     @param passedBuildCards, Vector<Card_Model>
+     Return Value: Void
+     Local Variables:None
+     Algorithm:
+     1) If all of the cards in the vector are valid cards, set the buildCards to what was
+     passed in
+     Assistance Received: none
+      ********************************************************************* */
     void SetBuildCards(Vector<Card_Model> passedBuildCards) {
+
+        // Cycling through the cards to make sure they are all valid
         int count = 0;
         for(int i = 0; i < uniqueCards.size(); i++) {
             for(int j = 0; j < passedBuildCards.size(); j++) {
@@ -1225,11 +1275,24 @@ public class Player_Model {
             }
         }
 
+        // If the count matches the size of the vector passed in, then they were all valid
         if(count == passedBuildCards.size()) {
             buildCards = passedBuildCards;
         }
     }
 
+    /** *********************************************************************
+     Function Name: SSetExistingbuildCard
+     Purpose: To set the existingBuildCard to what was passed in
+     Parameters:
+     @param passedCard, Card_Model
+     Return Value: Void
+     Local Variables:None
+     Algorithm:
+     1) If the card that was passed in is valid, set the existingBuildCard variable
+     passed in
+     Assistance Received: none
+      ********************************************************************* */
     void SetExistingBuildCard(Card_Model passedCard) {
 
         for(int i = 0; i < uniqueCards.size(); i++) {
@@ -1239,6 +1302,18 @@ public class Player_Model {
         }
     }
 
+    /** *********************************************************************
+     Function Name: RemoveFromPlayerBuildCards
+     Purpose: To remove a card from a player's build cards
+     Parameters:
+     @param cardValue, int
+     Return Value: Void
+     Local Variables:None
+     Algorithm:
+     1) Cycle through the build cards and if there is a card with a value
+     that matches what was passed in, remove it
+     Assistance Received: none
+      ********************************************************************* */
     void RemoveFromPlayerBuildCards(int cardValue) {
 
         for(int i = 0; i < playerBuildCards.size(); i++) {

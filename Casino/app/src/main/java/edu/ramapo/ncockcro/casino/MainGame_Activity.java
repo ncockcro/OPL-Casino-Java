@@ -1,5 +1,6 @@
 package edu.ramapo.ncockcro.casino;
 
+import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -123,6 +124,18 @@ public class MainGame_Activity extends AppCompatActivity {
         roundView.ShowCaptureButtons();
     }
 
+    /** *********************************************************************
+     Function Name: CaptureBuildButtonPressed
+     Purpose: When the player wants to capture a build, it sets the move and changes the buttons
+     Parameters:
+     @param view
+     Return Value: Void
+     Local Variables:None
+     Algorithm:
+     1) Check and make sure there are actual builds on the table for the player to capture...
+     2) If so, set the move and show the appropriate buttons
+     Assistance Received: none
+      ********************************************************************* */
     public void CaptureBuildButtonPressed(View view) {
 
         roundModel.CheckForBuilds();
@@ -134,6 +147,18 @@ public class MainGame_Activity extends AppCompatActivity {
         }
     }
 
+    /** *********************************************************************
+     Function Name: InsideCaptureBuildButtonPressed
+     Purpose: To make the move for capturing a build
+     Parameters:
+     @param view
+     Return Value: Void
+     Local Variables:None
+     Algorithm:
+     1) Make the move in the model
+     2) If there no errors, switch the buttons on the table and update the screen
+     Assistance Received: none
+      ********************************************************************* */
     public void InsideCaptureBuildButtonPressed(View view) {
 
         roundModel.PlayerMakeMove();
@@ -178,12 +203,15 @@ public class MainGame_Activity extends AppCompatActivity {
       ********************************************************************* */
     public void DoneButtonPressed(View view) {
 
+        // If the done button was pressed while capturing, set the capture info
         if(roundModel.GetPlayerMove() == 'c') {
             roundView.SetCaptureInfo();
         }
+        // Otheriwse, the done button had to be pressed for a build
         else {
             roundView.SetBuildInfo();
         }
+
         roundModel.PlayerMakeMove();
 
         if(!roundView.PrintErrors()) {
@@ -259,32 +287,61 @@ public class MainGame_Activity extends AppCompatActivity {
 
     }
 
+    /** *********************************************************************
+     Function Name: BackButtonPressed
+     Purpose: When the player wants to go back, this clears all the information they made
+     Parameters:
+     @param view
+     Return Value: Void
+     Local Variables:None
+     Algorithm:
+     1) Clear all of the information the player made with what they were doing
+     Assistance Received: none
+      ********************************************************************* */
     public void BackButtonPressed(View view) {
         roundView.ClearData();
     }
 
+    /** *********************************************************************
+     Function Name: SeeResultsButtonPressed
+     Purpose: When the round is over, this button appears to see the end of round results
+     Parameters:
+     @param view
+     Return Value: Void
+     Local Variables:None
+     Algorithm:
+     1) Create a new intent
+     2) Put all of the necessary information about the player's scores into the intent
+     3) Then start the activity for the RoundEnd
+     Assistance Received: none
+      ********************************************************************* */
     public void SeeResultsButtonPressed(View view) {
+
+        // Creating a new intent
         Intent intentResults = new Intent(this, RoundEnd_Activity.class);
         Vector<Card_Model> tempPlayerPile = roundModel.GetPlayerPile(0);
         Vector<Card_Model> tempComputerPile = roundModel.GetPlayerPile(1);
 
-
+        // Pushing the player's pile into the intent
         for(int i = 0; i < tempPlayerPile.size(); i++) {
             intentResults.putExtra("PlayerPile" + i, tempPlayerPile.get(i).GetCard());
         }
 
+        // Pushing the size of the player's pile into the intent
         String playerPileSize = Integer.toString(tempPlayerPile.size());
         Log.d("playerPileSize", Integer.toString(tempPlayerPile.size()));
-        //intentResults.putExtra("PlayerPileSize", tempPlayerPile.size());
         intentResults.putExtra("PlayerPileSize", playerPileSize);
 
+        // Pushing the computer's pile onto the intent
         for(int i = 0; i < tempComputerPile.size(); i++) {
             intentResults.putExtra("ComputerPile" + i, tempComputerPile.get(i).GetCard());
         }
 
+        // Pushing the computer's pile size onto the intent
         String computerPileSize = Integer.toString(tempComputerPile.size());
         intentResults.putExtra("ComputerPileSize", computerPileSize);
 
+        // Passed the current scores of the player's
         String humanScoreString = Integer.toString(roundView.GetHumanScore());
         String computerScoreString = Integer.toString(roundView.GetComputerScore());
         String roundString = Integer.toString(roundView.GetRound());
@@ -294,7 +351,23 @@ public class MainGame_Activity extends AppCompatActivity {
         intentResults.putExtra("currentRound", roundString);
         intentResults.putExtra("lastCapture", roundModel.GetLastCapture());
 
-
+        // Starting the activity
         startActivity(intentResults);
+    }
+
+    /** *********************************************************************
+     Function Name: SaveButtonPressed
+     Purpose: When the player wants to save, this will open a prompt for them to type in a
+     name for their save file
+     Parameters:
+     @param view
+     Return Value: Void
+     Local Variables:None
+     Algorithm:
+     1) Prompt the user with an input field to save
+     Assistance Received: none
+      ********************************************************************* */
+    public void SaveButtonPressed(View view) {
+        roundView.ShowSaveTextInput(this);
     }
 }

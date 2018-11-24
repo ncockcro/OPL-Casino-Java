@@ -12,11 +12,31 @@ public class Card_View {
     private char suit;
     private char number;
 
-    // Default constructor
+    /** *********************************************************************
+     Function Name: Card_View
+     Purpose: Default constructor
+     Parameters: None
+     Return Value: None
+     Local Variables: None
+     Algorithm:
+     1) Default constructor
+     Assistance Received: none
+      ********************************************************************* */
     Card_View() {
 
     }
 
+    /** *********************************************************************
+     Function Name: Card_View
+     Purpose: Overloaded default constructor
+     Parameters:
+     @param passedCard String, holds the value of a card
+     Return Value: None
+     Local Variables: None
+     Algorithm:
+     1) Set the card, suit, and number of a card to what was passed in
+     Assistance Received: none
+      ********************************************************************* */
     Card_View(String passedCard) {
         card = passedCard;
         suit = passedCard.charAt(0);

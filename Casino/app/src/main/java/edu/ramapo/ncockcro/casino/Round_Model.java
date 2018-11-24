@@ -5,6 +5,10 @@ import android.content.Context;
 import android.util.Log;
 import android.widget.TextView;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.Vector;
 
 // Root\Android\data\edu.ramapo.ncockcro.casino
@@ -1176,22 +1180,74 @@ public class Round_Model {
         player.get(currentPlayer).AddSetToPlayer(set);
     }
 
+    /** *********************************************************************
+     Function Name: PlayerModelClearPlayerMultipleSets
+     Purpose: To clear the multiple sets in the player model
+     Parameters: Void
+     Return Value: Void
+     Local Variables:None
+     Algorithm:
+     1) ClearPlayerMultipleSets in the player class
+     Assistance Received: none
+      ********************************************************************* */
     void PlayerModelClearPlayerMultipleSets() {
         player.get(currentPlayer).ClearPlayerMultipleSets();
     }
 
+    /** *********************************************************************
+     Function Name: SetPlayerModelWantNewOrExisting
+     Purpose: To set the new or existing variable in the player class
+     Parameters:
+     @param choice, char
+     Return Value: Void
+     Local Variables:None
+     Algorithm:
+     1) Set the playerWantNewOrExisting variable in the player class
+     Assistance Received: none
+      ********************************************************************* */
     void SetPlayerModelWantNewOrExisting(char choice) {
         player.get(currentPlayer).SetPlayerWantNewOrExisting(choice);
     }
 
+    /** *********************************************************************
+     Function Name: GetPlayerModelWantNewOrExisting
+     Purpose: To retrieve the newOrExisting variable from the player class
+     Parameters: None
+     Return Value: Void
+     Local Variables:None
+     Algorithm:
+     1) Retrieve the newOrExisting variable from the player class
+     Assistance Received: none
+      ********************************************************************* */
     char GetPlayerModelWantNewOrExisting() {
         return player.get(currentPlayer).GetNewOrExistingBuild();
     }
 
+    /** *********************************************************************
+     Function Name: GetPlayerMove
+     Purpose: To retrieve the playerMove variable from the class
+     Parameters:= None
+     Return Value: Void
+     Local Variables:None
+     Algorithm:
+     1) Retrieve the playerMove variable from the player class
+     Assistance Received: none
+      ********************************************************************* */
     char GetPlayerMove() {
         return player.get(currentPlayer).GetPlayerMove();
     }
 
+    /** *********************************************************************
+     Function Name: SetPlayerModelBuildCards
+     Purpose: To set the buildCards in the player class to what was passed in
+     Parameters:
+     @param passedBuildCards, Vector<Card_Model>
+     Return Value: Void
+     Local Variables:None
+     Algorithm:
+     1) Set the build cards in the player class with what was passed in
+     Assistance Received: none
+      ********************************************************************* */
     void SetPlayerModelBuildCards(Vector<Card_Model> passedBuildCards) {
 
         for(int i = 0; i < passedBuildCards.size(); i++) {
@@ -1200,10 +1256,32 @@ public class Round_Model {
         player.get(currentPlayer).SetBuildCards(passedBuildCards);
     }
 
+    /** *********************************************************************
+     Function Name: GetTableBuilds
+     Purpose: To retrieve the tableBuilds to whatever is calling it
+     Parameters: None
+     Return Value: Void
+     Local Variables:None
+     Algorithm:
+     1) Return the tableBuilds to whatever called it
+     Assistance Received: none
+      ********************************************************************* */
     Vector<Build_Model> GetTableBuilds() {
         return tableBuilds;
     }
 
+    /** *********************************************************************
+     Function Name: CheckForBuilds
+     Purpose: To return true or false depending on if there are builds on the table
+     Parameters: None
+     Return Value:
+     @return boolean
+     Local Variables:None
+     Algorithm:
+     1) Returns true if there are builds on the table
+     2) False otherwise
+     Assistance Received: none
+      ********************************************************************* */
     boolean CheckForBuilds() {
         if(tableBuilds.size() > 0) {
             return true;
@@ -1215,20 +1293,180 @@ public class Round_Model {
         }
     }
 
+    /** *********************************************************************
+     Function Name: SetPlayerModelWantBuild
+     Purpose: To set the playerWantBuild variable to what was passed in for the player class
+     Parameters:
+     @param choice, char
+     Return Value: Void
+     Local Variables:None
+     Algorithm:
+     1) Call the function in the player class to set the choice that was passed in
+     Assistance Received: none
+      ********************************************************************* */
     void SetPlayerModelWantBuild(char choice) {
         player.get(currentPlayer).SetPlayerWantBuild(choice);
     }
 
+    /** *********************************************************************
+     Function Name: GetPlayerModelWantCaptureBuild
+     Purpose: To retrieve the playerWantBuild variable from the player class
+     Parameters: None
+     Return Value: Void
+     Local Variables:None
+     Algorithm:
+     1) Retrieve the playerWantBuild variable from the player class
+     Assistance Received: none
+      ********************************************************************* */
     char GetPlayerModelWantCaptureBuild() {
         return player.get(currentPlayer).GetPlayerWantBuild();
     }
 
+    /** *********************************************************************
+     Function Name: SetPlayerModelExistingBuildCard
+     Purpose: To set the existingBuildCard variable in the player class to what was passed in
+     Parameters:
+     @param passedCard, Card_Model
+     Return Value: Void
+     Local Variables:None
+     Algorithm:
+     1) Call the function in the player class to set the existingBuildCard
+     Assistance Received: none
+      ********************************************************************* */
     void SetPlayerModelExistingBuildCard(Card_Model passedCard) {
         player.get(currentPlayer).SetExistingBuildCard(passedCard);
     }
 
+
     String GetLastCapture() {
         return lastCapture;
+    }
+
+    void SaveGame(Context context, String fileName) {
+
+        File saveFolder = new File(context.getFilesDir() + "/save");
+        Log.d("Saving", context.getFilesDir().toString());
+        Log.d("SavingAbsolute", saveFolder.getAbsolutePath().toString());
+        File saveFile = new File(saveFolder.getAbsolutePath() + "/" + fileName + ".txt");
+
+        if(!saveFolder.exists()) {
+            saveFolder.mkdir();
+        }
+        if(!saveFile.exists()) {
+            try {
+                saveFile.createNewFile();
+            }
+            catch(Exception e) {
+
+            }
+        }
+
+        FileOutputStream fileOS = null;
+        try {
+            fileOS = new FileOutputStream(saveFile);
+
+            fileOS.write(("Round: " + Integer.toString(currentRound) + System.getProperty("line.separator") + System.getProperty("line.separator")).getBytes());
+
+            fileOS.write(("Computer: " + System.getProperty("line.separator")).getBytes());
+            fileOS.write(("\t Score: " + Integer.toString(computerPoints) + System.getProperty("line.separator")).getBytes());
+            fileOS.write("\t Hand: ".getBytes());
+
+            for(int i = 0; i < player.get(1).GetHand().size(); i++) {
+                fileOS.write((player.get(1).GetHand().get(i).GetCard() + " ").getBytes());
+            }
+
+            fileOS.write(System.getProperty("line.separator").getBytes());
+
+            fileOS.write("\t Pile: ".getBytes());
+
+            for(int i = 0; i < player.get(1).GetPile().size(); i++) {
+                fileOS.write((player.get(1).GetPile().get(i).GetCard() + " ").getBytes());
+            }
+
+            fileOS.write(System.getProperty("line.separator").getBytes());
+
+            fileOS.write(("Human: " + System.getProperty("line.separator")).getBytes());
+
+            fileOS.write(("\t Score: " + Integer.toString(humanPoints) + System.getProperty("line.separator")).getBytes());
+
+            fileOS.write("\t Hand: ".getBytes());
+
+            for(int i = 0; i < player.get(0).GetHand().size(); i++) {
+                fileOS.write((player.get(0).GetHand().get(i).GetCard() + " ").getBytes());
+            }
+
+            fileOS.write(System.getProperty("line.separator").getBytes());
+
+            fileOS.write(("\t Pile: ").getBytes());
+            for(int i = 0; i < player.get(0).GetPile().size(); i++) {
+                fileOS.write((player.get(0).GetPile().get(i).GetCard() + System.getProperty("line.separator")).getBytes());
+            }
+
+            fileOS.write(System.getProperty("line.separator").getBytes());
+
+            fileOS.write("Table: ".getBytes());
+
+            for(int i = 0; i < tableBuilds.size(); i++) {
+                Vector<Card_Model> tempCards = tableBuilds.get(i).GetBuildOfCards();
+                fileOS.write("[ ".getBytes());
+                for(int j = 0; j < tempCards.size(); j++) {
+                    fileOS.write((tempCards.get(j).GetCard() + " ").getBytes());
+                }
+                fileOS.write("] ".getBytes());
+            }
+
+            for(int i = 0; i < table.size(); i++) {
+                fileOS.write((table.get(i).GetCard() + " ").getBytes());
+            }
+
+            fileOS.write(System.getProperty("line.separator").getBytes());
+
+            if(tableBuilds.size() > 0) {
+                for(int i = 0; i < tableBuilds.size(); i++) {
+                    fileOS.write("Build Owner: ".getBytes());
+                    Vector<Card_Model> tempBuild = tableBuilds.get(i).GetBuildOfCards();
+                    fileOS.write("[ ".getBytes());
+
+                    for(int j = 0; j < tempBuild.size(); j++) {
+                        fileOS.write((tempBuild.get(j).GetCard() + " ").getBytes());
+                    }
+                    fileOS.write("] ".getBytes());
+
+                    if(tableBuilds.get(i).GetOwner() == 1) {
+                        fileOS.write("Computer".getBytes());
+                    }
+                    else if(tableBuilds.get(i).GetOwner() == 0) {
+                        fileOS.write("Human".getBytes());
+                    }
+                }
+
+                fileOS.write(System.getProperty("line.separator").getBytes());
+            }
+
+            fileOS.write(("Last Capturer: " + lastCapture).getBytes());
+
+            fileOS.write("Deck: ".getBytes());
+
+            for(int i = 0; i < deck.size(); i++) {
+                fileOS.write((deck.get(i).GetCard() + " ").getBytes());
+            }
+
+            fileOS.write(System.getProperty("line.separator").getBytes());
+
+            if(currentPlayer == 1) {
+                fileOS.write("Next Player: Computer".getBytes());
+            }
+            else if(currentPlayer == 0) {
+                fileOS.write("Next Player: Human".getBytes());
+            }
+
+            fileOS.close();
+            System.exit(0);
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
 
