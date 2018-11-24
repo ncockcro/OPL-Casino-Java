@@ -335,12 +335,13 @@ public class Round_Model {
             }
             return true;
         }
-
         // If the player wants to add to an existing build, then we will go through each build to find which one
         // they want to add to and if it is possible
         else if(Character.toLowerCase(player.get(currentPlayer).GetNewOrExistingBuild()) == 'e') {
+            int valueOfBuild = 0;
 
             for(int i = 0; i < tableBuilds.size(); i++) {
+                valueOfBuild = tableBuilds.get(i).GetCardValueOfBuild();
 
                 // If this function that is called returns true, then it was successful in validating the new build with the
                 // card added and created the new build already so all that is left to do is return true
@@ -353,6 +354,14 @@ public class Round_Model {
                     player.get(currentPlayer).SetPrintTableBuildCards(tableBuilds.get(i).GetBuildOfCards());
                     player.get(currentPlayer).RemoveCard(playerHandBuildCard);
                     addExistingBuildSuccessful = true;
+
+                    // After adding to a build, we must remove the build card from the other player
+                    if(currentPlayer == 0) {
+                        player.get(1).RemoveFromPlayerBuildCards(valueOfBuild);
+                    }
+                    else {
+                        player.get(0).RemoveFromPlayerBuildCards(valueOfBuild);
+                    }
                 }
             }
 
@@ -1216,6 +1225,10 @@ public class Round_Model {
 
     void SetPlayerModelExistingBuildCard(Card_Model passedCard) {
         player.get(currentPlayer).SetExistingBuildCard(passedCard);
+    }
+
+    String GetLastCapture() {
+        return lastCapture;
     }
 
 

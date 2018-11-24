@@ -536,16 +536,21 @@ public class Player_Model {
 
         int handCardNumber;
         boolean skipCard = false;
+        Log.d("AI", "AI trying to make a build");
 
 
         // Cycling through the computer's hand and checking if there are cards that add up to that card
         for(int i = 0; i < hand.size(); i++) {
             handCardNumber = CardNumber(hand.get(i).GetNumber());
 
+            Log.d("AIBuild", "In AI trying to make a build");
             // Cycling through the builds and if the card in the player's hand matches one of the cards
             // used to capture a build, then it will set skipCard to true and skip over that hand card
             for(int j = 0; j < tableBuilds.size(); j++) {
+                Log.d("AIHand", hand.get(i).GetCard());
+                Log.d("CaptureCard", tableBuilds.get(j).GetCaptureCardOfBuild().GetCard());
                 if(hand.get(i).GetCard().equals(tableBuilds.get(j).GetCaptureCardOfBuild().GetCard())) {
+                    Log.d("Skip", "Setting skipCard to true");
                     skipCard = true;
                 }
             }
@@ -559,17 +564,28 @@ public class Player_Model {
             // Now cycling through the computers hand and table, looking for a combination of a card from the hand and a card on
             // the table that will add up to another card in the player's hand
             for(int j = 0; j < hand.size(); j++) {
+                boolean skipCard2 = false;
+
                 // Skipping over the same exact computer card from the first for loop
-                if(hand.get(i).GetCard().equals(hand.get(j).GetCard())) {
+                if (hand.get(i).GetCard().equals(hand.get(j).GetCard())) {
                     continue;
                 }
 
-                for(int k = 0; k < table.size(); k++) {
-                    if((CardNumber(hand.get(j).GetNumber()) + CardNumber(table.get(k).GetNumber())) == handCardNumber) {
-                        newOrExistingBuild = 'n';
-                        playerCard = hand.get(j);
-                        buildCards.add(table.get(k));
-                        return true;
+                for (int l = 0; l < tableBuilds.size(); l++) {
+                    if (hand.get(j).GetCard().equals(tableBuilds.get(l).GetCaptureCardOfBuild().GetCard())) {
+                        skipCard2 = true;
+                    }
+                }
+
+                if (!skipCard2) {
+                    for (int k = 0; k < table.size(); k++) {
+                        if ((CardNumber(hand.get(j).GetNumber()) + CardNumber(table.get(k).GetNumber())) == handCardNumber) {
+                            Log.d("Success", "Actually creating the new build!");
+                            newOrExistingBuild = 'n';
+                            playerCard = hand.get(j);
+                            buildCards.add(table.get(k));
+                            return true;
+                        }
                     }
                 }
             }
@@ -662,11 +678,13 @@ public class Player_Model {
             printTableBuildCards = tableBuilds.get(i).GetBuildOfCards();
 
             // Then cycle through all of the cards in a specific build and add up the value of the cards
+            Log.d("BuildSize", Integer.toString(currentBuild.size()));
             for(int j = 0; j < currentBuild.size(); j++) {
                 Log.d("Value of each card in ai", Integer.toString(CardNumber(currentBuild.get(j).GetNumber())));
                 count += CardNumber(currentBuild.get(j).GetNumber());
             }
 
+            Log.d("CountBefore", Integer.toString(count));
             // Now we must go through the player's hand and see if any of the cards equal the sum of the build
             // If so, this function will return true and the build will be captured
             for(int j = 0; j < hand.size(); j++) {
@@ -692,6 +710,8 @@ public class Player_Model {
                     return true;
                 }
             }
+
+            count = 0;
         }
 
         Card_Model tableCardToBeCaptured = new Card_Model();
@@ -1215,6 +1235,15 @@ public class Player_Model {
         for(int i = 0; i < uniqueCards.size(); i++) {
             if(uniqueCards.get(i).GetCard().equals(passedCard.GetCard())) {
                 existingBuildCard = passedCard;
+            }
+        }
+    }
+
+    void RemoveFromPlayerBuildCards(int cardValue) {
+
+        for(int i = 0; i < playerBuildCards.size(); i++) {
+            if(cardValue == CardNumber(playerBuildCards.get(i).GetNumber())) {
+                playerBuildCards.remove(i);
             }
         }
     }

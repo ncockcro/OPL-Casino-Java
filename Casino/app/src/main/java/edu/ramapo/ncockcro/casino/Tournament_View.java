@@ -22,6 +22,8 @@ public class Tournament_View {
     private TextView tenOfDiamondsView;
     private TextView twoOfSpadesView;
     private TextView mostAcesView;
+    private TextView humanScore;
+    private TextView computerScore;
 
     Vector<ImageView> playerPile = new Vector<ImageView>();
     Vector<ImageView> computerPile = new Vector<ImageView>();
@@ -74,6 +76,9 @@ public class Tournament_View {
         tenOfDiamondsView = (TextView) activity.findViewById(R.id.tenOfDiamondsTextView);
         twoOfSpadesView = (TextView) activity.findViewById(R.id.twoOfSpadesTextView);
         mostAcesView = (TextView) activity.findViewById(R.id.mostAcesTextView);
+
+        humanScore = (TextView) activity.findViewById(R.id.humanScore);
+        computerScore = (TextView) activity.findViewById(R.id.computerScore);
 
         tournamentModel = passedTournamentModel;
     }
@@ -138,7 +143,10 @@ public class Tournament_View {
         mostAcesView.append(tournamentModel.GetNumAcesMessage().get(0));
 
         mostAcesView.setTextColor(0xFFFF0000);
-        mostAcesView.append(tournamentModel.GetNumAcesMessage().get(0));
+        mostAcesView.append(tournamentModel.GetNumAcesMessage().get(1));
+
+        humanScore.append(Integer.toString(tournamentModel.GetHumanPoints()));
+        computerScore.append(Integer.toString(tournamentModel.GetComputerPoints()));
 
     }
 
@@ -227,5 +235,6 @@ public class Tournament_View {
 
         return button;
     }
+
 
 }

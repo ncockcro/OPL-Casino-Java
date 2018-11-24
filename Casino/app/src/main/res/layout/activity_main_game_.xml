@@ -157,7 +157,7 @@
         app:srcCompat="@drawable/redback" />
 
     <TextView
-        android:id="@+id/humanPileTextView"
+        android:id="@+id/humanScoreTextView"
         android:layout_width="wrap_content"
         android:layout_height="18dp"
         android:layout_marginStart="360dp"
@@ -304,7 +304,7 @@
         android:layout_marginEnd="30dp"
         android:layout_marginRight="30dp"
         android:layout_marginBottom="15dp"
-        app:layout_constraintBottom_toTopOf="@+id/humanPileTextView"
+        app:layout_constraintBottom_toTopOf="@+id/humanScoreTextView"
         app:layout_constraintEnd_toStartOf="@+id/outputTextView">
 
         <LinearLayout

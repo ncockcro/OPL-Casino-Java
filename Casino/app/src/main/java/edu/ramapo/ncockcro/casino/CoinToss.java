@@ -107,6 +107,9 @@ public class CoinToss extends AppCompatActivity {
     public void Play(View view) {
         Intent intent = new Intent(this, MainGame_Activity.class);
         intent.putExtra("coinWinner", coinTossWinner);
+        intent.putExtra("humanScore", "0");
+        intent.putExtra("computerScore", "0");
+        intent.putExtra("currentRound", "0");
         startActivity(intent);
     }
 }

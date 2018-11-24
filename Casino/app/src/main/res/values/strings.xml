@@ -63,4 +63,6 @@
     <string name="mostAcesTextView">Most Aces</string>
     <string name="gameWonTextView">Game Won</string>
     <string name="seeResultsButton">See Results</string>
+    <string name="humanScoreTextView">Your Score</string>
+    <string name="computerScoreTextView">Computer Score</string>
 </resources>

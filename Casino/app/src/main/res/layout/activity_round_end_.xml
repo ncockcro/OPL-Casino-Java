@@ -44,7 +44,6 @@
         android:layout_width="500dp"
         android:layout_height="40dp"
         android:layout_marginTop="30dp"
-        android:text="@string/mostCardsTextView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/computerPileHorizontalView" />
@@ -58,7 +57,6 @@
         android:layout_marginTop="20dp"
         android:layout_marginEnd="612dp"
         android:layout_marginRight="612dp"
-        android:text="@string/mostSpadesTextView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/mostCardsTextView" />
@@ -72,7 +70,6 @@
         android:layout_marginTop="20dp"
         android:layout_marginEnd="390dp"
         android:layout_marginRight="390dp"
-        android:text="@string/tenOfDiamondsTextView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/mostSpadesTextView" />
@@ -82,7 +79,6 @@
         android:layout_width="500dp"
         android:layout_height="40dp"
         android:layout_marginTop="20dp"
-        android:text="@string/twoOfSpadesTextView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tenOfDiamondsTextView" />
@@ -92,7 +88,6 @@
         android:layout_width="500dp"
         android:layout_height="40dp"
         android:layout_marginTop="20dp"
-        android:text="@string/mostAcesTextView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/twoOfSpadesTextView" />
@@ -102,7 +97,6 @@
         android:layout_width="500dp"
         android:layout_height="40dp"
         android:layout_marginTop="20dp"
-        android:text="@string/gameWonTextView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/mostAcesTextView" />
@@ -112,6 +106,7 @@
         android:layout_width="371dp"
         android:layout_height="81dp"
         android:layout_marginTop="20dp"
+        android:onClick="NextRoundButtonPressed"
         android:text="@string/playNewRoundButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -140,4 +135,51 @@
         android:textColor="#FFFFFFFF"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/HumanPileTextView" />
+
+    <TextView
+        android:id="@+id/humanScoreTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="123dp"
+        android:layout_marginLeft="123dp"
+        android:layout_marginTop="300dp"
+        android:text="@string/humanScoreTextView"
+        android:textColor="#FFFFFFFF"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/computerScoreTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="300dp"
+        android:layout_marginEnd="123dp"
+        android:layout_marginRight="123dp"
+        android:text="@string/computerScoreTextView"
+        android:textColor="#FFFFFFFF"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/humanScore"
+        android:layout_width="119dp"
+        android:layout_height="114dp"
+        android:layout_marginStart="100dp"
+        android:layout_marginLeft="100dp"
+        android:layout_marginTop="36dp"
+        android:textColor="#FFFFFFFF"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/humanScoreTextView" />
+
+    <TextView
+        android:id="@+id/computerScore"
+        android:layout_width="119dp"
+        android:layout_height="114dp"
+        android:layout_marginTop="36dp"
+        android:layout_marginEnd="100dp"
+        android:layout_marginRight="100dp"
+        android:textColor="#FFFFFFFF"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/computerScoreTextView" />
+
 </android.support.constraint.ConstraintLayout>

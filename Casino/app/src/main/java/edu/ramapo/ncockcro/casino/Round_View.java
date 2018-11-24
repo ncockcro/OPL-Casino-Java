@@ -69,6 +69,10 @@ public class Round_View extends MainGame_Activity {
     private Vector<Card_View> singleBuildCards = new Vector<Card_View>();
     private Card_View currentBuildCard;
 
+    private int humanScore;
+    private int computerScore;
+    int round;
+
     /** *********************************************************************
      Function Name: Round_View
      Purpose: Default constructor for the round_view class
@@ -923,6 +927,7 @@ public class Round_View extends MainGame_Activity {
         // Otherwise, return false, the round is over
         else if(roundModel.CheckIfPlayersHandEmpty() && roundModel.CheckIfDeckEmpty()){
 
+            roundModel.GiveTableCards();
             HideAllButtons();
             seeResultsButton.setVisibility(View.VISIBLE);
 
@@ -1414,6 +1419,30 @@ public class Round_View extends MainGame_Activity {
 
         setHighlightedTableCard.clear();
         buildHighlightedTableCards.clear();
+    }
+
+    void SetHumanScore(int score) {
+        humanScore = score;
+    }
+
+    void SetComputerScore(int score) {
+        computerScore = score;
+    }
+
+    void SetRound(int passedRound) {
+        round = passedRound;
+    }
+
+    int GetHumanScore() {
+        return humanScore;
+    }
+
+    int GetComputerScore() {
+        return computerScore;
+    }
+
+    int GetRound() {
+        return round;
     }
 
 }

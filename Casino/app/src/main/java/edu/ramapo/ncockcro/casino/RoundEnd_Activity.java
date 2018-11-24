@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 
 import java.util.Vector;
 
@@ -42,7 +43,29 @@ public class RoundEnd_Activity extends AppCompatActivity {
             computerPile.add(new Card_View(intent.getStringExtra("ComputerPile" + i)));
         }
 
+        tournamentModel.SetHumanPoints(Integer.parseInt(intent.getStringExtra("humanScore")));
+        tournamentModel.SetComputerPoints(Integer.parseInt(intent.getStringExtra("computerScore")));
+        tournamentModel.SetCurrentRound(Integer.parseInt(intent.getStringExtra("currentRound")));
+        tournamentModel.SetLastCapture(intent.getStringExtra("lastCapture"));
+
         tournamentView.DrawResults(this, playerPile, computerPile);
+
+
+    }
+
+    public void NextRoundButtonPressed(View view) {
+        Intent intentRound = new Intent(this, MainGame_Activity.class);
+
+        String humanScoreString = Integer.toString(tournamentModel.GetHumanPoints());
+        String computerScoreString = Integer.toString(tournamentModel.GetComputerPoints());
+        String roundString = Integer.toString(tournamentModel.GetRound());
+
+        intentRound.putExtra("coinWinner", tournamentModel.GetLastCapture());
+        intentRound.putExtra("humanScore", humanScoreString);
+        intentRound.putExtra("computerScore", computerScoreString);
+        intentRound.putExtra("currentRound", roundString);
+
+        startActivity(intentRound);
 
 
     }

@@ -44,6 +44,10 @@ public class MainGame_Activity extends AppCompatActivity {
 
         Intent intent = getIntent();
         coinTossWinner = intent.getStringExtra("coinWinner");
+
+        roundView.SetHumanScore(Integer.parseInt(intent.getStringExtra("humanScore")));
+        roundView.SetComputerScore(Integer.parseInt(intent.getStringExtra("computerScore")));
+        roundView.SetRound(Integer.parseInt(intent.getStringExtra("currentRound")));
         roundModel.SetFirstPlayer(coinTossWinner);
         roundView.SetPlayerButtons();
 
@@ -280,6 +284,16 @@ public class MainGame_Activity extends AppCompatActivity {
 
         String computerPileSize = Integer.toString(tempComputerPile.size());
         intentResults.putExtra("ComputerPileSize", computerPileSize);
+
+        String humanScoreString = Integer.toString(roundView.GetHumanScore());
+        String computerScoreString = Integer.toString(roundView.GetComputerScore());
+        String roundString = Integer.toString(roundView.GetRound());
+
+        intentResults.putExtra("humanScore", humanScoreString);
+        intentResults.putExtra("computerScore", computerScoreString);
+        intentResults.putExtra("currentRound", roundString);
+        intentResults.putExtra("lastCapture", roundModel.GetLastCapture());
+
 
         startActivity(intentResults);
     }

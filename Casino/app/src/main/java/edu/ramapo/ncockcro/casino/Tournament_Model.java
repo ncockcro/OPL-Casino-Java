@@ -34,7 +34,7 @@ public class Tournament_Model {
     String mostSpadesMessage;
     String tenOfDiamondsMessage;
     String twoOfSpadesMessage;
-    Vector<String> numAcesMessage;
+    Vector<String> numAcesMessage = new Vector<String>();
     String winnerMessage;
 
     String mostCardsColor;
@@ -228,6 +228,9 @@ public class Tournament_Model {
             mostSpadesColor = "Yellow";
             mostSpadesMessage = "Neither player had more Spades!";
         }
+
+        numAcesMessage.add("You had " + Integer.toString(humanAceCount) + " Aces. ");
+        numAcesMessage.add("The computer had " + Integer.toString(computerAceCount) + " Aces.");
 
         // Set the overall scores to what was calculated by the round
         humanPoints += humanRoundPoints;
@@ -435,4 +438,38 @@ public class Tournament_Model {
     String winnerColor() {
         return winnerColor;
     }
+
+    void SetHumanPoints(int passedPoints) {
+        humanPoints = passedPoints;
+    }
+
+    void SetComputerPoints(int passedPoints) {
+        computerPoints = passedPoints;
+    }
+
+    void SetCurrentRound(int passedRound) {
+        round = passedRound;
+    }
+
+    int GetHumanPoints() {
+        return humanPoints;
+    }
+
+    int GetComputerPoints() {
+        return computerPoints;
+    }
+
+    int GetRound() {
+        return round;
+    }
+
+    void SetLastCapture(String passedCapture) {
+        lastCaptured = passedCapture;
+    }
+
+    String GetLastCapture() {
+        return lastCaptured;
+    }
+
+
 }
