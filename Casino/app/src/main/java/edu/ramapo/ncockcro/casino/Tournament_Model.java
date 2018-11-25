@@ -34,8 +34,9 @@ public class Tournament_Model {
     Vector<Card_Model> loadGameTable = new Vector<Card_Model>();
     Vector<Card_Model> loadGameBuildCards = new Vector<Card_Model>();
     Vector<Build_Model> loadGameBuilds = new Vector<Build_Model>();
+    String loadGameLastCapture;
     Vector<Card_Model> loadGameDeck = new Vector<Card_Model>();
-    String nextPlayer;
+    String loadGameNextPlayer;
 
     String mostCardsMessage;
     String mostSpadesMessage;
@@ -484,7 +485,6 @@ public class Tournament_Model {
         Card_Model tempCard = new Card_Model();
 
         try {
-            Log.d("jfoevr", "in tournament");
             FileInputStream fileIS = new FileInputStream(new File(path + fileName));
             InputStreamReader inputStreamReader = new InputStreamReader(fileIS);
             BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
@@ -492,9 +492,15 @@ public class Tournament_Model {
 
             Scanner input = new Scanner(inputStreamReader);
 
+            while( (line = bufferedReader.readLine()) != null) {
+                Log.d("Line", line);
+            }
+
+            // Reading the text file word by word
             while(input.hasNext()) {
                 String currentWord = input.next();
 
+                // Getting the round
                 if(currentWord.equals("Round:")) {
                     currentWord = input.next();
                     loadGameRound = Integer.parseInt(currentWord);
@@ -504,12 +510,15 @@ public class Tournament_Model {
                 currentWord = input.next();
                 currentWord = input.next();
 
+                // Getting the computer score
                 if(currentWord.equals("Score:")) {
                     currentWord = input.next();
                     loadGameComputerScore = Integer.parseInt(currentWord);
                 }
 
                 currentWord = input.next();
+
+                // Getting the computer hand
                 if(currentWord.equals("Hand:")) {
                     currentWord = input.next();
                     while(currentWord.length() == 2) {
@@ -519,6 +528,7 @@ public class Tournament_Model {
                     }
                 }
 
+                // Getting the computer pile
                 if(currentWord.equals("Pile:")) {
                     currentWord = input.next();
                     while(currentWord.length() == 2) {
@@ -528,12 +538,152 @@ public class Tournament_Model {
                     }
                 }
 
+                currentWord = input.next();
+
+                // Getting the human score
+                if(currentWord.equals("Score:")) {
+                    currentWord = input.next();
+                    loadGameHumanScore = Integer.parseInt(currentWord);
+                }
+
+                currentWord = input.next();
+
+                // Getting the human score
+                if(currentWord.equals("Hand:")) {
+                    currentWord = input.next();
+                    while(currentWord.length() == 2) {
+                        tempCard.SetCard(currentWord);
+                        loadGameHumanHand.add(tempCard);
+                        currentWord = input.next();
+                    }
+                }
+
+                // Getting the human pile
+                if(currentWord.equals("Pile:")) {
+                    currentWord = input.next();
+                    while(currentWord.length() == 2) {
+                        tempCard.SetCard(currentWord);
+                        loadGameHumanPile.add(tempCard);
+                        currentWord = input.next();
+                    }
+                }
+
+                // Getting the table
+                if(currentWord.equals("Table:")) {
+                    currentWord = input.next();
+                    while(!currentWord.equals("Build") && !currentWord.equals("Last")) {
+                        if(currentWord.equals("[")) {
+                            while(!currentWord.equals("]")) {
+                                currentWord = input.next();
+                            }
+                        }
+                        if(currentWord.length() == 2) {
+                            tempCard.SetCard(currentWord);
+                            loadGameTable.add(tempCard);
+                        }
+                        currentWord = input.next();
+                    }
+                }
+
+                Vector<String> tempVector = new Vector<String>();
+                String tempString = new String();
+                String buildString = new String();
+                Build_Model tempBuild = new Build_Model();
+
+                // If the build keyword is in the text file, then we need to parse it for a build
+                do {
+                    if(currentWord.equals("Build")) {
+                        currentWord = input.next();
+
+                        // If the string is not a computer or human, then we know there is some
+                        // text of the build we need to parse
+                        while(!currentWord.equals("Computer") && !currentWord.equals("Human")) {
+                            currentWord = input.next();
+
+                            for(int i = 0; i < currentWord.length(); i++) {
+
+                                // Checking for a suit
+                                if(currentWord.charAt(i) == 'C' || currentWord.charAt(i) == 'D' ||
+                                        currentWord.charAt(i) == 'H' || currentWord.charAt(i) == 'S') {
+                                    buildString += currentWord.charAt(i);
+                                }
+
+                                // Checking for a number
+                                if(currentWord.charAt(i) == '2' || currentWord.charAt(i) == '3' ||
+                                        currentWord.charAt(i) == '4' || currentWord.charAt(i) == '5' ||
+                                        currentWord.charAt(i) == '6' || currentWord.charAt(i) == '7' ||
+                                        currentWord.charAt(i) == '8' || currentWord.charAt(i) == '9' ||
+                                        currentWord.charAt(i) == 'X' || currentWord.charAt(i) == 'J' ||
+                                        currentWord.charAt(i) == 'Q' || currentWord.charAt(i) == 'K' ||
+                                        currentWord.charAt(i) == 'A') {
+                                    buildString += currentWord.charAt(i);
+                                }
+                            }
+
+                            // So long as what we parsed is a valid card, push it into a card and
+                            // add it to the vector of cards to make up a build
+                            if(buildString.length() == 2) {
+                                tempCard.SetCard(buildString);
+                                loadGameBuildCards.add(tempCard);
+                            }
+
+                            buildString = "";
+                        }
+
+                        tempBuild.SetBuildOfCards(loadGameBuildCards);
+
+                        if(currentWord.equals("Computer")) {
+                            tempBuild.SetOwner(1);
+                        }
+                        else if(currentWord.equals("Human")) {
+                            tempBuild.SetOwner(0);
+                        }
+                        else {
+                            Log.d("MyError", "Error in setting the build owner in tournament model");
+                        }
+
+                        loadGameBuilds.add(tempBuild);
+                        loadGameBuildCards.clear();
+                        currentWord = input.next();
+                    }
+
+                    tempBuild = new Build_Model();
+                } while(currentWord.equals("Build"));
+
+                if(currentWord.equals("Last")) {
+                    currentWord = input.next();
+                    currentWord = input.next();
+
+                    loadGameLastCapture = currentWord;
+                }
+
+                currentWord = input.next();
+                currentWord = input.next();
+
+                if(currentWord.equals("Deck:")) {
+                    currentWord = input.next();
+
+                    if(currentWord != "Next") {
+                        while(currentWord.length() == 2) {
+                            tempCard.SetCard(currentWord);
+                            loadGameDeck.add(tempCard);
+                            currentWord = input.next();
+                        }
+                    }
+
+                    currentWord = input.next();
+                }
+
+                if(currentWord.equals("Player:")) {
+                    currentWord = input.next();
+
+                    loadGameNextPlayer = currentWord;
+                }
+
+
                 Log.d("Comp", Integer.toString(loadGameComputerScore));
             }
 
-            while( (line = bufferedReader.readLine()) != null) {
-                Log.d("Line", line);
-            }
         }
         catch (FileNotFoundException e) {
 
