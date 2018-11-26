@@ -1648,5 +1648,21 @@ public class Round_Model {
         }
     }
 
+    /** *********************************************************************
+     Function Name: GetPlayerHelpOutputMessages
+     Purpose: To retrieve the help output messages from the player class
+     Parameters: None
+     Return Value:
+     @return Vector<String>
+     Local Variables: None
+     Algorithm:
+     1) Return the helpOutputMessages variable from the player class
+     Assistance Received: none
+      ********************************************************************* */
+    Vector<String> GetPlayerHelpOutputMessages() {
+        player.get(currentPlayer).AskForHelp(table, tableBuilds);
+        return player.get(currentPlayer).GetHelpOutputMessages();
+    }
+
 
 }

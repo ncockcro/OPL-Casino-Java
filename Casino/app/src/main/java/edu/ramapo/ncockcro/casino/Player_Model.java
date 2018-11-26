@@ -29,6 +29,7 @@ public class Player_Model {
     private Vector<Card_Model> tableCardsToBeCaptured = new Vector<Card_Model>();
 
     private Card_Model playerWantCard;
+    private Vector<String> helpOutputMessages = new Vector<String>();
 
     /** *********************************************************************
      Function Name: SetHand
@@ -989,6 +990,76 @@ public class Player_Model {
      ********************************************************************* */
     void AskForHelp(Vector<Card_Model> table, Vector<Build_Model> tableBuilds) {
 
+        helpOutputMessages.clear();
+
+        // Check if the player can make a capture and output the move they would make
+        if(AICheckForBuild(table, tableBuilds)) {
+            helpOutputMessages.add("The player should make a build.");
+            helpOutputMessages.add("The player should user" + GetNumberName(playerCard.GetNumber()));
+            helpOutputMessages.add(" of " + GetSuitName(playerCard.GetSuit()) + " to make a build.");
+
+            for(int i = 0; i < buildCards.size(); i++) {
+                if(i > 0) {
+                    helpOutputMessages.add(" and ");
+                }
+                helpOutputMessages.add(GetNumberName(buildCards.get(i).GetNumber()) + " of " + GetSuitName(buildCards.get(i).GetSuit()));
+            }
+            helpOutputMessages.add("This way the player can capture as many cards as possible.");
+            return;
+        }
+
+        // Check if the player can make a capture and output what they should do
+        else if(AICheckForCapture(table, tableBuilds)) {
+
+            helpOutputMessages.add("The player should play the ");
+            helpOutputMessages.add(GetNumberName(playerCard.GetNumber()) + " of " + GetSuitName(playerCard.GetSuit()) + " to capture the ");
+
+            // Print if the player should capture a build
+            if(playerWantBuild == 'y') {
+                helpOutputMessages.add("this build that contains ");
+
+                for(int i = 0; i < printTableBuildCards.size(); i++) {
+                    if(i > 1) {
+                        helpOutputMessages.add(" and ");
+                    }
+
+                    helpOutputMessages.add(GetNumberName(printTableBuildCards.get(i).GetNumber()) + " of " + GetSuitName(printTableBuildCards.get(i).GetSuit()));
+                }
+            }
+
+            // Print out any loose cards the player can capture
+            for(int i = 0; i < printTableCaptureCards.size(); i++) {
+                if(i > 1) {
+                    helpOutputMessages.add(" and ");
+                }
+
+                helpOutputMessages.add(GetNumberName(printTableCaptureCards.get(i).GetNumber()) + " of " + GetSuitName(printTableCaptureCards.get(i).GetSuit()));
+            }
+
+            // Print out any sets the player can capture
+            Vector<Set_Model> setCards = new Vector<Set_Model>();
+            for(int i = 0; i < playerMultipleSetCards.size(); i++) {
+                setCards.add(playerMultipleSetCards.get(i));
+
+                for(int j = 0; j < setCards.get(i).GetCardOfSet().size(); j++) {
+                    if(i > 1) {
+                        helpOutputMessages.add(" and ");
+                    }
+                    helpOutputMessages.add(GetNumberName(setCards.get(i).GetCardOfSet().get(j).GetNumber()) + " of " + GetSuitName(setCards.get(i).GetCardOfSet().get(j).GetSuit()));
+                }
+            }
+
+            helpOutputMessages.add("This way the player can capture as many cards as possible.");
+            return;
+        }
+
+        // If they can't do either of those things, output to the player that they can trail
+        else {
+            AIMakeTrail();
+            helpOutputMessages.add("The player should trail and use the ");
+            helpOutputMessages.add(GetNumberName(playerCard.GetNumber()) + " of " + GetSuitName(playerCard.GetSuit()) + " to trail as there is not other option.");
+            return;
+        }
     }
 
     /** *********************************************************************
@@ -1005,8 +1076,33 @@ public class Player_Model {
      Assistance Received: none
      ********************************************************************* */
     String GetNumberName(char number) {
-        if(number == 'X') {
-            return "Ten";
+
+        if(number == '2') {
+            return "two";
+        }
+        else if(number == '3') {
+            return "three";
+        }
+        else if(number == '4') {
+            return "four";
+        }
+        else if(number == '5') {
+            return "five";
+        }
+        else if(number == '6') {
+            return "six";
+        }
+        else if(number == '7') {
+            return "seven";
+        }
+        else if(number == '8') {
+            return "eight";
+        }
+        else if(number == '9') {
+            return "nine";
+        }
+        else if(number == 'X') {
+            return "ten";
         }
         else if(number == 'J') {
             return "Jack";
@@ -1334,6 +1430,20 @@ public class Player_Model {
      ********************************************************************* */
     void LoadHand(Vector<Card_Model> passedCards) {
         hand = passedCards;
+    }
+
+    /** *********************************************************************
+     Function Name: GetHelpOutputMessages
+     Purpose: To retrieve the output messages for helping the player
+     Parameters: None
+     Return Value: None
+     Local Variables: None
+     Algorithm:
+     1) Return the helpOutputMessages variable
+     Assistance Received: none
+      ********************************************************************* */
+    Vector<String> GetHelpOutputMessages() {
+        return helpOutputMessages;
     }
 
 

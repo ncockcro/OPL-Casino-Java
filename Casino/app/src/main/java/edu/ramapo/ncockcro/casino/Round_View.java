@@ -1571,4 +1571,22 @@ public class Round_View extends MainGame_Activity {
 
     }
 
+    /** *********************************************************************
+     Function Name: OutputHelpMessage
+     Purpose: Output the help messages for the player to the console
+     Parameters: None
+     Return Value: Void
+     Local Variables: None
+     Algorithm:
+     1) Cycle through the help messages and output them to the console text view
+     Assistance Received: none
+      ********************************************************************* */
+    void OutputHelpMessages() {
+        Vector<String> helpMessages = roundModel.GetPlayerHelpOutputMessages();
+
+        for(int i = 0; i < helpMessages.size(); i++) {
+            outputTextView.append(helpMessages.get(i));
+        }
+    }
+
 }

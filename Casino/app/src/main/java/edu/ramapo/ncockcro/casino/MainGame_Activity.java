@@ -457,4 +457,21 @@ public class MainGame_Activity extends AppCompatActivity {
     public void SaveButtonPressed(View view) {
         roundView.ShowSaveTextInput(this);
     }
+
+    /** *********************************************************************
+     Function Name: HelpButtonPressed
+     Purpose: When the help button is pressed, generate a help statement for the player
+     Parameters:
+     @param view, View object
+     Return Value: None
+     Local Variables: None
+     Algorithm:
+     1) Call the model to generate the help messages
+     2) Call the view to show the help messages
+     Assistance Received: none
+      ********************************************************************* */
+    public void HelpButtonPressed(View view) {
+        roundModel.GetPlayerHelpOutputMessages();
+        roundView.OutputHelpMessages();
+    }
 }

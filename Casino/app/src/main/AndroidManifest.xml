@@ -17,13 +17,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".DisplayMessageActivity"
-            android:parentActivityName=".Start_Menu">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".Start_Menu" />
-        </activity>
         <activity android:name=".CoinToss" />
         <activity android:name=".MainGame_Activity" />
         <activity android:name=".RoundEnd_Activity"></activity>
