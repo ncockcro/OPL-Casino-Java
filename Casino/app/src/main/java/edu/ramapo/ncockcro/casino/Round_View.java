@@ -871,6 +871,7 @@ public class Round_View extends MainGame_Activity {
 
         // Draw the player's hand
         for(int i = 0; i < playerCards.size(); i++) {
+            Log.d("Player", playerCards.get(i).GetCard());
             playerCards.get(i).DrawImageCard(playerImageButtonHand.get(i));
         }
 
@@ -889,6 +890,7 @@ public class Round_View extends MainGame_Activity {
             computerImageViewHand.get(i).setVisibility(View.GONE);
         }
 
+        Log.d("update", "In updating screen");
         // Draw the rest of the content to the screen
         DrawTable(context);
         DrawDeck(context);
@@ -911,13 +913,18 @@ public class Round_View extends MainGame_Activity {
       ********************************************************************* */
     Integer CheckForDealingCards(Context context) {
 
+        Log.d("Check", "Checking for dealing cards");
 
         for(int i = 0; i < roundModel.GetHand(0).size(); i++) {
             Log.d("humanCards", roundModel.GetHand(0).get(i).GetCard());
         }
 
+        Log.d("HandEmpty", Boolean.toString(roundModel.CheckIfPlayersHandEmpty()));
+        Log.d("DeckEmpty", Boolean.toString(roundModel.CheckIfDeckEmpty()));
+
         // If the player's hands are empty but not the deck, deal cards and return true
         if(roundModel.CheckIfPlayersHandEmpty() && !roundModel.CheckIfDeckEmpty()) {
+            Log.d("Choice", "Returning 1");
             roundModel.DealCardsToPlayer();
             SetPlayersHandsVisible();
             UpdateScreen(context);
@@ -925,10 +932,12 @@ public class Round_View extends MainGame_Activity {
         }
         // If the hands aren't empty and the deck isn't empty, return true
         else if(!roundModel.CheckIfPlayersHandEmpty() && !roundModel.CheckIfDeckEmpty()) {
+            Log.d("Choice", "returning 2");
             return 2;
         }
         // Otherwise, return false, the round is over
         else if(roundModel.CheckIfPlayersHandEmpty() && roundModel.CheckIfDeckEmpty()){
+            Log.d("Choice", "returning 3");
 
             roundModel.GiveTableCards();
             HideAllButtons();
@@ -1380,6 +1389,18 @@ public class Round_View extends MainGame_Activity {
 
     }
 
+    /** *********************************************************************
+     Function Name: ClearData
+     Purpose: To clear everything that the player may have altered during their move
+     Parameters: None
+     Return Value: None
+     Local Variables: None
+     Algorithm:
+     1) Unhighlight all of the player's cards
+     2) Unhighlight all of the table's cards
+     3) Clear various vectors and set variables to 'n'
+     Assistance Received: none
+     ********************************************************************* */
     void ClearData() {
 
         HideAllButtons();
@@ -1424,30 +1445,105 @@ public class Round_View extends MainGame_Activity {
         buildHighlightedTableCards.clear();
     }
 
+    /** *********************************************************************
+     Function Name: SetHumanScore
+     Purpose: Set the score for the human to what was passed in
+     Parameters:
+     @param score, int
+     Return Value: None
+     Local Variables: None
+     Algorithm:
+     1) To set the humanScore to what was passed in
+     Assistance Received: none
+     ********************************************************************* */
     void SetHumanScore(int score) {
         humanScore = score;
     }
 
+    /** *********************************************************************
+     Function Name: SetComputerScore
+     Purpose: Set the score for the computer to what was passed in
+     Parameters:
+     @param score, int
+     Return Value: None
+     Local Variables: None
+     Algorithm:
+     1) To set the computerScore to what was passed in
+     Assistance Received: none
+      ********************************************************************* */
     void SetComputerScore(int score) {
         computerScore = score;
     }
 
+    /** *********************************************************************
+     Function Name: SetRound
+     Purpose: Set the round to what was passed in
+     Parameters:
+     @param passedRound, int
+     Return Value: None
+     Local Variables: None
+     Algorithm:
+     1) To set the round to what was passed in
+     Assistance Received: none
+      ********************************************************************* */
     void SetRound(int passedRound) {
         round = passedRound;
     }
 
+    /** *********************************************************************
+     Function Name: GetHumanScore
+     Purpose: To retrieve the human's score to what was passed in
+     Parameters: None
+     Return Value: None
+     Local Variables: None
+     Algorithm:
+     1) Return the humanScore variable
+     Assistance Received: none
+      ********************************************************************* */
     int GetHumanScore() {
         return humanScore;
     }
 
+    /** *********************************************************************
+     Function Name: GetComputerScore
+     Purpose: To retrieve the computer's score to what was passed in
+     Parameters: None
+     Return Value: None
+     Local Variables: None
+     Algorithm:
+     1) Return the computerScore variable
+     Assistance Received: none
+     ********************************************************************* */
     int GetComputerScore() {
         return computerScore;
     }
 
+    /** *********************************************************************
+     Function Name: GetRound
+     Purpose: To retrieve the round
+     Parameters: None
+     Return Value: None
+     Local Variables: None
+     Algorithm:
+     1) Return the round variable
+     Assistance Received: none
+     ********************************************************************* */
     int GetRound() {
         return round;
     }
 
+    /** *********************************************************************
+     Function Name: ShowSaveTextInput
+     Purpose: To prompt the user to type in a name for their save file
+     Parameters:
+     @param context, Context object
+     Return Value: None
+     Local Variables: None
+     Algorithm:
+     1) Create an input box for the player to type in a name for their save file
+     and then save the game under that file name
+     Assistance Received: none
+     ********************************************************************* */
     void ShowSaveTextInput(Context context) {
         final EditText saveEditText = new EditText(context);
         AlertDialog.Builder dialog = new AlertDialog.Builder(context);

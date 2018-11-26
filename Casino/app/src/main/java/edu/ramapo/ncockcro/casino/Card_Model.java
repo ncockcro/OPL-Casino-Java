@@ -24,6 +24,23 @@ public class Card_Model {
     }
 
     /** *********************************************************************
+     Function Name: Card_Model
+     Purpose: Overloaded constructor
+     Parameters:
+     @param passedCard, String
+     Return Value: None
+     Local Variables: None
+     Algorithm:
+     1) Overloaded Constructor
+     Assistance Received: none
+     ********************************************************************* */
+    Card_Model(String passedCard) {
+        card = passedCard;
+        suit = passedCard.charAt(0);
+        number = passedCard.charAt(1);
+    }
+
+    /** *********************************************************************
      Function Name: SetCard
      Purpose: To set a card to the value that was passed in
      Parameters:

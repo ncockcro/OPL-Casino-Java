@@ -64,6 +64,7 @@ public class RoundEnd_Activity extends AppCompatActivity {
         intentRound.putExtra("humanScore", humanScoreString);
         intentRound.putExtra("computerScore", computerScoreString);
         intentRound.putExtra("currentRound", roundString);
+        intentRound.putExtra("loadGame", "false");
 
         startActivity(intentRound);
 

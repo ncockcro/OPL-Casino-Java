@@ -182,4 +182,19 @@ public class Deck_Model {
         Collections.shuffle(deckOfCards);
 
     }
+
+    /** *********************************************************************
+     Function Name: SetDeck
+     Purpose: To set the deck to what was passed in, used when loading in a game
+     Parameters:
+     @param passedCards, Vector<Card_Model>
+     Return Value: None
+     Local Variables: None
+     Algorithm:
+     1) Set the deckOfCards to what was passed in
+     Assistance Received: none
+     ********************************************************************* */
+    void SetDeck(Vector<Card_Model> passedCards) {
+        deckOfCards = passedCards;
+    }
 }

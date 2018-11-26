@@ -720,10 +720,14 @@ public class Round_Model {
 
         // Set lastCapture to whoever the current player is
         if(currentPlayer == 0) {
+            Log.d("Setting", "Setting the last capture");
             lastCapture = "Human";
+            Log.d("LastCapture", lastCapture);
         }
         else {
+            Log.d("Setting", "Setting the last capture");
             lastCapture = "Computer";
+            Log.d("LastCapture", lastCapture);
         }
 
         if(!canCapture) {
@@ -1337,11 +1341,35 @@ public class Round_Model {
         player.get(currentPlayer).SetExistingBuildCard(passedCard);
     }
 
-
+    /** *********************************************************************
+     Function Name: GetLastCapture
+     Purpose: To get the player that captured last
+     Parameters: None
+     Return Value: None
+     Local Variables: None
+     Algorithm:
+     1) Retrieve the lastCapture variable
+     Assistance Received: none
+     ********************************************************************* */
     String GetLastCapture() {
         return lastCapture;
     }
 
+    /** *********************************************************************
+     Function Name: SaveGame
+     Purpose: To save all of the information from the instance of the game
+     Parameters:
+     @param context, Context object, the current activity were in
+     @param fileName, String, the name of the file were saving to
+     Return Value: None
+     Local Variables: None
+     Algorithm:
+     1) If the "save" folder doesn't exist, create it
+     2) If the file the user wants to save to doesn't exist, create it
+     3) Then go through and save the various information such as the player's
+     hands, piles, table, ect
+     Assistance Received: none
+     ********************************************************************* */
     void SaveGame(Context context, String fileName) {
 
         File saveFolder = new File(context.getFilesDir() + "/save");
@@ -1349,9 +1377,12 @@ public class Round_Model {
         Log.d("SavingAbsolute", saveFolder.getAbsolutePath().toString());
         File saveFile = new File(saveFolder.getAbsolutePath() + "/" + fileName + ".txt");
 
+        // If the save folder doesn't exist, then make the directory
         if(!saveFolder.exists()) {
             saveFolder.mkdir();
         }
+
+        // If the save file doesn't exist, then make the file
         if(!saveFile.exists()) {
             try {
                 saveFile.createNewFile();
@@ -1365,8 +1396,10 @@ public class Round_Model {
         try {
             fileOS = new FileOutputStream(saveFile);
 
+            // Write the round to the text file
             fileOS.write(("Round: " + Integer.toString(currentRound) + System.getProperty("line.separator") + System.getProperty("line.separator")).getBytes());
 
+            // Write the computer's score, hand, and pile to the text file
             fileOS.write(("Computer: " + System.getProperty("line.separator")).getBytes());
             fileOS.write(("\t Score: " + Integer.toString(computerPoints) + System.getProperty("line.separator")).getBytes());
             fileOS.write("\t Hand: ".getBytes());
@@ -1384,7 +1417,9 @@ public class Round_Model {
             }
 
             fileOS.write(System.getProperty("line.separator").getBytes());
+            fileOS.write(System.getProperty("line.separator").getBytes());
 
+            // Write the human's score, hand, and pile to the text file
             fileOS.write(("Human: " + System.getProperty("line.separator")).getBytes());
 
             fileOS.write(("\t Score: " + Integer.toString(humanPoints) + System.getProperty("line.separator")).getBytes());
@@ -1399,13 +1434,16 @@ public class Round_Model {
 
             fileOS.write(("\t Pile: ").getBytes());
             for(int i = 0; i < player.get(0).GetPile().size(); i++) {
-                fileOS.write((player.get(0).GetPile().get(i).GetCard() + System.getProperty("line.separator")).getBytes());
+                fileOS.write(((player.get(0).GetPile().get(i).GetCard()) + " ").getBytes());
             }
 
             fileOS.write(System.getProperty("line.separator").getBytes());
+            fileOS.write(System.getProperty("line.separator").getBytes());
 
+            // Write the table to the text file
             fileOS.write("Table: ".getBytes());
 
+            // Writing the builds first for the table
             for(int i = 0; i < tableBuilds.size(); i++) {
                 Vector<Card_Model> tempCards = tableBuilds.get(i).GetBuildOfCards();
                 fileOS.write("[ ".getBytes());
@@ -1415,12 +1453,15 @@ public class Round_Model {
                 fileOS.write("] ".getBytes());
             }
 
+            // Then writing the plain cards to the table
             for(int i = 0; i < table.size(); i++) {
                 fileOS.write((table.get(i).GetCard() + " ").getBytes());
             }
 
             fileOS.write(System.getProperty("line.separator").getBytes());
+            fileOS.write(System.getProperty("line.separator").getBytes());
 
+            // Then write the build owners to the text file
             if(tableBuilds.size() > 0) {
                 for(int i = 0; i < tableBuilds.size(); i++) {
                     fileOS.write("Build Owner: ".getBytes());
@@ -1443,16 +1484,26 @@ public class Round_Model {
                 fileOS.write(System.getProperty("line.separator").getBytes());
             }
 
-            fileOS.write(("Last Capturer: " + lastCapture).getBytes());
+            fileOS.write(System.getProperty("line.separator").getBytes());
 
+            // Write the person who captured last to the text file
+            Log.d("SaveLastCap", lastCapture);
+            fileOS.write(("Last Capturer: " + lastCapture).getBytes());
+            fileOS.write(System.getProperty("line.separator").getBytes());
+            fileOS.write(System.getProperty("line.separator").getBytes());
+
+            // Write the deck to the text file
             fileOS.write("Deck: ".getBytes());
 
-            for(int i = 0; i < deck.size(); i++) {
-                fileOS.write((deck.get(i).GetCard() + " ").getBytes());
+            Vector<Card_Model> tempDeck = deckOfCards.GetDeck();
+            for(int i = 0; i < deckOfCards.GetDeck().size(); i++) {
+                fileOS.write((tempDeck.get(i).GetCard() + " ").getBytes());
             }
 
             fileOS.write(System.getProperty("line.separator").getBytes());
+            fileOS.write(System.getProperty("line.separator").getBytes());
 
+            // Write the next player to the text file
             if(currentPlayer == 1) {
                 fileOS.write("Next Player: Computer".getBytes());
             }
@@ -1467,6 +1518,134 @@ public class Round_Model {
             e.printStackTrace();
         }
 
+    }
+
+    /** *********************************************************************
+     Function Name: SetComputerPoints
+     Purpose: To set the points for the computer player to what was passed in
+     Parameters:
+     @param points, String the points that were passed in
+     Return Value: None
+     Local Variables: None
+     Algorithm:
+     1) Set the computerPoints to what was passed in
+     Assistance Received: none
+     ********************************************************************* */
+    void SetComputerPoints(String points) {
+        computerPoints = Integer.parseInt(points);
+    }
+
+    /** *********************************************************************
+     Function Name: SetHumanPoints
+     Purpose: To set the points for the human player to what was passed in
+     Parameters:
+     @param points, String, the points for the human player
+     Return Value: None
+     Local Variables: None
+     Algorithm:
+     1) Set the human's points to what was passed in
+     Assistance Received: none
+     ********************************************************************* */
+    void SetHumanPoints(String points) {
+        humanPoints = Integer.parseInt(points);
+    }
+
+    /** *********************************************************************
+     Function Name: SetPlayerHand
+     Purpose: To set the player's hand to what was passed in, used for loading in a game
+     Parameters:
+     @param passedPlayer, int
+     @param handCards, Vector<Card_Model>
+     Return Value: None
+     Local Variables: None
+     Algorithm:
+     1) Call the player class and set the cards to the player that was passed in
+     Assistance Received: none
+     ********************************************************************* */
+    void SetPlayerHand(int passedPlayer, Vector<Card_Model> handCards) {
+        player.get(passedPlayer).LoadHand(handCards);
+    }
+
+    /** *********************************************************************
+     Function Name: SetPlayerPile
+     Purpose: To set the player's pile to what was passed in, used for loading in a game
+     Parameters:
+     @param passedPlayer, int
+     @param pileCards, Vector<Card_Model>
+     Return Value: None
+     Local Variables: None
+     Algorithm:
+     1) Call the player class and set the cards to the player that was passed in
+     Assistance Received: none
+     ********************************************************************* */
+    void SetPlayerPile(int passedPlayer, Vector<Card_Model> pileCards) {
+        player.get(passedPlayer).SetPile(pileCards);
+    }
+
+    /** *********************************************************************
+     Function Name: SetTableBuilds
+     Purpose: To set the builds on the table to what was passed in, used when loading a game
+     Parameters:
+     @param builds, Vector<Build_Model>
+     Return Value: None
+     Local Variables: None
+     Algorithm:
+     1) Set the tableBuilds to what was passed in
+     Assistance Received: none
+     ********************************************************************* */
+    void SetTableBuilds(Vector<Build_Model> builds) {
+        tableBuilds = builds;
+    }
+
+    /** *********************************************************************
+     Function Name: SetDeck
+     Purpose: To set the deck of the round to what was passed in
+     Parameters:
+     @param passedDeck, DeckM=_Model
+     Return Value: None
+     Local Variables: None
+     Algorithm:
+     1) Set the deck for the round to what was passed in
+     Assistance Received: none
+     ********************************************************************* */
+    void SetDeck(Deck_Model passedDeck) {
+        deckOfCards = passedDeck;
+    }
+
+    /** *********************************************************************
+     Function Name: LoadTable
+     Purpose: To load in the table from a save file
+     Parameters:
+     @param passedTable, Vector<Card_Model>
+     Return Value: None
+     Local Variables: None
+     Algorithm:
+     1) Set the table to what was passed in
+     Assistance Received: none
+     ********************************************************************* */
+    void LoadTable(Vector<Card_Model> passedTable) {
+        table = passedTable;
+    }
+
+    /** *********************************************************************
+     Function Name: SetCurrentPlayer
+     Purpose: To set the current player to what was passed in
+     Parameters:
+     @param passedCurrentPlayer, String
+     Return Value: None
+     Local Variables: None
+     Algorithm:
+     1) If the passed string is "Human" set the current player to 0
+     2) If the passed string is "Computer" set the current player to 1
+     Assistance Received: none
+     ********************************************************************* */
+    void SetCurrentPlayer(String passedCurrentPlayer) {
+        if(passedCurrentPlayer.equals("Human")) {
+            currentPlayer = 0;
+        }
+        else if(passedCurrentPlayer.equals("Computer")) {
+            currentPlayer = 1;
+        }
     }
 
 

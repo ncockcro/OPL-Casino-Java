@@ -547,8 +547,6 @@ public class Player_Model {
             // Cycling through the builds and if the card in the player's hand matches one of the cards
             // used to capture a build, then it will set skipCard to true and skip over that hand card
             for(int j = 0; j < tableBuilds.size(); j++) {
-                Log.d("AIHand", hand.get(i).GetCard());
-                Log.d("CaptureCard", tableBuilds.get(j).GetCaptureCardOfBuild().GetCard());
                 if(hand.get(i).GetCard().equals(tableBuilds.get(j).GetCaptureCardOfBuild().GetCard())) {
                     Log.d("Skip", "Setting skipCard to true");
                     skipCard = true;
@@ -1322,6 +1320,23 @@ public class Player_Model {
             }
         }
     }
+
+    /** *********************************************************************
+     Function Name: LoadHand
+     Purpose: To set a player's hand to what was passed in, used for loading a game
+     Parameters:
+     @param passedCards, Vector<Card_Model>
+     Return Value: None
+     Local Variables: None
+     Algorithm:
+     1) Set the hand equal to what was passed in
+     Assistance Received: none
+     ********************************************************************* */
+    void LoadHand(Vector<Card_Model> passedCards) {
+        hand = passedCards;
+    }
+
+
 
 
 }

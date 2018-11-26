@@ -39,18 +39,101 @@ public class MainGame_Activity extends AppCompatActivity {
 
         roundView = new Round_View(this, roundModel);
 
-        roundView.DrawFourCardsHumanAndComputer();
-        roundView.DrawFourCardsTable(this);
-        roundView.DrawDeck(this);
-
         Intent intent = getIntent();
         coinTossWinner = intent.getStringExtra("coinWinner");
+        Log.d("coinW", coinTossWinner);
 
+        // Loading in the scores and the current round
         roundView.SetHumanScore(Integer.parseInt(intent.getStringExtra("humanScore")));
         roundView.SetComputerScore(Integer.parseInt(intent.getStringExtra("computerScore")));
         roundView.SetRound(Integer.parseInt(intent.getStringExtra("currentRound")));
         roundModel.SetFirstPlayer(coinTossWinner);
+
+        // If we aren't loading in a game...
+        if(intent.getStringExtra("loadGame").equals("false")) {
+            roundView.DrawFourCardsHumanAndComputer();
+            roundView.DrawFourCardsTable(this);
+            roundView.DrawDeck(this);
+        }
+
+        // Otherwise, we are loading from a save
+        else if(intent.getStringExtra("loadGame").equals("true")) {
+
+        roundModel.SetComputerPoints(intent.getStringExtra("computerScore"));
+
+        // Loading in the computer's hand
+        Vector<Card_Model> computerHandTempCards = new Vector<Card_Model>();
+        for(int i = 0; i < Integer.parseInt(intent.getStringExtra("loadGameComputerHandSize")); i++) {
+            computerHandTempCards.add(new Card_Model(intent.getStringExtra("loadGameComputerHand" + i)));
+        }
+        roundModel.SetPlayerHand(1, computerHandTempCards);
+
+        // Loading in the computer's pile
+        Vector<Card_Model> computerPileTempCards = new Vector<Card_Model>();
+        for(int i = 0; i < Integer.parseInt(intent.getStringExtra("computerPileSize")); i++) {
+            computerPileTempCards.add(new Card_Model(intent.getStringExtra("loadGameComputerPile" + i)));
+        }
+
+        roundModel.SetPlayerPile(1, computerPileTempCards);
+
+        // Loading in the human's score
+        roundModel.SetHumanPoints(intent.getStringExtra("humanScore"));
+
+        // Loading in the human's hand
+        Vector<Card_Model> humanHandTempCards = new Vector<Card_Model>();
+        for(int i = 0; i < Integer.parseInt(intent.getStringExtra("humanHandSize")); i++) {
+            humanHandTempCards.add(new Card_Model(intent.getStringExtra("loadGameHumanHand" + i)));
+            Log.d("StartPlayerHandFirst", intent.getStringExtra("loadGameHumanHand" + i));
+        }
+
+        roundModel.SetPlayerHand(0, humanHandTempCards);
+
+        // Loading in the human's pile
+        Vector<Card_Model> humanPileTempCards = new Vector<Card_Model>();
+        for(int i = 0; i < Integer.parseInt(intent.getStringExtra("humanPileSize")); i++) {
+            humanPileTempCards.add(new Card_Model(intent.getStringExtra("loadGameHumanPile" + i)));
+        }
+
+        roundModel.SetPlayerPile(0, humanPileTempCards);
+
+        // Loading in the table
+        Vector<Card_Model> tableTempCards = new Vector<Card_Model>();
+        for(int i = 0; i < Integer.parseInt(intent.getStringExtra("tableSize")); i++) {
+            tableTempCards.add(new Card_Model(intent.getStringExtra("loadGameTable" + i)));
+        }
+
+        roundModel.LoadTable(tableTempCards);
+
+        // Loading in the deck
+        Vector<Card_Model> deckTempCards = new Vector<Card_Model>();
+        for(int i = 0; i < Integer.parseInt(intent.getStringExtra("deckSize")); i++) {
+            deckTempCards.add(new Card_Model(intent.getStringExtra("loadGameDeck" + i)));
+        }
+        Deck_Model tempDeck = new Deck_Model();
+        tempDeck.SetDeck(deckTempCards);
+        roundModel.SetDeck(tempDeck);
+
+        // Loading in the builds
+        Vector<Card_Model> tempCards = new Vector<Card_Model>();
+        Vector<Build_Model> tempBuilds = new Vector<Build_Model>();
+        Build_Model tempBuildSingle = new Build_Model();
+        for(int i = 0; i < Integer.parseInt(intent.getStringExtra("buildSize")); i++) {
+            for(int j = 0; j < Integer.parseInt(intent.getStringExtra("buildCardSize" + i)); j++) {
+                tempCards.add(new Card_Model(intent.getStringExtra("loadGameBuilds" + i + j)));
+            }
+            tempBuildSingle.SetBuildOfCards(tempCards);
+            tempBuilds.add(tempBuildSingle);
+
+        }
+
+        roundModel.SetTableBuilds(tempBuilds);
+
+        // Loading in the current player
+        roundModel.SetCurrentPlayer(intent.getStringExtra("nextPlayer"));
+        }
+
         roundView.SetPlayerButtons();
+        roundView.UpdateScreen(this);
 
     }
 
@@ -280,9 +363,13 @@ public class MainGame_Activity extends AppCompatActivity {
         roundModel.PlayerMakeMove();
 
         if(!roundView.PrintErrors()) {
-            roundView.CheckForDealingCards(this);
+            int result = roundView.CheckForDealingCards(this);
             roundView.UpdateScreen(this);
-            roundView.ShowHumanButtons();
+
+            // If the result equals 3, then the round is over and we shouldnt show the human buttons
+            if(result != 3) {
+                roundView.ShowHumanButtons();
+            }
         }
 
     }

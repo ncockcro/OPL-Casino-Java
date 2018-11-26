@@ -51,6 +51,8 @@ public class Tournament_Model {
     String twoOfSpadesColor;
     String winnerColor;
 
+    String fileToLoadFrom;
+
     /** *********************************************************************
      Function Name: Tournament_Model
      Purpose: Default constructor
@@ -63,6 +65,7 @@ public class Tournament_Model {
       ********************************************************************* */
     Tournament_Model() {
 
+        fileToLoadFrom = "";
     }
 
     /** *********************************************************************
@@ -78,6 +81,7 @@ public class Tournament_Model {
       ********************************************************************* */
     Tournament_Model(Activity passedActivity) {
         activity = (Activity) passedActivity;
+        fileToLoadFrom = "";
     }
 
 
@@ -447,39 +451,138 @@ public class Tournament_Model {
         return winnerColor;
     }
 
+    /** *********************************************************************
+     Function Name: SetHumanPoints
+     Purpose: To set the points for the human to what was passed in
+     Parameters:
+     @param passedPoints, int
+     Return Value: None
+     Local Variables: None
+     Algorithm:
+     1) Set the humanPoints variable to what was passed in
+     Assistance Received: none
+     ********************************************************************* */
     void SetHumanPoints(int passedPoints) {
         humanPoints = passedPoints;
     }
 
+    /** *********************************************************************
+     Function Name: SetComputerPoints
+     Purpose: To set the points for the computer to what was passed in
+     Parameters:
+     @param passedPoints, int
+     Return Value: None
+     Local Variables: None
+     Algorithm:
+     1) Set the computerPoints variable to what was passed in
+     Assistance Received: none
+      ********************************************************************* */
     void SetComputerPoints(int passedPoints) {
         computerPoints = passedPoints;
     }
 
+    /** *********************************************************************
+     Function Name: SetCurrentRound
+     Purpose: To set the current round to what was passed in
+     Parameters:
+     @param passedRound, int
+     Return Value: None
+     Local Variables: None
+     Algorithm:
+     1) Set the round variable to what was passed in
+     Assistance Received: none
+      ********************************************************************* */
     void SetCurrentRound(int passedRound) {
         round = passedRound;
     }
 
+    /** *********************************************************************
+     Function Name: GetHumanPoints
+     Purpose: To retrieve the human's points from the tournament model
+     Parameters: None
+     Return Value: None
+     Local Variables: None
+     Algorithm:
+     1) Return the humanPoints variable
+     Assistance Received: none
+      ********************************************************************* */
     int GetHumanPoints() {
         return humanPoints;
     }
 
+    /** *********************************************************************
+     Function Name: GetComputerPoints
+     Purpose: To retrieve the computer's points from the tournament model
+     Parameters: None
+     Return Value: None
+     Local Variables: None
+     Algorithm:
+     1) Return the computerPoints variable
+     Assistance Received: none
+     ********************************************************************* */
     int GetComputerPoints() {
         return computerPoints;
     }
 
+    /** *********************************************************************
+     Function Name: GetRound
+     Purpose: To retrieve the round from the tournament model
+     Parameters: None
+     Return Value: None
+     Local Variables: None
+     Algorithm:
+     1) Return the round variable
+     Assistance Received: none
+     ********************************************************************* */
     int GetRound() {
         return round;
     }
 
+    /** *********************************************************************
+     Function Name: SetLastCapture
+     Purpose: To set the player who captured last to what was passed in
+     Parameters:
+     @param passedCapture, String
+     Return Value: None
+     Local Variables: None
+     Algorithm:
+     1) Set the lastCaptured variable to what was passed in
+     Assistance Received: none
+     ********************************************************************* */
     void SetLastCapture(String passedCapture) {
         lastCaptured = passedCapture;
     }
 
+    /** *********************************************************************
+     Function Name: GetLastCapture
+     Purpose: To retrieve the lastCapture player from the tournament model
+     Parameters: None
+     Return Value: None
+     Local Variables: None
+     Algorithm:
+     1) Return the lastCapture variable
+     Assistance Received: none
+     ********************************************************************* */
     String GetLastCapture() {
         return lastCaptured;
     }
 
-    void LoadGame(Context context, String path, String fileName) {
+    /** *********************************************************************
+     Function Name: LoadGame
+     Purpose: To gather all of the necessary information from a text file
+     Parameters:
+     @param path, String
+     @param fileName, String
+     Return Value: None
+     Local Variables: None
+     Algorithm:
+     1) Open the file that the user wants to load from
+     2) While there are still words in the text file to read
+     3) Then cycle through and look for the keywords to load the
+     information from
+     Assistance Received: none
+     ********************************************************************* */
+    void LoadGame(String path, String fileName) {
 
         String line = null;
         Card_Model tempCard = new Card_Model();
@@ -492,12 +595,15 @@ public class Tournament_Model {
 
             Scanner input = new Scanner(inputStreamReader);
 
-            while( (line = bufferedReader.readLine()) != null) {
+            /*while( (line = bufferedReader.readLine()) != null) {
                 Log.d("Line", line);
-            }
+            }*/
+
+            Log.d("In", "In the tournament function");
 
             // Reading the text file word by word
             while(input.hasNext()) {
+                Log.d("Inside", "Inside of while loop");
                 String currentWord = input.next();
 
                 // Getting the round
@@ -508,22 +614,30 @@ public class Tournament_Model {
                 }
 
                 currentWord = input.next();
-                currentWord = input.next();
+                try {
+                    currentWord = input.next();
+                }
+                catch(Exception e) {
+                    break;
+                }
 
                 // Getting the computer score
                 if(currentWord.equals("Score:")) {
                     currentWord = input.next();
                     loadGameComputerScore = Integer.parseInt(currentWord);
+                    Log.d("CompScore", Integer.toString(loadGameComputerScore));
                 }
 
                 currentWord = input.next();
 
+                Vector<Card_Model> computerHandTempCards = new Vector<Card_Model>();
                 // Getting the computer hand
                 if(currentWord.equals("Hand:")) {
                     currentWord = input.next();
                     while(currentWord.length() == 2) {
                         tempCard.SetCard(currentWord);
-                        loadGameComputerHand.add(tempCard);
+                        loadGameComputerHand.add(new Card_Model(currentWord));
+                        Log.d("CompHandCard", tempCard.GetCard());
                         currentWord = input.next();
                     }
                 }
@@ -533,7 +647,8 @@ public class Tournament_Model {
                     currentWord = input.next();
                     while(currentWord.length() == 2) {
                         tempCard.SetCard(currentWord);
-                        loadGameComputerPile.add(tempCard);
+                        loadGameComputerPile.add(new Card_Model(currentWord));
+                        Log.d("CompPileCard", tempCard.GetCard());
                         currentWord = input.next();
                     }
                 }
@@ -544,16 +659,18 @@ public class Tournament_Model {
                 if(currentWord.equals("Score:")) {
                     currentWord = input.next();
                     loadGameHumanScore = Integer.parseInt(currentWord);
+                    Log.d("humanScore", Integer.toString(loadGameHumanScore));
                 }
 
                 currentWord = input.next();
 
+                Vector<Card_Model> humanHandTempCards = new Vector<Card_Model>();
                 // Getting the human score
                 if(currentWord.equals("Hand:")) {
                     currentWord = input.next();
                     while(currentWord.length() == 2) {
-                        tempCard.SetCard(currentWord);
-                        loadGameHumanHand.add(tempCard);
+                        loadGameHumanHand.add(new Card_Model(currentWord));
+                        Log.d("HumanHand", tempCard.GetCard());
                         currentWord = input.next();
                     }
                 }
@@ -563,10 +680,13 @@ public class Tournament_Model {
                     currentWord = input.next();
                     while(currentWord.length() == 2) {
                         tempCard.SetCard(currentWord);
-                        loadGameHumanPile.add(tempCard);
+                        Log.d("HumanPile", currentWord);
+                        loadGameHumanPile.add(new Card_Model(currentWord));
                         currentWord = input.next();
                     }
                 }
+
+                Log.d("RightBeforeTable", currentWord);
 
                 // Getting the table
                 if(currentWord.equals("Table:")) {
@@ -579,7 +699,7 @@ public class Tournament_Model {
                         }
                         if(currentWord.length() == 2) {
                             tempCard.SetCard(currentWord);
-                            loadGameTable.add(tempCard);
+                            loadGameTable.add(new Card_Model(currentWord));
                         }
                         currentWord = input.next();
                     }
@@ -624,7 +744,7 @@ public class Tournament_Model {
                             // add it to the vector of cards to make up a build
                             if(buildString.length() == 2) {
                                 tempCard.SetCard(buildString);
-                                loadGameBuildCards.add(tempCard);
+                                loadGameBuildCards.add(new Card_Model(buildString));
                             }
 
                             buildString = "";
@@ -654,25 +774,34 @@ public class Tournament_Model {
                     currentWord = input.next();
                     currentWord = input.next();
 
+                    Log.d("Current", currentWord);
                     loadGameLastCapture = currentWord;
                 }
 
                 currentWord = input.next();
-                currentWord = input.next();
+                Log.d("Deck?", currentWord);
+                //currentWord = input.next();
 
+                Log.d("CurrentFirst", currentWord);
                 if(currentWord.equals("Deck:")) {
                     currentWord = input.next();
 
-                    if(currentWord != "Next") {
+                    Log.d("CurrentWord", currentWord);
+                    if(!currentWord.equals("Next")) {
                         while(currentWord.length() == 2) {
                             tempCard.SetCard(currentWord);
-                            loadGameDeck.add(tempCard);
+                            loadGameDeck.add(new Card_Model(currentWord));
                             currentWord = input.next();
                         }
                     }
 
                     currentWord = input.next();
                 }
+
+                for(int i = 0; i < loadGameDeck.size(); i++) {
+                    Log.d("Deck", loadGameDeck.get(i).GetCard());
+                }
+
 
                 if(currentWord.equals("Player:")) {
                     currentWord = input.next();
@@ -689,11 +818,231 @@ public class Tournament_Model {
 
             Log.d("In", "In exception");
         }
-        catch (IOException e) {
+    }
 
-            Log.d("In", "In exception");
-        }
+    /** *********************************************************************
+     Function Name: GetLoadGameRound
+     Purpose: To retrieve the loaded game round
+     Parameters: None
+     Return Value:
+     @return int
+     Local Variables: None
+     Algorithm:
+     1) Return the loadGameRound variable
+     Assistance Received: none
+     ********************************************************************* */
+    int GetLoadGameRound() {
+        return loadGameRound;
+    }
 
+    /** *********************************************************************
+     Function Name: GetLoadGameComputerScore
+     Purpose: To retrieve the loaded game computer score
+     Parameters: None
+     Return Value:
+     @return int
+     Local Variables: None
+     Algorithm:
+     1) Return the loadGameComputerScore variable
+     Assistance Received: none
+     ********************************************************************* */
+    int GetLoadGameComputerScore() {
+        return loadGameComputerScore;
+    }
+
+    /** *********************************************************************
+     Function Name: GetLoadGameComputerHand
+     Purpose: To retrieve the loaded game computer hand
+     Parameters: None
+     Return Value:
+     @return Vector<Card_Model>
+     Local Variables: None
+     Algorithm:
+     1) Return the loadGameComputerHand variable
+     Assistance Received: none
+     ********************************************************************* */
+    Vector<Card_Model> GetLoadGameComputerHand() {
+        return loadGameComputerHand;
+    }
+
+    /** *********************************************************************
+     Function Name: GetLoadGameComputerPile
+     Purpose: To retrieve the loaded game computer pile
+     Parameters: None
+     Return Value:
+     @return Vector<Card_Model>
+     Local Variables: None
+     Algorithm:
+     1) Return the loadGameComputerPile variable
+     Assistance Received: none
+     ********************************************************************* */
+    Vector<Card_Model> GetLoadGameComputerPile() {
+        return loadGameComputerPile;
+    }
+
+    /** *********************************************************************
+     Function Name: GetLoadGameHumanScore
+     Purpose: To retrieve the loaded game human score
+     Parameters: None
+     Return Value:
+     @return int
+     Local Variables: None
+     Algorithm:
+     1) Return the loadGameHumanScore variable
+     Assistance Received: none
+     ********************************************************************* */
+    int GetLoadGameHumanScore() {
+        return loadGameHumanScore;
+    }
+
+    /** *********************************************************************
+     Function Name: GetLoadGameHumanHand
+     Purpose: To retrieve the loaded game human hand
+     Parameters: None
+     Return Value:
+     @return Vector<Card_Model>
+     Local Variables: None
+     Algorithm:
+     1) Return the loadGameHumanHand variable
+     Assistance Received: none
+      ********************************************************************* */
+    Vector<Card_Model> GetLoadGameHumanHand() {
+        return loadGameHumanHand;
+    }
+
+    /** *********************************************************************
+     Function Name: GetLoadGameHumanPile
+     Purpose: To retrieve the loaded game human pile
+     Parameters: None
+     Return Value:
+     @return Vector<Card_Model>
+     Local Variables: None
+     Algorithm:
+     1) Return the loadGameHumanPile variable
+     Assistance Received: none
+      ********************************************************************* */
+    Vector<Card_Model> GetLoadGameHumanPile() {
+        return loadGameHumanPile;
+    }
+
+    /** *********************************************************************
+     Function Name: GetLoadGameTable
+     Purpose: To retrieve the loaded game table
+     Parameters: None
+     Return Value:
+     @return Vector<Card_Model>
+     Local Variables: None
+     Algorithm:
+     1) Return the loadGameTable variable
+     Assistance Received: none
+      ********************************************************************* */
+    Vector<Card_Model> GetLoadGameTable() {
+        return loadGameTable;
+    }
+
+    /** *********************************************************************
+     Function Name: GetLoadGameBuildCards
+     Purpose: To retrieve the loaded game build cards
+     Parameters: None
+     Return Value:
+     @return Vector<Card_Model>
+     Local Variables: None
+     Algorithm:
+     1) Return the loadGameBuildCards variable
+     Assistance Received: none
+      ********************************************************************* */
+    Vector<Card_Model> GetLoadGameBuildCards() {
+        return loadGameBuildCards;
+    }
+
+    /** *********************************************************************
+     Function Name: GetLoadGameBuilds
+     Purpose: To retrieve the loaded game builds
+     Parameters: None
+     Return Value:
+     @return Vector<Card_Model>
+     Local Variables: None
+     Algorithm:
+     1) Return the loadGameComputerBuilds variable
+     Assistance Received: none
+      ********************************************************************* */
+    Vector<Build_Model> GetLoadGameBuilds() {
+        return loadGameBuilds;
+    }
+
+    /** *********************************************************************
+     Function Name: GetLoadGameLastCapture
+     Purpose: To retrieve the loaded game last capture
+     Parameters: None
+     Return Value:
+     @return String
+     Local Variables: None
+     Algorithm:
+     1) Return the loadGameLastCapture variable
+     Assistance Received: none
+      ********************************************************************* */
+    String GetLoadGameLastCapture() {
+        return loadGameLastCapture;
+    }
+
+    /** *********************************************************************
+     Function Name: GetLoadGameDeck
+     Purpose: To retrieve the loaded game deck
+     Parameters: None
+     Return Value:
+     @return Vector<Card_Model>
+     Local Variables: None
+     Algorithm:
+     1) Return the loadGameDeck variable
+     Assistance Received: none
+      ********************************************************************* */
+    Vector<Card_Model> GetLoadGameDeck() {
+        return loadGameDeck;
+    }
+
+    /** *********************************************************************
+     Function Name: GetLoadGameNextPlayer
+     Purpose: To retrieve the loaded game next player
+     Parameters: None
+     Return Value:
+     @return Vector<Card_Model>
+     Local Variables: None
+     Algorithm:
+     1) Return the loadGameNectPlayer variable
+     Assistance Received: none
+      ********************************************************************* */
+    String GetLoadGameNextPlayer() {
+        return loadGameNextPlayer;
+    }
+
+    /** *********************************************************************
+     Function Name: GetFileToLoadFrom
+     Purpose: To retrieve the file to load from
+     Parameters: None
+     Return Value:
+     @return String
+     Local Variables: None
+     Algorithm:
+     1) Return the fileToLoadFrom variable
+     Assistance Received: none
+      ********************************************************************* */
+    String GetFileToLoadFrom() {
+        return fileToLoadFrom;
+    }
+
+    /** *********************************************************************
+     Function Name: SetFileToLoadFrom
+     Purpose: To set the fileToLoadFrom
+     Parameters:
+     @param file, String
+     Return Value: Void
+     Local Variables: None
+     Algorithm:
+     1) To set the fileToLoadFrom variable to what was passed in
+     Assistance Received: none
+      ********************************************************************* */
+    void SetFileToLoadFrom(String file) {
+        fileToLoadFrom = file;
     }
 
 

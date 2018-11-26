@@ -1,14 +1,18 @@
 package edu.ramapo.ncockcro.casino;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Color;
+import android.widget.EditText;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.io.File;
 import java.util.Vector;
 
 public class Tournament_View {
@@ -43,6 +47,10 @@ public class Tournament_View {
       ********************************************************************* */
     Tournament_View() {
 
+    }
+
+    Tournament_View(Tournament_Model passedTournamentModel) {
+        tournamentModel = passedTournamentModel;
     }
 
     /** *********************************************************************
@@ -234,6 +242,48 @@ public class Tournament_View {
         computerPileLinearLayout.addView(button);
 
         return button;
+    }
+
+    /** *********************************************************************
+     Function Name: ShowLoadTextInput
+     Purpose: To prompt the user to type in a file name to load from
+     Parameters:
+     @param context, Context object
+     @param directory, File object
+     Return Value: Void
+     Local Variables: None
+     Algorithm:
+     1) Create an input text box for the user to type in a file name
+     2) Once they hit load, this will load in all the information from the text file
+     and start the round
+     Assistance Received: none
+      ********************************************************************* */
+    void ShowLoadTextInput(Context context, File directory) {
+        final EditText loadEditText = new EditText(context);
+        AlertDialog.Builder dialog = new AlertDialog.Builder(context);
+        dialog.setTitle("Loading");
+        dialog.setMessage("Enter a file name to load from.");
+        dialog.setView(loadEditText);
+        final Context innerContext = context;
+        final String newDirectory = directory.toString();
+        dialog.setPositiveButton("Load", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                tournamentModel.SetFileToLoadFrom(loadEditText.getText().toString());
+                tournamentModel.LoadGame(newDirectory, "/" + loadEditText.getText().toString() + ".txt");
+            }
+
+        });
+
+        dialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                dialog.cancel();
+            }
+
+        });
+
+        dialog.create();
+        dialog.show();
+
     }
 
 
