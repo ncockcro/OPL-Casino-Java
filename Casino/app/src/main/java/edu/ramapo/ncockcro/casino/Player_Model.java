@@ -10,26 +10,27 @@ public class Player_Model {
     private Vector<Card_Model> pile = new Vector<Card_Model>();
     private Vector<Card_Model> playerBuildCards = new Vector<Card_Model>();
     private Vector<Card_Model> playerSingleSetCards = new Vector<Card_Model>();
-    private Vector<Set_Model> playerMultipleSetCards = new Vector<Set_Model>();
+    protected Vector<Set_Model> playerMultipleSetCards = new Vector<Set_Model>();
     private int multipleSetCardsCount = 0;
     private Deck_Model deck = new Deck_Model();
     private Vector<Card_Model> uniqueCards = deck.GetDeck();
     private boolean playerWantSave;
-    private Card_Model playerCard;
-    private Vector<Card_Model> buildCards = new Vector<Card_Model>();
-    private char newOrExistingBuild;
+    protected Card_Model playerCard;
+    protected Vector<Card_Model> buildCards = new Vector<Card_Model>();
+    protected char newOrExistingBuild;
     private Card_Model existingBuildCard;
     protected char playerMove;
-    private char playerWantBuild;
-    private char printPlayerCaptureBuild;
-    private char playerWantSet;
-    private Vector<Card_Model> printTableBuildCards = new Vector<Card_Model>();
-    private Vector<Card_Model> printTableCaptureCards = new Vector<Card_Model>();
+    protected char playerWantBuild;
+    protected char printPlayerCaptureBuild;
+    protected char playerWantSet;
+    protected Vector<Card_Model> printTableBuildCards = new Vector<Card_Model>();
+    protected Vector<Card_Model> printTableCaptureCards = new Vector<Card_Model>();
 
     private Vector<Card_Model> tableCardsToBeCaptured = new Vector<Card_Model>();
 
     private Card_Model playerWantCard;
     private Vector<String> helpOutputMessages = new Vector<String>();
+    protected Vector<String> playerOutputMessages = new Vector<String>();
 
     /** *********************************************************************
      Function Name: SetHand
@@ -47,6 +48,10 @@ public class Player_Model {
       ********************************************************************* */
     public char MakeMove(Vector<Card_Model> table, Vector<Build_Model> tableBuilds) {
         return '0';
+    }
+
+    public void PrintMove() {
+
     }
 
     /** *********************************************************************
@@ -1444,6 +1449,21 @@ public class Player_Model {
       ********************************************************************* */
     Vector<String> GetHelpOutputMessages() {
         return helpOutputMessages;
+    }
+
+    /** *********************************************************************
+     Function Name: GetPlayerOutputMessages
+     Purpose: To retrieve the output messages for a player's move
+     Parameters: None
+     Return Value:
+     @return Vector<String>
+     Local Variables: None
+     Algorithm:
+     1) Return the playerOutputMessages variable
+     Assistance Received: none
+     ********************************************************************* */
+    Vector<String> GetPlayerOutputMessages() {
+        return playerOutputMessages;
     }
 
 

@@ -1,9 +1,11 @@
 package edu.ramapo.ncockcro.casino;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -49,8 +51,10 @@ public class Start_Menu extends AppCompatActivity {
 
         Log.d("Path", this.getFilesDir().getAbsolutePath().toString());
 
-        File directory = new File(this.getFilesDir().getAbsolutePath() + "/save");
+        //File directory = new File(this.getFilesDir().getAbsolutePath() + "/save");
+        File directory = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "CasinoSave");
 
+        Log.d("DownloadPath", directory.toString());
         File[] fList = directory.listFiles();
 
         /*for(File file : fList) {

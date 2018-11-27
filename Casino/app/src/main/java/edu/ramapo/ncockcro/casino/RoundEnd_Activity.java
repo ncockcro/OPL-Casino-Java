@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 
 import java.util.Vector;
 
@@ -32,6 +33,7 @@ public class RoundEnd_Activity extends AppCompatActivity {
         setContentView(R.layout.activity_round_end_);
         tournamentView = new Tournament_View(this, tournamentModel);
 
+        this.findViewById(R.id.endGameButton).setVisibility(View.GONE);
         Intent intent = getIntent();
 
         for(int i = 0; i < Integer.parseInt(intent.getStringExtra("PlayerPileSize")); i++) {
@@ -49,6 +51,22 @@ public class RoundEnd_Activity extends AppCompatActivity {
         tournamentModel.SetLastCapture(intent.getStringExtra("lastCapture"));
 
         tournamentView.DrawResults(this, playerPile, computerPile);
+
+        if(tournamentModel.GameWon() > 0){
+            TextView gameWonText = this.findViewById(R.id.gameWonTextView);
+            if(tournamentModel.GetWinnerColor().equals("Green")) {
+                gameWonText.setTextColor(0xFF2ea54a);
+            }
+            else if(tournamentModel.GetWinnerColor().equals("Red")) {
+                gameWonText.setTextColor(0xFFFF0000);
+            }
+            else {
+                gameWonText.setTextColor(0xFFf4e842);
+            }
+            gameWonText.append(tournamentModel.GetWinnerMessage());
+            this.findViewById(R.id.nextRoundButton).setVisibility(View.GONE);
+            this.findViewById(R.id.endGameButton).setVisibility(View.VISIBLE);
+        }
 
 
     }
@@ -69,5 +87,13 @@ public class RoundEnd_Activity extends AppCompatActivity {
         startActivity(intentRound);
 
 
+    }
+
+    public void EndGameButtonPressed(View view) {
+
+        Intent intent = new Intent(Intent.ACTION_MAIN);
+        intent.addCategory(Intent.CATEGORY_HOME);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
     }
 }

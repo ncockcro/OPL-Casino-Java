@@ -265,7 +265,10 @@ public class Tournament_Model {
     int GameWon() {
 
         // Human won
-        if(humanPoints >= 21 && computerPoints < 21) {
+        if(humanPoints < 21 && computerPoints < 21) {
+            return 0;
+        }
+        else if(humanPoints >= 21 && computerPoints < 21) {
             winnerColor = "Green";
             winnerMessage = "You won!";
             return 1;
@@ -1043,6 +1046,10 @@ public class Tournament_Model {
       ********************************************************************* */
     void SetFileToLoadFrom(String file) {
         fileToLoadFrom = file;
+    }
+
+    String GetWinnerColor() {
+        return winnerColor;
     }
 
 

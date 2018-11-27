@@ -2,6 +2,8 @@ package edu.ramapo.ncockcro.casino;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.os.Environment;
 import android.util.Log;
 import android.widget.TextView;
 
@@ -10,6 +12,8 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Vector;
+
+import static android.support.v4.content.ContextCompat.startActivity;
 
 // Root\Android\data\edu.ramapo.ncockcro.casino
 
@@ -1372,7 +1376,8 @@ public class Round_Model {
      ********************************************************************* */
     void SaveGame(Context context, String fileName) {
 
-        File saveFolder = new File(context.getFilesDir() + "/save");
+        //File saveFolder = new File(context.getFilesDir() + "/save");
+        File saveFolder = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "CasinoSave");
         Log.d("Saving", context.getFilesDir().toString());
         Log.d("SavingAbsolute", saveFolder.getAbsolutePath().toString());
         File saveFile = new File(saveFolder.getAbsolutePath() + "/" + fileName + ".txt");
@@ -1662,6 +1667,19 @@ public class Round_Model {
     Vector<String> GetPlayerHelpOutputMessages() {
         player.get(currentPlayer).AskForHelp(table, tableBuilds);
         return player.get(currentPlayer).GetHelpOutputMessages();
+    }
+
+    Vector<String> GetPlayerOutputMessages() {
+        Log.d("CurrentPlayerPrint", Integer.toString(currentPlayer));
+
+        if(currentPlayer ==0 ) {
+            player.get(1).PrintMove();
+            return player.get(1).GetPlayerOutputMessages();
+        }
+        else {
+            player.get(0).PrintMove();
+            return player.get(0).GetPlayerOutputMessages();
+        }
     }
 
 

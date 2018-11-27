@@ -41,4 +41,8 @@ public class Human_Model extends Player_Model {
         }
     }
 
+    @Override public void PrintMove() {
+        //playerOutputMessages.clear();
+    }
+
 }

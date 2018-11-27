@@ -167,7 +167,7 @@ public class MainGame_Activity extends AppCompatActivity {
       ********************************************************************* */
     public void BuildButtonPressed(View view) {
 
-        roundView.PrintTableToOutput();
+        //roundView.PrintTableToOutput();
         roundView.EnableTableButtons();
         roundModel.SetPlayerMove('b');
         roundView.ShowBuildButtons();
@@ -201,7 +201,7 @@ public class MainGame_Activity extends AppCompatActivity {
       ********************************************************************* */
     public void CaptureButtonPressed(View view) {
 
-        roundView.PrintTableToOutput();
+        //roundView.PrintTableToOutput();
         roundView.EnableTableButtons();
         roundModel.SetPlayerMove('c');
         roundView.ShowCaptureButtons();
@@ -334,7 +334,7 @@ public class MainGame_Activity extends AppCompatActivity {
      ********************************************************************* */
     public void TrailCardPressed(View view) {
 
-        roundView.PrintTableToOutput();
+        //roundView.PrintTableToOutput();
         roundView.SetTrailInfo();
         roundModel.PlayerMakeMove();
 
@@ -358,9 +358,10 @@ public class MainGame_Activity extends AppCompatActivity {
      ********************************************************************* */
     public void ComputerMoveButtonPressed(View view) {
 
-        roundView.PrintTableToOutput();
+        //roundView.PrintTableToOutput();
 
         roundModel.PlayerMakeMove();
+        roundView.OutputPlayerMessages();
 
         if(!roundView.PrintErrors()) {
             int result = roundView.CheckForDealingCards(this);

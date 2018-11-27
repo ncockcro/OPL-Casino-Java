@@ -1361,14 +1361,14 @@ public class Round_View extends MainGame_Activity {
      1) Print the table to the output text view
      Assistance Received: none
       ********************************************************************* */
-    void PrintTableToOutput() {
+    /*void PrintTableToOutput() {
 
         outputTextView.append("TABLE: ");
         for(int i = 0; i < tableCards.size(); i++) {
             outputTextView.append(tableCards.get(i).GetCard() + " ");
         }
         outputTextView.append("\n");
-    }
+    }*/
 
     /** *********************************************************************
      Function Name: AddSetToPlayer
@@ -1586,6 +1586,14 @@ public class Round_View extends MainGame_Activity {
 
         for(int i = 0; i < helpMessages.size(); i++) {
             outputTextView.append(helpMessages.get(i));
+        }
+    }
+
+    void OutputPlayerMessages() {
+        Vector<String> playerMessages = roundModel.GetPlayerOutputMessages();
+
+        for(int i = 0; i < playerMessages.size(); i++) {
+            outputTextView.append(playerMessages.get(i));
         }
     }
 

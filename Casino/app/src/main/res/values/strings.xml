@@ -65,4 +65,5 @@
     <string name="seeResultsButton">See Results</string>
     <string name="humanScoreTextView">Your Score</string>
     <string name="computerScoreTextView">Computer Score</string>
+    <string name="endGameButton">End Game</string>
 </resources>

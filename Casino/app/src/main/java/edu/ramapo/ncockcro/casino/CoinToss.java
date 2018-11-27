@@ -109,7 +109,7 @@ public class CoinToss extends AppCompatActivity {
         intent.putExtra("coinWinner", coinTossWinner);
         intent.putExtra("humanScore", "0");
         intent.putExtra("computerScore", "0");
-        intent.putExtra("currentRound", "0");
+        intent.putExtra("currentRound", "1");
 
         // Information that would otherwise be used if we were loading into the
         // round from a saved game
