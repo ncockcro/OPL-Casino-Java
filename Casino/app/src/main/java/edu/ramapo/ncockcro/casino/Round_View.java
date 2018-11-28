@@ -1587,13 +1587,45 @@ public class Round_View extends MainGame_Activity {
         for(int i = 0; i < helpMessages.size(); i++) {
             outputTextView.append(helpMessages.get(i));
         }
+
+        outputTextView.append("\n");
+        outputTextView.append("\n");
     }
 
+    /** *********************************************************************
+     Function Name: OutputPlayerMessages
+     Purpose: To output the player move messages to the console text view
+     Parameters: None
+     Return Value: Void
+     Local Variables: None
+     Algorithm:
+     1) Cycle through the player output messages and append them to the console text view
+     Assistance Received: none
+      ********************************************************************* */
     void OutputPlayerMessages() {
         Vector<String> playerMessages = roundModel.GetPlayerOutputMessages();
 
         for(int i = 0; i < playerMessages.size(); i++) {
             outputTextView.append(playerMessages.get(i));
+        }
+        outputTextView.append("\n");
+        outputTextView.append("\n");
+    }
+
+    /** *********************************************************************
+     Function Name: DisableHumanCards
+     Purpose: To disable the human card image buttons
+     Parameters: None
+     Return Value: Void
+     Local Variables: None
+     Algorithm:
+     1) Cycle through the player's image buttons and disable them
+     Assistance Received: none
+      ********************************************************************* */
+    void DisableHumanCards() {
+        // Disable the human hand's buttons so they cant click on them
+        for(int i = 0; i < playerCards.size(); i++) {
+            playerImageButtonHand.get(i).setEnabled(false);
         }
     }
 

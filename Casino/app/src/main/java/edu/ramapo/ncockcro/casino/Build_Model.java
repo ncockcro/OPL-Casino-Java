@@ -320,6 +320,10 @@ public class Build_Model {
         return captureCardOfBuild;
     }
 
+    void AddCardToBuild(Card_Model passedCard) {
+        buildOfCards.add(passedCard);
+    }
+
 
 
 }

@@ -54,6 +54,7 @@ public class Computer_Model extends Player_Model {
         Log.d("Printing", "Printing in the computer");
 
         playerOutputMessages.clear();
+        Log.d("PlayerMove", Character.toString(playerMove));
 
         if(playerMove == 'b') {
 
@@ -62,15 +63,15 @@ public class Computer_Model extends Player_Model {
             if(newOrExistingBuild == 'n') {
                 playerOutputMessages.add(" to make a build with ");
 
-                for(int i = 0; i < buildCards.size(); i++) {
+                for(int i = 0; i < printTableBuildCards.size(); i++) {
                     if(i > 1) {
                         playerOutputMessages.add(" and ");
                     }
 
-                    playerOutputMessages.add(GetNumberName(buildCards.get(i).GetNumber()) + " of " + GetSuitName(buildCards.get(i).GetNumber()));
+                    playerOutputMessages.add(GetNumberName(printTableBuildCards.get(i).GetNumber()) + " of " + GetSuitName(printTableBuildCards.get(i).GetSuit()));
                 }
 
-                playerOutputMessages.add("It wanted to be able to capture more cards later.");
+                playerOutputMessages.add(". It wanted to be able to capture more cards later.");
             }
 
             else if(newOrExistingBuild == 'e') {
@@ -95,7 +96,7 @@ public class Computer_Model extends Player_Model {
 
             if(printPlayerCaptureBuild == 'y') {
                 for(int i = 0; i < printTableBuildCards.size(); i++) {
-                    if(i > 1) {
+                    if(i > 0) {
                         playerOutputMessages.add(" and ");
                     }
 
@@ -126,12 +127,19 @@ public class Computer_Model extends Player_Model {
                 }
             }
 
-            playerOutputMessages.add("It wanted to add more cards to its pile.");
+            playerOutputMessages.add(". It wanted to add more cards to its pile.");
         }
 
         else if(playerMove == 't') {
-            playerOutputMessages.add("The computer chose to trail witht the " + GetNumberName(playerCard.GetNumber()) + " of " + GetSuitName(playerCard.GetSuit()));
-            playerOutputMessages.add("It had no other moves to make.");
+            playerOutputMessages.add("The computer chose to trail with the " + GetNumberName(playerCard.GetNumber()) + " of " + GetSuitName(playerCard.GetSuit()));
+            playerOutputMessages.add(". It had no other moves to make.");
+        }
+        else {
+            Log.d("MyError", "Error in setting the computer's print statement in computer model.");
+        }
+
+        for(int i = 0; i < playerOutputMessages.size(); i++) {
+            Log.d("PrintingMessage", playerOutputMessages.get(i));
         }
     }
 }

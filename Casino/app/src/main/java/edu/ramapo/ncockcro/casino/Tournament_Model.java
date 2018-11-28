@@ -37,6 +37,7 @@ public class Tournament_Model {
     String loadGameLastCapture;
     Vector<Card_Model> loadGameDeck = new Vector<Card_Model>();
     String loadGameNextPlayer;
+    Vector<String> loadGameBuildOwner = new Vector<String>();
 
     String mostCardsMessage;
     String mostSpadesMessage;
@@ -747,6 +748,7 @@ public class Tournament_Model {
                             // add it to the vector of cards to make up a build
                             if(buildString.length() == 2) {
                                 tempCard.SetCard(buildString);
+                                Log.d("AddingBuildCard", tempCard.GetCard());
                                 loadGameBuildCards.add(new Card_Model(buildString));
                             }
 
@@ -755,11 +757,14 @@ public class Tournament_Model {
 
                         tempBuild.SetBuildOfCards(loadGameBuildCards);
 
+                        Log.d("CurrentWordBeforeOwner", currentWord);
                         if(currentWord.equals("Computer")) {
                             tempBuild.SetOwner(1);
+                            loadGameBuildOwner.add("Computer");
                         }
                         else if(currentWord.equals("Human")) {
                             tempBuild.SetOwner(0);
+                            loadGameBuildOwner.add("Human");
                         }
                         else {
                             Log.d("MyError", "Error in setting the build owner in tournament model");
@@ -813,7 +818,6 @@ public class Tournament_Model {
                 }
 
 
-                Log.d("Comp", Integer.toString(loadGameComputerScore));
             }
 
         }
@@ -1048,8 +1052,34 @@ public class Tournament_Model {
         fileToLoadFrom = file;
     }
 
+    /** *********************************************************************
+     Function Name: GetWinnerColor
+     Purpose: To retrieve the color of the winner text view
+     Parameters: None
+     Return Value:
+     @return Vector<String>
+     Local Variables: None
+     Algorithm:
+     1) Return the winnerColor variable
+     Assistance Received: none
+      ********************************************************************* */
     String GetWinnerColor() {
         return winnerColor;
+    }
+
+    /** *********************************************************************
+     Function Name: GetLoadGameBuildOwner
+     Purpose: To retrieve the loadGameBuildOwner vector
+     Parameters: None
+     Return Value:
+     @return Vector<String>
+     Local Variables: None
+     Algorithm:
+     1) Return the loadGameBuildOwner variable
+     Assistance Received: none
+      ********************************************************************* */
+    Vector<String> GetLoadGameBuildOwner() {
+        return loadGameBuildOwner;
     }
 
 

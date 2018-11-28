@@ -176,6 +176,7 @@
         android:layout_marginLeft="100dp"
         android:layout_marginTop="36dp"
         android:textColor="#FFFFFFFF"
+        android:textSize="32dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/humanScoreTextView" />
 
@@ -187,6 +188,7 @@
         android:layout_marginEnd="100dp"
         android:layout_marginRight="100dp"
         android:textColor="#FFFFFFFF"
+        android:textSize="32dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/computerScoreTextView" />
 

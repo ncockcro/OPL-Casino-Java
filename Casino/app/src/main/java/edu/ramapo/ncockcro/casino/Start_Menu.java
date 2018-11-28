@@ -47,20 +47,20 @@ public class Start_Menu extends AppCompatActivity {
         startActivity(intent);
     }
 
+    /** *********************************************************************
+     Function Name: loadGame
+     Purpose: Prompt the user to type in a save file
+     Parameters:
+     @param view, View object
+     Return Value: Void
+     Local Variables: None
+     Algorithm:
+     1) Create an input box for the user to type in a save file
+     Assistance Received: none
+      ********************************************************************* */
     public void loadGame(View view) {
 
-        Log.d("Path", this.getFilesDir().getAbsolutePath().toString());
-
-        //File directory = new File(this.getFilesDir().getAbsolutePath() + "/save");
         File directory = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "CasinoSave");
-
-        Log.d("DownloadPath", directory.toString());
-        File[] fList = directory.listFiles();
-
-        /*for(File file : fList) {
-            Log.d("File", file.toString());
-            tournamentModelLG.LoadGame(this, this.getFilesDir().getAbsolutePath() + "/save", "/Test.txt");
-        }*/
 
         final EditText loadEditText = new EditText(this);
         AlertDialog.Builder dialog = new AlertDialog.Builder(this);
@@ -71,7 +71,6 @@ public class Start_Menu extends AppCompatActivity {
         dialog.setPositiveButton("Load", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 tournamentModelLG.SetFileToLoadFrom(loadEditText.getText().toString());
-                Log.d("About", "About to call the function");
                 tournamentModelLG.LoadGame(newDirectory, "/" + loadEditText.getText().toString() + ".txt");
                 StartLoadedGame();
             }
@@ -195,6 +194,14 @@ public class Start_Menu extends AppCompatActivity {
 
         String stringBuildsSize = Integer.toString(tournamentModelLG.GetLoadGameBuilds().size());
         loadIntent.putExtra("buildSize", stringBuildsSize);
+
+        for(int i = 0; i < tournamentModelLG.GetLoadGameBuildOwner().size(); i++) {
+            loadIntent.putExtra("buildOwner" + i, tournamentModelLG.GetLoadGameBuildOwner().get(i));
+        }
+
+        String buildOwnerSize = Integer.toString(tournamentModelLG.GetLoadGameBuildOwner().size());
+        loadIntent.putExtra("buildOwnerSize", buildOwnerSize);
+
 
         loadIntent.putExtra("nextPlayer", tournamentModelLG.GetLoadGameNextPlayer());
 

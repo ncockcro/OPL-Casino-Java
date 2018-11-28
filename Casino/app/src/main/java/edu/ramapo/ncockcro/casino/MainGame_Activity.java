@@ -118,22 +118,46 @@ public class MainGame_Activity extends AppCompatActivity {
         Vector<Build_Model> tempBuilds = new Vector<Build_Model>();
         Build_Model tempBuildSingle = new Build_Model();
         for(int i = 0; i < Integer.parseInt(intent.getStringExtra("buildSize")); i++) {
+
+            roundModel.CreateNewBuildOnTable();
+
             for(int j = 0; j < Integer.parseInt(intent.getStringExtra("buildCardSize" + i)); j++) {
-                tempCards.add(new Card_Model(intent.getStringExtra("loadGameBuilds" + i + j)));
+                //tempCards.add(new Card_Model(intent.getStringExtra("loadGameBuilds" + i + j)));
+                roundModel.AddCardToBuild(i, new Card_Model(intent.getStringExtra("loadGameBuilds" + i + j)));
+                Log.d("BuildCardInGame", intent.getStringExtra("loadGameBuilds" + i + j));
             }
             tempBuildSingle.SetBuildOfCards(tempCards);
             tempBuilds.add(tempBuildSingle);
 
         }
 
-        roundModel.SetTableBuilds(tempBuilds);
+        Log.d("BuildsSize", Integer.toString(tempBuilds.size()));
+        //roundModel.SetTableBuilds(tempBuilds);
+        roundModel.SetBuildCounter(Integer.parseInt(intent.getStringExtra("buildSize")));
+
+        // Setting the owners of each build
+        Vector<String> buildOwners = new Vector<String>();
+        for(int i = 0; i < Integer.parseInt(intent.getStringExtra("buildOwnerSize")); i++) {
+            buildOwners.add(intent.getStringExtra("buildOwner" + i));
+        }
+
+        roundModel.SetBuildOwners(buildOwners);
+        roundModel.SetCaptureCardForBuilds();
 
         // Loading in the current player
         roundModel.SetCurrentPlayer(intent.getStringExtra("nextPlayer"));
+
         }
 
         roundView.SetPlayerButtons();
         roundView.UpdateScreen(this);
+
+        // Disabling the human's cards if the computer is going first
+        if(intent.getStringExtra("loadGame").equals("true")) {
+            if (intent.getStringExtra("nextPlayer").equals("Computer")) {
+                roundView.DisableHumanCards();
+            }
+        }
 
     }
 

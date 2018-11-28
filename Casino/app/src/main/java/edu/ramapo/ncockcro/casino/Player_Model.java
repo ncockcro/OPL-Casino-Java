@@ -581,13 +581,23 @@ public class Player_Model {
                     }
                 }
 
+                for(int r = 0; r < table.size(); r++) {
+                    Log.d("TableInBuildAI", table.get(r).GetCard());
+                }
                 if (!skipCard2) {
+                    Log.d("AIBuilding", "Inside of checking table cards for AI");
                     for (int k = 0; k < table.size(); k++) {
+                        Log.d("PlayerHand", hand.get(j).GetCard());
+                        Log.d("Table", table.get(k).GetCard());
+                        Log.d("PlayerAndTableCard", Integer.toString(CardNumber(hand.get(j).GetNumber()) + CardNumber(table.get(k).GetNumber())));
+                        Log.d("handCardNumber", Integer.toString(handCardNumber));
                         if ((CardNumber(hand.get(j).GetNumber()) + CardNumber(table.get(k).GetNumber())) == handCardNumber) {
                             Log.d("Success", "Actually creating the new build!");
                             newOrExistingBuild = 'n';
                             playerCard = hand.get(j);
                             buildCards.add(table.get(k));
+                            printTableBuildCards.clear();
+                            //printTableBuildCards.add(table.get(k));
                             return true;
                         }
                     }
@@ -702,6 +712,7 @@ public class Player_Model {
                     printPlayerCaptureBuild = 'y';
                     playerCard = hand.get(j);
                     existingBuildCard = currentBuild.lastElement();
+                    playerMove = 'c';
                     return true;
                 }
 
@@ -711,6 +722,7 @@ public class Player_Model {
                     printPlayerCaptureBuild = 'y';
                     playerCard = hand.get(j);
                     existingBuildCard = currentBuild.lastElement();
+                    playerMove = 'c';
                     return true;
                 }
             }
@@ -884,6 +896,49 @@ public class Player_Model {
             }
         }
 
+        // Look for just capturing a set of cards, not capturing with anything
+        else {
+            int valueOfCurrentHandCard;
+
+            // Cycling through the player's hand
+            for(int i = 0; i < hand.size(); i++) {
+
+                if(hand.get(i).GetNumber() == 'A') {
+                    valueOfCurrentHandCard = 14;
+                }
+                else {
+                    valueOfCurrentHandCard = CardNumber(hand.get(i).GetNumber());
+                }
+
+                // Cycling through the table twice to see if there is a pair of cards to capture as a set
+                for (int j = 0; j < table.size(); j++) {
+                    for (int k = 0; k < table.size(); k++) {
+
+                        if (table.get(j).GetCard().equals(table.get(k).GetCard())) {
+                            continue;
+                        }
+
+                        // If both of the table cards equal the value of one of the player's cards, then capture the set
+                        if(CardNumber(table.get(j).GetNumber()) + CardNumber(table.get(k).GetNumber()) == valueOfCurrentHandCard) {
+                            Log.d("AddingSet","Adding the set in the player");
+                            Vector<Card_Model> cardsForSets = new Vector<Card_Model>();
+                            cardsForSets.add(table.get(j));
+                            cardsForSets.add(table.get(k));
+                            playerWantSet = 'y';
+                            playerMove = 'c';
+                            playerCard = hand.get(i);
+                            tempCards.add(table.get(j));
+                            tempCards.add(table.get(k));
+                            tempSet.SetCardsOfSet(cardsForSets);
+                            playerMultipleSetCards.add(tempSet);
+                            return true;
+                        }
+
+                    }
+                }
+            }
+        }
+
         if(playerMultipleSetCards.size() == 0) {
             Log.d("This is not", "Size is still 0");
         }
@@ -918,6 +973,7 @@ public class Player_Model {
             }
         }
 
+        playerMove = 't';
         playerCard = lowestCard;
     }
 

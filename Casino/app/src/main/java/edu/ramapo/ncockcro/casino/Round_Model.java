@@ -359,7 +359,7 @@ public class Round_Model {
                 currentPlayer, player.get(currentPlayer).GetHand())) {
 
                     // Removing the card the player added from the player's hand
-                    player.get(currentPlayer).SetPrintTableBuildCards(tableBuilds.get(i).GetBuildOfCards());
+                    //player.get(currentPlayer).SetPrintTableBuildCards(tableBuilds.get(i).GetBuildOfCards());
                     player.get(currentPlayer).RemoveCard(playerHandBuildCard);
                     addExistingBuildSuccessful = true;
 
@@ -841,6 +841,7 @@ public class Round_Model {
         for(int i = 0; i < tableBuilds.size(); i++) {
             tempOwner = tableBuilds.get(i).GetOwner();
 
+            Log.d("BuildOwner", Integer.toString(tableBuilds.get(i).GetOwner()));
             if(currentPlayer == tempOwner) {
                 errorReason = "You can not trail because there is a build you can capture.";
                 return false;
@@ -1484,12 +1485,22 @@ public class Round_Model {
                     else if(tableBuilds.get(i).GetOwner() == 0) {
                         fileOS.write("Human".getBytes());
                     }
+
+                    if(tableBuilds.size() > 1) {
+                        fileOS.write(System.getProperty("line.separator").getBytes());
+                    }
                 }
 
                 fileOS.write(System.getProperty("line.separator").getBytes());
             }
 
             fileOS.write(System.getProperty("line.separator").getBytes());
+
+            // If there was no last capture yet in the game, it will default to saving
+            // the last capture player to be the human
+            if(lastCapture == null) {
+                lastCapture = "Human";
+            }
 
             // Write the person who captured last to the text file
             Log.d("SaveLastCap", lastCapture);
@@ -1517,7 +1528,11 @@ public class Round_Model {
             }
 
             fileOS.close();
-            System.exit(0);
+
+            Intent intent = new Intent(Intent.ACTION_MAIN);
+            intent.addCategory(Intent.CATEGORY_HOME);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            context.startActivity(intent);
         }
         catch (IOException e) {
             e.printStackTrace();
@@ -1600,6 +1615,12 @@ public class Round_Model {
      ********************************************************************* */
     void SetTableBuilds(Vector<Build_Model> builds) {
         tableBuilds = builds;
+
+        for(int i = 0; i < tableBuilds.size(); i++) {
+            for(int j = 0; j < tableBuilds.get(i).GetBuildOfCards().size(); j++) {
+                Log.d("SettingBuildCard", tableBuilds.get(i).GetBuildOfCards().get(j).GetCard());
+            }
+        }
     }
 
     /** *********************************************************************
@@ -1669,18 +1690,143 @@ public class Round_Model {
         return player.get(currentPlayer).GetHelpOutputMessages();
     }
 
+    /** *********************************************************************
+     Function Name: GetPlayerOutputMessages
+     Purpose: To retrieve the output messages for the players after they make a move
+     Parameters: None
+     Return Value:
+     @return Vector<String>
+     Local Variables: None
+     Algorithm:
+     1) Return the playerOutputMessages variable from the player class
+     Assistance Received: none
+      ********************************************************************* */
     Vector<String> GetPlayerOutputMessages() {
-        Log.d("CurrentPlayerPrint", Integer.toString(currentPlayer));
 
-        if(currentPlayer ==0 ) {
+        // Getting the computer output messages
+        if(currentPlayer == 0 ) {
             player.get(1).PrintMove();
             return player.get(1).GetPlayerOutputMessages();
         }
+        // Getting the human output messages
         else {
             player.get(0).PrintMove();
             return player.get(0).GetPlayerOutputMessages();
         }
     }
 
+    /** *********************************************************************
+     Function Name: SetBuildOwners
+     Purpose: To set the owners of the builds after being loaded in
+     Parameters:
+     @param passedOwners Vector<String>
+     Return Value: Void
+     Local Variables: None
+     Algorithm:
+     1) Cycle through the owners passed in and set the owner to the corresponding build
+     Assistance Received: none
+      ********************************************************************* */
+    void SetBuildOwners(Vector<String> passedOwners) {
 
+        for(int i = 0; i < passedOwners.size(); i++) {
+            if(passedOwners.get(i).equals("Computer")) {
+                tableBuilds.get(i).SetOwner(1);
+            }
+            else {
+                tableBuilds.get(i).SetOwner(0);
+            }
+        }
+    }
+
+    /** *********************************************************************
+     Function Name: SetCaptureCardForBuilds
+     Purpose: To set the capture cards for all the builds after being loaded in
+     Parameters: None
+     Return Value: Void
+     Local Variables: None
+     Algorithm:
+     1) Cycle through the builds and get the value of the cards in each build
+     2) Then cycle through the player's hand and see if any cards match the value of the build
+     Assistance Received: none
+      ********************************************************************* */
+    void SetCaptureCardForBuilds() {
+
+        Vector<Card_Model> playersHand = new Vector<Card_Model>();
+
+        // Cycling through the builds...
+        for(int i = 0; i < tableBuilds.size(); i++) {
+            if(tableBuilds.get(i).GetOwner() == 1) {
+                playersHand = player.get(1).GetHand();
+            }
+            else {
+                playersHand = player.get(0).GetHand();
+            }
+
+            int count = 0;
+            // Cycling through the specific cards of a build and getting the count
+            for(int j = 0; j < tableBuilds.get(i).GetBuildOfCards().size(); j++) {
+                count += player.get(currentPlayer).CardNumber(tableBuilds.get(i).GetBuildOfCards().get(j).GetNumber());
+            }
+
+            // Cycling through the build owner's hand...
+            for(int j = 0; j < playersHand.size(); j++) {
+
+                // If the player has an ace, treat it as a 14
+                if(playersHand.get(j).GetNumber() == 'A' && count == 14) {
+                    tableBuilds.get(i).SetCaptureCardOfBuild(playersHand.get(j));
+                    tableBuilds.get(i).SetValueOfBuild(count);
+                }
+                // Otherwise, just see if the card value matches the value of the build
+                else if(player.get(currentPlayer).CardNumber(playersHand.get(j).GetNumber()) == count) {
+                    tableBuilds.get(j).SetCaptureCardOfBuild(playersHand.get(j));
+                    tableBuilds.get(i).SetValueOfBuild(count);
+                }
+            }
+        }
+    }
+
+    /** *********************************************************************
+     Function Name: SetBuildCounter
+     Purpose: To set the build counter after builds have been loaded in
+     Parameters:
+     @param passedCount, int
+     Return Value: Void
+     Local Variables: None
+     Algorithm:
+     1) Set the build counter to what was passed in
+     Assistance Received: none
+      ********************************************************************* */
+    void SetBuildCounter(int passedCount) {
+        buildCounter = passedCount;
+    }
+
+    /** *********************************************************************
+     Function Name: CreateNewBuildOnTable
+     Purpose: To create a new build in the tableBuilds vector
+     Parameters: None
+     Return Value: Void
+     Local Variables: None
+     Algorithm:
+     1) Add a new build_model object to the tableBuilds vector
+     Assistance Received: none
+      ********************************************************************* */
+    void CreateNewBuildOnTable() {
+        tableBuilds.add(new Build_Model());
+    }
+
+    /** *********************************************************************
+     Function Name: AddCardToBuild
+     Purpose: To add a card to a particular build
+     Parameters:
+     @param index, int
+     @param passedCard, Card_Model
+     Return Value: Void
+     Local Variables: None
+     Algorithm:
+     1) Add the card that was passed in to the function to the tableBuilds
+     Assistance Received: none
+      ********************************************************************* */
+    void AddCardToBuild(int index, Card_Model passedCard) {
+        tableBuilds.get(index).AddCardToBuild(passedCard);
+    }
 }
