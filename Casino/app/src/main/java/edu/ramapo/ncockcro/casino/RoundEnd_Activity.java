@@ -37,7 +37,6 @@ public class RoundEnd_Activity extends AppCompatActivity {
         Intent intent = getIntent();
 
         for(int i = 0; i < Integer.parseInt(intent.getStringExtra("PlayerPileSize")); i++) {
-            Log.d("Player at end", intent.getStringExtra("PlayerPile" + i));
             playerPile.add(new Card_View(intent.getStringExtra("PlayerPile" + i)));
         }
 

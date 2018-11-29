@@ -50,6 +50,16 @@ public class Player_Model {
         return '0';
     }
 
+    /** *********************************************************************
+     Function Name: PrintMove
+     Purpose: Overrided functions with its children classes to print a player's move
+     Parameters: None
+     Return Value: Void
+     Local Variables:None
+     Algorithm:
+     1) Nothing, further specified in the children classes
+     Assistance Received: none
+      ********************************************************************* */
     public void PrintMove() {
 
     }
@@ -67,6 +77,7 @@ public class Player_Model {
       ********************************************************************* */
     void SetHand(Vector<Card_Model> passedFourCards) {
 
+        // Add four cards to the player's hand
         hand.add(passedFourCards.get(0));
         hand.add(passedFourCards.get(1));
         hand.add(passedFourCards.get(2));
@@ -86,6 +97,7 @@ public class Player_Model {
     Assistance Received: none
     ********************************************************************* */
     void AddCardsToHand(Vector<Card_Model> cards) {
+
         for(int i = 0; i < cards.size(); i++) {
             hand.add(cards.get(i));
         }
@@ -154,10 +166,12 @@ public class Player_Model {
      Assistance Received: none
       ********************************************************************* */
     void AddToPile(Vector<Card_Model> passedCards) {
+
+        // Cycle through the valid cards and the cards passed in to ensure what was
+        // passed in is actually cards
         for(int i = 0; i < uniqueCards.size(); i++) {
             for(int j = 0; j < passedCards.size(); j++) {
                 if(uniqueCards.get(i).GetCard().equals(passedCards.get(j).GetCard())) {
-                    Log.d("LOL", passedCards.get(j).GetCard());
                     pile.add(passedCards.get(j));
                 }
             }
@@ -219,6 +233,7 @@ public class Player_Model {
      Assistance Received: none
       ********************************************************************* */
     void RemoveCard(Card_Model passedCard) {
+
         boolean notFound = false;
 
         for(int i = 0; i < hand.size(); i++) {
@@ -245,8 +260,10 @@ public class Player_Model {
      Assistance Received: none
       ********************************************************************* */
     void SetPile(Vector<Card_Model> passedPile) {
+
         int count = 0;
-        for(int i = 0; i  <uniqueCards.size(); i++) {
+
+        for(int i = 0; i < uniqueCards.size(); i++) {
             for(int j = 0; j < passedPile.size(); j++) {
                 if(uniqueCards.get(i).GetCard().equals(passedPile.get(j).GetCard())) {
                     count++;
@@ -310,6 +327,7 @@ public class Player_Model {
     Assistance Received: none
     ********************************************************************* */
     void AddToPlayerBuildCards(Card_Model buildCard) {
+
         for(int i = 0; i < uniqueCards.size(); i++) {
             if(buildCard.GetCard().equals(uniqueCards.get(i).GetCard())) {
                 playerBuildCards.add(buildCard);
@@ -398,6 +416,7 @@ public class Player_Model {
     Assistance Received: none
     ********************************************************************* */
     void SetPlayerWantBuild(char choice) {
+
         if(Character.toLowerCase(choice) == 'y' || Character.toLowerCase(choice) == 'n') {
             playerWantBuild = choice;
         }
@@ -542,20 +561,25 @@ public class Player_Model {
 
         int handCardNumber;
         boolean skipCard = false;
-        Log.d("AI", "AI trying to make a build");
 
 
         // Cycling through the computer's hand and checking if there are cards that add up to that card
         for(int i = 0; i < hand.size(); i++) {
             handCardNumber = CardNumber(hand.get(i).GetNumber());
 
-            Log.d("AIBuild", "In AI trying to make a build");
             // Cycling through the builds and if the card in the player's hand matches one of the cards
             // used to capture a build, then it will set skipCard to true and skip over that hand card
             for(int j = 0; j < tableBuilds.size(); j++) {
-                if(hand.get(i).GetCard().equals(tableBuilds.get(j).GetCaptureCardOfBuild().GetCard())) {
-                    Log.d("Skip", "Setting skipCard to true");
-                    skipCard = true;
+
+                // Have a try catch here since sometimes when loading in a file, if the capture card of
+                // the build is null, the game will crash
+                try {
+                    if (hand.get(i).GetCard().equals(tableBuilds.get(j).GetCaptureCardOfBuild().GetCard())) {
+                        skipCard = true;
+                    }
+                }
+                catch(Exception e) {
+
                 }
             }
 
@@ -576,23 +600,26 @@ public class Player_Model {
                 }
 
                 for (int l = 0; l < tableBuilds.size(); l++) {
-                    if (hand.get(j).GetCard().equals(tableBuilds.get(l).GetCaptureCardOfBuild().GetCard())) {
-                        skipCard2 = true;
+
+                    // Have a try catch here since sometimes when loading in a file, if the capture card of
+                    // the build is null, the game will crash
+                    try {
+                        if (hand.get(j).GetCard().equals(tableBuilds.get(l).GetCaptureCardOfBuild().GetCard())) {
+                            skipCard2 = true;
+                        }
+                    }
+                    catch(Exception e) {
+
                     }
                 }
 
                 for(int r = 0; r < table.size(); r++) {
-                    Log.d("TableInBuildAI", table.get(r).GetCard());
                 }
                 if (!skipCard2) {
-                    Log.d("AIBuilding", "Inside of checking table cards for AI");
+
                     for (int k = 0; k < table.size(); k++) {
-                        Log.d("PlayerHand", hand.get(j).GetCard());
-                        Log.d("Table", table.get(k).GetCard());
-                        Log.d("PlayerAndTableCard", Integer.toString(CardNumber(hand.get(j).GetNumber()) + CardNumber(table.get(k).GetNumber())));
-                        Log.d("handCardNumber", Integer.toString(handCardNumber));
+
                         if ((CardNumber(hand.get(j).GetNumber()) + CardNumber(table.get(k).GetNumber())) == handCardNumber) {
-                            Log.d("Success", "Actually creating the new build!");
                             newOrExistingBuild = 'n';
                             playerCard = hand.get(j);
                             buildCards.add(table.get(k));
@@ -670,7 +697,6 @@ public class Player_Model {
     Assistance Received: none
     ********************************************************************* */
     boolean AICheckForCapture(Vector<Card_Model> table, Vector<Build_Model> tableBuilds) {
-        Log.d("AI", "Ai is capturing");
 
         tableCardsToBeCaptured.clear();
         Vector<Card_Model> currentBuild;
@@ -681,30 +707,21 @@ public class Player_Model {
 
         // Checking to see if any builds can be captured
 
-        Log.d("In AI", Integer.toString(tableBuilds.size()));
-
         // First we need to cycle through each of the builds on the table
         for(int i = 0; i < tableBuilds.size(); i++) {
             currentBuild = tableBuilds.get(i).GetBuildOfCards();
-            Log.d("AICaptureBuild", "Inside of capturing a build in AI");
 
             // Saving the current build of cards to be printed after the computer makes their move
             printTableBuildCards = tableBuilds.get(i).GetBuildOfCards();
 
             // Then cycle through all of the cards in a specific build and add up the value of the cards
-            Log.d("BuildSize", Integer.toString(currentBuild.size()));
             for(int j = 0; j < currentBuild.size(); j++) {
-                Log.d("Value of card", Integer.toString(CardNumber(currentBuild.get(j).GetNumber())));
                 count += CardNumber(currentBuild.get(j).GetNumber());
             }
 
-            Log.d("CountBefore", Integer.toString(count));
             // Now we must go through the player's hand and see if any of the cards equal the sum of the build
             // If so, this function will return true and the build will be captured
             for(int j = 0; j < hand.size(); j++) {
-
-                Log.d("IncaptureBuild", hand.get(j).GetCard());
-                Log.d("Count", Integer.toString(count));
 
                 // Capturing the build with an ace
                 if(hand.get(j).GetNumber() == 'A' && count == 14) {
@@ -747,10 +764,10 @@ public class Player_Model {
 
                     if(tableCardsToBeCaptured.size() > 0) {
                         for (int k = 0; k < tableCardsToBeCaptured.size(); k++) {
-                            Log.d("CaptureCards", tableCardsToBeCaptured.get(k).GetCard());
                             if (CardNumber(tableCardsToBeCaptured.get(k).GetNumber()) == CardNumber(table.get(i).GetNumber()) &&
                                     !tableCardsToBeCaptured.get(k).GetCard().equals(table.get(i).GetCard())) {
                                 playerCard = hand.get(j);
+                                playerMove = 'c';
                                 tableCardsToBeCaptured.add(table.get(i));
                             }
                         }
@@ -759,7 +776,6 @@ public class Player_Model {
                         playerCard = hand.get(j);
                         tableCardsToBeCaptured.add(table.get(i));
                     }
-                    //tableCardsToBeCaptured.add(table.get(i));
                     isCapturing = true;
 
                     // Saving the card that matched so it can be outputted later to show the computers move
@@ -782,7 +798,6 @@ public class Player_Model {
         // If the computer is capturing, maybe there are some sets to be captured aswell
         if(isCapturing) {
 
-            Log.d("AI", "AI is trying to get a set");
             // Next two for loops go through the table and we are looking for combinations of cards on the table
             // that add up to the card the computer is capturing with
             for(int i = 0; i < table.size(); i++) {
@@ -829,7 +844,6 @@ public class Player_Model {
 
                         // If the cards are not already in the set vector, then add them to it
                         if(canCapture) {
-                            Log.d("We", "We are at the point of adding to the sets");
                             Vector<Card_Model> cardsForSetsAce = new Vector<Card_Model>();
                             cardsForSetsAce.add(table.get(i));
                             cardsForSetsAce.add(table.get(j));
@@ -840,7 +854,6 @@ public class Player_Model {
                             tempCards.add(table.get(j));
 
                             // Then push these cards onto a set object and them to the vector of sets
-                            //tempSet.SetCardsOfSet(tempCards);
                             tempSet.SetCardsOfSet(cardsForSetsAce);
 
                             playerMultipleSetCards.add(tempSet);
@@ -863,11 +876,7 @@ public class Player_Model {
                             // were used in a set prior
                             for(int m = 0; m < setOfCards.size(); m++) {
 
-                                Log.d("falsing", setOfCards.get(m).GetCard());
-                                Log.d("tempFalsing", tempCards.get(m).GetCard());
                                 if(setOfCards.get(m).GetCard().equals(tempCards.get(m).GetCard())) {
-                                    Log.d("false", "Turning false");
-
                                     canCapture = false;
                                 }
                             }
@@ -885,11 +894,8 @@ public class Player_Model {
                             tempCards.add(table.get(j));
 
                             // Then push these cards onto a set object and them to the vector of sets
-                            //tempSet.SetCardsOfSet(tempCards);
-                            //playerMultipleSetCards.add(tempSet);
                             tempSet.SetCardsOfSet(cardsForSets);
                             playerMultipleSetCards.add(tempSet);
-                            //tempCards.clear();
                         }
                     }
                 }
@@ -920,7 +926,6 @@ public class Player_Model {
 
                         // If both of the table cards equal the value of one of the player's cards, then capture the set
                         if(CardNumber(table.get(j).GetNumber()) + CardNumber(table.get(k).GetNumber()) == valueOfCurrentHandCard) {
-                            Log.d("AddingSet","Adding the set in the player");
                             Vector<Card_Model> cardsForSets = new Vector<Card_Model>();
                             cardsForSets.add(table.get(j));
                             cardsForSets.add(table.get(k));
@@ -936,15 +941,6 @@ public class Player_Model {
 
                     }
                 }
-            }
-        }
-
-        if(playerMultipleSetCards.size() == 0) {
-            Log.d("This is not", "Size is still 0");
-        }
-        if(playerMultipleSetCards.size() > 0) {
-            for (int i = 0; i < playerMultipleSetCards.get(0).GetCardOfSet().size(); i++) {
-                Log.d("Crds in set", playerMultipleSetCards.get(0).GetCardOfSet().get(i).GetCard());
             }
         }
 

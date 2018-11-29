@@ -54,7 +54,7 @@ public class Card_View {
      1) Set the card, suit, and number to what the card passed in was
      Assistance Received: none
       ********************************************************************* */
-    Card_View(Card_Model passedCard) {
+    Card_View (Card_Model passedCard) {
         card = passedCard.GetCard();
         suit = passedCard.GetSuit();
         number = passedCard.GetNumber();

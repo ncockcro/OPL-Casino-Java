@@ -1,28 +1,20 @@
 package edu.ramapo.ncockcro.casino;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Environment;
 import android.util.Log;
-import android.widget.TextView;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Vector;
-
-import static android.support.v4.content.ContextCompat.startActivity;
-
-// Root\Android\data\edu.ramapo.ncockcro.casino
 
 public class Round_Model {
 
     // Private variables for the Round class
     private Vector<Card_Model> computerPile = new Vector<Card_Model>();
     private int humanScore;
-    //private Vector<Card_Model> humanHand = new Vector();
     private Vector<Card_Model> humanPile = new Vector<Card_Model>();
     private Vector<Card_Model> table = new Vector<Card_Model>();
     private Vector<Card_Model> buildCards = new Vector<Card_Model>();
@@ -89,7 +81,7 @@ public class Round_Model {
             currentRound = round;
         }
         else {
-            Log.d("ERROR", "Error in setting the round in the round class");
+            Log.d("MyError", "Error in setting the round in the round class");
         }
 
         // So long as the human and computer scores are 0 or greater, set them
@@ -98,48 +90,7 @@ public class Round_Model {
             computerPoints = computerScore;
         }
         else {
-            Log.d("ERROR", "Error in setting the scores in the round class");
-        }
-    }
-
-    /** *********************************************************************
-    Function Name: LoadRound
-    Purpose: Load all of the appropriate information for a round to be picked up on
-    Parameters:
-    @param loadComputerHand, holds the computer's hand, a vector of cards
-    @param loadComputerPile, holds the computer's pile, a vector of cards
-    @param loadHumanHand, holds the human's hand, a vector of cards
-    @param loadHumanPile, holds the human's pile, a vector of cards
-    @param loadTable, holds the cards on the table, a vector of cards
-    @param loadBuilds, holds any builds on the table, a vector of builds
-    @param loadDeck, holds the cards left in a deck, a vector of cards
-    @param loadNextPlayer, holds the player who plays next, a string
-    Return Value: Void
-    Local Variables: None
-    Algorithm:
-    1) Set each of the different fields to what the data was passed in.
-    2) No error checking here as saved input files should always be properly formatted
-    Assistance Received: none
-    ********************************************************************* */
-    void LoadRound(Vector<Card_Model> loadComputerHand, Vector<Card_Model> loadComputerPile, Vector<Card_Model> loadHumanHand,
-                           Vector<Card_Model> loadHumanPile, Vector<Card_Model> loadTable, Vector<Build_Model> loadBuilds,
-                           Vector<Card_Model> loadDeck, String loadNextPlayer) {
-
-    }
-
-
-    void PlayRound(String passedFirstPlayer) {
-
-        if(passedFirstPlayer.equals("Human")) {
-            currentPlayer = 0;
-        }
-        else {
-            currentPlayer = 1;
-        }
-
-        if(!loadGame) {
-            DealCardsToPlayer();
-            DealCardsToTable();
+            Log.d("MyError", "Error in setting the scores in the round class");
         }
     }
 
@@ -197,6 +148,7 @@ public class Round_Model {
       ********************************************************************* */
     void SetTable(Vector<Card_Model> passedFourCards) {
 
+        // Add four cards to the table
         table.add(passedFourCards.get(0));
         table.add(passedFourCards.get(1));
         table.add(passedFourCards.get(2));
@@ -301,10 +253,6 @@ public class Round_Model {
 
         // Getting the card on the table that the player wants to use for a build
         playerTableBuildCards = player.get(currentPlayer).GetBuildCards();
-
-        for(int i = 0; i < playerTableBuildCards.size(); i++) {
-            Log.d("playerTable", playerTableBuildCards.get(i).GetCard());
-        }
 
         int buildSize = playerTableBuildCards.size();
         int count = 0;
@@ -419,19 +367,13 @@ public class Round_Model {
         Vector<Card_Model> playerHand = player.get(currentPlayer).GetHand();
         boolean hasRightCards = false;
         Vector<Card_Model> tempPlayerBuildCards = new Vector<Card_Model>();
-        //tempPlayerBuildCards = playerBuildCards;
 
-        for(int i = 0; i < playerTableBuildCards.size(); i++) {
-            Log.d("playerTable", playerTableBuildCards.get(i).GetCard());
-        }
         playerBuildCards.add(playerCard);
-        //tempPlayerBuildCards.add(playerCard);
+
 
         // Iterate through the cards the player wants to build with and count their values
         for(int i = 0; i < playerBuildCards.size(); i++) {
 
-
-            Log.d("InBuildNumbers", Character.toString(playerBuildCards.get(i).GetNumber()));
             // If the card is an ace, we must increment the two different counts with 1 and 14 as the ace card
             if(playerBuildCards.get(i).GetNumber() == 'A') {
                 aceAs1++;
@@ -445,8 +387,6 @@ public class Round_Model {
             }
         }
 
-        /*for(int i = 0; i < )
-        Log.d("")*/
         // If the player has a card that equals the total value of the build, then return true
         for(int i = 0; i < playerHand.size(); i++) {
             if(player.get(currentPlayer).CardNumber(playerHand.get(i).GetNumber()) == aceAs1 ||
@@ -486,12 +426,7 @@ public class Round_Model {
     ********************************************************************* */
     void CreatePlayerBuild() {
 
-        for(int i = 0; i < playerTableBuildCards.size(); i++) {
-            Log.d("PlayerBuilds", playerTableBuildCards.get(i).GetCard());
-        }
-
         Vector<Card_Model> playersBuildCards = player.get(currentPlayer).GetPlayerBuildCards();
-        char lastAddedCard = playersBuildCards.lastElement().GetNumber();
         Vector<Card_Model> handCards = new Vector<Card_Model>();
 
         // Initialize a build
@@ -508,12 +443,10 @@ public class Round_Model {
         // This is used for counting up the total value of a build and setting it right after to the specific build
         int countOfBuild = 0;
         for(int i = 0; i < playerTableBuildCards.size(); i++) {
-            Log.d("CountOfBuild", Integer.toString(player.get(currentPlayer).CardNumber(playerTableBuildCards.get(i).GetNumber())));
             countOfBuild += player.get(currentPlayer).CardNumber(playerTableBuildCards.get(i).GetNumber());
         }
 
         countOfBuild += player.get(currentPlayer).CardNumber(playerHandBuildCard.GetNumber());
-        Log.d("CountOfBuild", Integer.toString(countOfBuild));
         tableBuilds.get(buildCounter).SetValueOfBuild(countOfBuild);
 
         // This is for setting the card that is needed for capturing the build
@@ -538,15 +471,8 @@ public class Round_Model {
         RemoveTableCards(playerTableBuildCards);
         player.get(currentPlayer).RemoveCard(playerHandBuildCard);
 
-        for(int i = 0; i < playerTableBuildCards.size(); i++) {
-            Log.d("PlayerBuilds", playerTableBuildCards.get(i).GetCard());
-        }
-
         buildCounter++;
-
-        // ADDED IN
         playerTableBuildCards.clear();
-        Log.d("EndOfBuild", Integer.toString(tableBuilds.size()));
 
     }
 
@@ -587,26 +513,21 @@ public class Round_Model {
         // If the player said they wanted to make a set, then we will check those cards with the table cards first
         // to make sure they are on the table and add up to the capture card
         if(player.get(currentPlayer).GetPlayerWantSet() == 'y') {
-            Log.d("yes", "Inside of sets in round_model");
             Vector<Set_Model> playerSets = new Vector<Set_Model>();
             playerSets = player.get(currentPlayer).GetPlayerMultipleSetCards();
             Vector<Card_Model> cardsOfSet = new Vector<Card_Model>();
-
-            Log.d("no", Integer.toString(playerSets.size()));
 
             // Cycling through all of the sets that the player wants to capture
             for(int i = 0; i < playerSets.size(); i++) {
 
                 cardsOfSet = playerSets.get(i).GetCardOfSet();
-                Log.d("no2222", Integer.toString(cardsOfSet.size()));
 
                 // For each set, we must check and make sure that the cards are actually on the table
                 for(int j = 0; j < table.size(); j++) {
                     for(int k = 0; k < cardsOfSet.size(); k++) {
-                        Log.d("Set", cardsOfSet.get(k).GetCard());
+
                         // If the card is on the table, push it onto the pile vector to be added later
                         if(table.get(j).GetCard().equals(cardsOfSet.get(k).GetCard())) {
-                            Log.d("Add", "Adding set cards for computer to pile");
                             pile.add(table.get(j));
                             removeTableCards.add(table.get(j));
 
@@ -628,8 +549,6 @@ public class Round_Model {
                     // Left blank intentionally so the function wouldn't return false in the else if statement
                 }
                 else if(aceAs1Count != player.get(currentPlayer).CardNumber(playerHandCaptureCard.GetNumber()) && aceAs14Count != player.get(currentPlayer).CardNumber(playerHandCaptureCard.GetNumber()) ) {
-                    Log.d("Ace as 1", Integer.toString(aceAs1Count));
-                    Log.d("Ace as 14", Integer.toString(aceAs14Count));
                     errorReason = "Card numbers did not add up to what you were capturing with. Try again.";
                     return false;
                 }
@@ -643,8 +562,6 @@ public class Round_Model {
         // If the player wanted to build, then this function will check if it is possible based on
         // the information the user provided
         if(player.get(currentPlayer).GetPlayerWantBuild() == 'y') {
-            Log.d("Wherd", "Inside of capturing build");
-            Log.d("PlayerHandCard", playerHandCaptureCard.GetCard());
             if(CheckIfPlayerCanCaptureBuild(playerHandCaptureCard, playerHand)) {
                 canCapture = true;
 
@@ -670,8 +587,6 @@ public class Round_Model {
                         looseCardsCapture = true;
                     }
                     else {
-                        Log.d("Number", Integer.toString(number));
-                        Log.d("TableCard", tableCardsForCapturing.get(i).GetCard());
                         errorReason = "One of the cards selected can not be captured.";
                         return false;
                     }
@@ -713,7 +628,6 @@ public class Round_Model {
             // If everything is correct, add the cards and remove them properly
             if(canCapture) {
 
-                Log.d("Checking", "Inside of ACTUALLY adding card to pile");
                 player.get(currentPlayer).RemoveCard(playerHandCaptureCard);
                 RemoveTableCards(removeTableCards);
 
@@ -724,14 +638,10 @@ public class Round_Model {
 
         // Set lastCapture to whoever the current player is
         if(currentPlayer == 0) {
-            Log.d("Setting", "Setting the last capture");
             lastCapture = "Human";
-            Log.d("LastCapture", lastCapture);
         }
         else {
-            Log.d("Setting", "Setting the last capture");
             lastCapture = "Computer";
-            Log.d("LastCapture", lastCapture);
         }
 
         if(!canCapture) {
@@ -763,13 +673,9 @@ public class Round_Model {
         Card_Model existingBuildCard = player.get(currentPlayer).GetExistingBuildCard();
         Vector<Card_Model> tempPile = new Vector<Card_Model>();
 
-        Log.d("CheckIf", Integer.toString(tableBuilds.size()));
-
         // Iterate through each of the builds on the table and check if any of them can be captured
         // based on the specifications the user entered in
         for(int i = 0; i < tableBuilds.size(); i++) {
-
-            Log.d("CheckInside", Integer.toString(tableBuilds.size()));
 
             // If there was a build that can be successfully captured after checking if possible, move the cards
             // from the build element into player's pile, move the card used for capture to player pile, and
@@ -793,7 +699,6 @@ public class Round_Model {
                     }
                 }
 
-                Log.d("bklrbktr", "Capturing a build");
                 tableBuilds.remove(tableBuilds.get(i));
                 player.get(currentPlayer).RemoveCard(playerHandCaptureCard);
                 return true;
@@ -841,7 +746,6 @@ public class Round_Model {
         for(int i = 0; i < tableBuilds.size(); i++) {
             tempOwner = tableBuilds.get(i).GetOwner();
 
-            Log.d("BuildOwner", Integer.toString(tableBuilds.get(i).GetOwner()));
             if(currentPlayer == tempOwner) {
                 errorReason = "You can not trail because there is a build you can capture.";
                 return false;
@@ -992,8 +896,6 @@ public class Round_Model {
         errorReason = "None";
         move = player.get(currentPlayer).MakeMove(table, tableBuilds);
 
-        Log.d("CurrentPlayer", Integer.toString(currentPlayer));
-
         // Builds
         if(move == 'b') {
             if(CheckBuild()) {
@@ -1017,8 +919,6 @@ public class Round_Model {
         else {
             Log.d("MyError", "Error in making a move in the round model class.");
         }
-
-        Log.d("Current player in round", Integer.toString(currentPlayer));
 
     }
 
@@ -1185,7 +1085,6 @@ public class Round_Model {
      Assistance Received: none
      ********************************************************************* */
     void SetPlayerModelAddSet(Set_Model set) {
-        Log.d("Adding to set in round", set.GetCardOfSet().get(0).GetCard());
         player.get(currentPlayer).AddSetToPlayer(set);
     }
 
@@ -1258,10 +1157,6 @@ public class Round_Model {
      Assistance Received: none
       ********************************************************************* */
     void SetPlayerModelBuildCards(Vector<Card_Model> passedBuildCards) {
-
-        for(int i = 0; i < passedBuildCards.size(); i++) {
-            Log.d("In round build", passedBuildCards.get(i).GetCard());
-        }
         player.get(currentPlayer).SetBuildCards(passedBuildCards);
     }
 
@@ -1379,8 +1274,6 @@ public class Round_Model {
 
         //File saveFolder = new File(context.getFilesDir() + "/save");
         File saveFolder = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "CasinoSave");
-        Log.d("Saving", context.getFilesDir().toString());
-        Log.d("SavingAbsolute", saveFolder.getAbsolutePath().toString());
         File saveFile = new File(saveFolder.getAbsolutePath() + "/" + fileName + ".txt");
 
         // If the save folder doesn't exist, then make the directory
@@ -1503,7 +1396,6 @@ public class Round_Model {
             }
 
             // Write the person who captured last to the text file
-            Log.d("SaveLastCap", lastCapture);
             fileOS.write(("Last Capturer: " + lastCapture).getBytes());
             fileOS.write(System.getProperty("line.separator").getBytes());
             fileOS.write(System.getProperty("line.separator").getBytes());
@@ -1525,6 +1417,9 @@ public class Round_Model {
             }
             else if(currentPlayer == 0) {
                 fileOS.write("Next Player: Human".getBytes());
+            }
+            else {
+                Log.d("MyError", "Error in saving the next player in round model.");
             }
 
             fileOS.close();
@@ -1615,12 +1510,6 @@ public class Round_Model {
      ********************************************************************* */
     void SetTableBuilds(Vector<Build_Model> builds) {
         tableBuilds = builds;
-
-        for(int i = 0; i < tableBuilds.size(); i++) {
-            for(int j = 0; j < tableBuilds.get(i).GetBuildOfCards().size(); j++) {
-                Log.d("SettingBuildCard", tableBuilds.get(i).GetBuildOfCards().get(j).GetCard());
-            }
-        }
     }
 
     /** *********************************************************************
@@ -1752,6 +1641,7 @@ public class Round_Model {
     void SetCaptureCardForBuilds() {
 
         Vector<Card_Model> playersHand = new Vector<Card_Model>();
+        boolean setValue = false;
 
         // Cycling through the builds...
         for(int i = 0; i < tableBuilds.size(); i++) {
@@ -1773,15 +1663,19 @@ public class Round_Model {
 
                 // If the player has an ace, treat it as a 14
                 if(playersHand.get(j).GetNumber() == 'A' && count == 14) {
+                    setValue = true;
                     tableBuilds.get(i).SetCaptureCardOfBuild(playersHand.get(j));
                     tableBuilds.get(i).SetValueOfBuild(count);
                 }
                 // Otherwise, just see if the card value matches the value of the build
                 else if(player.get(currentPlayer).CardNumber(playersHand.get(j).GetNumber()) == count) {
+                    setValue = true;
                     tableBuilds.get(j).SetCaptureCardOfBuild(playersHand.get(j));
                     tableBuilds.get(i).SetValueOfBuild(count);
                 }
             }
+
+            setValue = false;
         }
     }
 

@@ -77,7 +77,10 @@ public class Build_Model {
     ********************************************************************* */
     void SetBuildOfCards(Vector<Card_Model> buildCards) {
 
+        // Cycling through the list of cards that make up a build
         for(int i = 0; i < buildCards.size(); i++) {
+
+            // Cycling through the valid cards to make sure what was passed in is an actual card
             for(int j = 0; j < uniqueCards.size(); j++) {
                 if(buildCards.get(i).GetCard().equals(uniqueCards.get(j).GetCard())) {
                     buildOfCards.add(buildCards.get(i));
@@ -125,21 +128,18 @@ public class Build_Model {
     Assistance Received: none
     ********************************************************************* */
     boolean CheckAndAddCardInBuild(Card_Model cardToBeAdded, Card_Model cardInBuild, int currentPlayer, Vector<Card_Model> playerHand) {
+
         boolean isCardInBuild = false;
         Vector<Card_Model> tempBuild = buildOfCards;
         int aceAs1 = 0;
         int aceAs14 = 0;
 
-        Log.d("BuildOfCards", buildOfCards.get(0).GetCard());
-        Log.d("cardInBuild", cardInBuild.GetCard());
-
+        // Cycling through the cards in the build and see if the card the user selected is actually in the build
         for(int i = 0; i < buildOfCards.size(); i++) {
             if(buildOfCards.get(i).GetCard().equals(cardInBuild.GetCard())) {
                 isCardInBuild = true;
             }
         }
-
-        Log.d("But", "In build class");
 
         // If the card the user wants to add to a build exists and they are not the owner...
         if(isCardInBuild && owner != currentPlayer) {
@@ -181,6 +181,7 @@ public class Build_Model {
             }
 
             // If we get out of the for loop then that means that it never added up to a card in the player's hand
+            tempBuild.remove(tempBuild.lastElement());
             return false;
         }
 
@@ -209,6 +210,7 @@ public class Build_Model {
     Assistance Received: none
     ********************************************************************* */
     boolean CanCaptureBuildOfCards(Card_Model cardToBeCaptured, Card_Model cardInBuild, Vector<Card_Model> playerHand) {
+
         boolean isCardInBuild = false;
         int captureCardNum = playerModel.CardNumber(cardToBeCaptured.GetNumber());
         int captureCardAce = 14;
@@ -216,7 +218,6 @@ public class Build_Model {
         // First checking to see if the build the user wants to capture exists by looking for the card they provided
         for(int i = 0; i < buildOfCards.size(); i++) {
             if(buildOfCards.get(i).GetCard().equals(cardInBuild.GetCard())) {
-                Log.d("Card", "Card is in the build");
                 isCardInBuild = true;
             }
         }
@@ -225,8 +226,6 @@ public class Build_Model {
         // wants to capture with is not an ace, then we need to make sure the card they are
         // capturing with is the same value as the total build
         if(isCardInBuild && cardToBeCaptured.GetNumber() != 'A') {
-            Log.d("CardValueOfBuild", Integer.toString(cardValueOfBuild));
-            Log.d("playerCard", Integer.toString(playerModel.CardNumber(cardToBeCaptured.GetNumber())));
             if(playerModel.CardNumber(cardToBeCaptured.GetNumber()) == cardValueOfBuild) {
                 return true;
             }
@@ -261,7 +260,6 @@ public class Build_Model {
             cardValueOfBuild = value;
         }
         else {
-            Log.d("ERROR", Integer.toString(value));
             Log.d("MyError", "Error in setting the value of a build in the build class.");
         }
     }
@@ -310,7 +308,8 @@ public class Build_Model {
     Function Name: GetCaptureCardOfBuild
     Purpose: To retrieve the card that
     Paramters: None
-    Return Value: the card that can capture a build, a card object
+    Return Value:
+     @return Card_Model, the card that can capture a build, a card object
     Local Variables: None
     Algorithm:
     1) Return the capture card of a build
@@ -320,6 +319,17 @@ public class Build_Model {
         return captureCardOfBuild;
     }
 
+    /** *********************************************************************
+     Function Name: AddCardToBuild
+     Purpose: To add a card that was passed in to the list of build cards
+     Paramters:
+     @param passedCard, Card_Model
+     Return Value: Void
+     Local Variables: None
+     Algorithm:
+     1) Add the card passed in to the list of build cards
+     Assistance Received: none
+     ********************************************************************* */
     void AddCardToBuild(Card_Model passedCard) {
         buildOfCards.add(passedCard);
     }

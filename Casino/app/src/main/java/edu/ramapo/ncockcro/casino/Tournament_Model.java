@@ -54,6 +54,9 @@ public class Tournament_Model {
 
     String fileToLoadFrom;
 
+    String roundPointsHumanMessage;
+    String roundPointsComputerMessage;
+
     /** *********************************************************************
      Function Name: Tournament_Model
      Purpose: Default constructor
@@ -200,7 +203,7 @@ public class Tournament_Model {
             // If the computer has the DX, increment their score
             if (passedComputerPile.get(i).GetCard().equals("DX")) {
                 tenOfDiamondsColor = "Red";
-                tenOfDiamondsMessage = "The computer had the 10 of Diamons, plus two points,";
+                tenOfDiamondsMessage = "The computer had the Ten of Diamonds, plus two points.";
                 computerRoundPoints += 2;
             }
 
@@ -214,27 +217,27 @@ public class Tournament_Model {
         // See if the player or computer has the most cards
         if (passedHumanPile.size() > passedComputerPile.size()) {
             mostCardsColor = "Green";
-            mostCardsMessage = "The human had the most cards!";
+            mostCardsMessage = "The human had the most cards, with " + passedHumanPile.size() + " cards! The computer had " + passedComputerPile.size() + "cards. Plus three points.";
             humanRoundPoints += 3;
         }
         else if (passedHumanPile.size() < passedComputerPile.size()) {
             mostCardsColor = "Red";
-            mostCardsMessage = "The computer had the most cards.";
+            mostCardsMessage = "The computer had the most cards, with " + passedComputerPile.size() + " cards. You had " + passedHumanPile.size() + " cards. Plus three points";
             computerRoundPoints += 3;
         }
         else {
             mostCardsColor = "Yellow";
-            mostCardsMessage = "Neither player had more cards!";
+            mostCardsMessage = "Neither player had more cards! No one gets any points.";
         }
 
         // Checking to see if either player has more Spades
         if (humanSpadeCount > computerSpadeCount) {
             mostSpadesColor = "Green";
-            mostSpadesMessage = "The human had the most Spades!";
+            mostSpadesMessage = "The human had the most Spades, with " + humanSpadeCount + " Spades! The computer had " + computerSpadeCount + " Spades.";
             humanRoundPoints++;
         } else if (humanSpadeCount < computerSpadeCount) {
             mostSpadesColor = "Red";
-            mostSpadesMessage = "The computer had the most Spades.";
+            mostSpadesMessage = "The computer had the most Spades, with " + computerSpadeCount + " Spades. You had " + humanSpadeCount + " Spades.";
             computerSpadeCount++;
         }
         else {
@@ -248,6 +251,9 @@ public class Tournament_Model {
         // Set the overall scores to what was calculated by the round
         humanPoints += humanRoundPoints;
         computerPoints += computerRoundPoints;
+
+        roundPointsHumanMessage = "You earned " + humanRoundPoints + " points that round!";
+        roundPointsComputerMessage = "The computer earned " + computerRoundPoints + " points that round!";
     }
 
     /** *********************************************************************
@@ -599,22 +605,14 @@ public class Tournament_Model {
 
             Scanner input = new Scanner(inputStreamReader);
 
-            /*while( (line = bufferedReader.readLine()) != null) {
-                Log.d("Line", line);
-            }*/
-
-            Log.d("In", "In the tournament function");
-
             // Reading the text file word by word
             while(input.hasNext()) {
-                Log.d("Inside", "Inside of while loop");
                 String currentWord = input.next();
 
                 // Getting the round
                 if(currentWord.equals("Round:")) {
                     currentWord = input.next();
                     loadGameRound = Integer.parseInt(currentWord);
-                    Log.d("Round", Integer.toString(loadGameRound));
                 }
 
                 currentWord = input.next();
@@ -629,7 +627,6 @@ public class Tournament_Model {
                 if(currentWord.equals("Score:")) {
                     currentWord = input.next();
                     loadGameComputerScore = Integer.parseInt(currentWord);
-                    Log.d("CompScore", Integer.toString(loadGameComputerScore));
                 }
 
                 currentWord = input.next();
@@ -641,7 +638,6 @@ public class Tournament_Model {
                     while(currentWord.length() == 2) {
                         tempCard.SetCard(currentWord);
                         loadGameComputerHand.add(new Card_Model(currentWord));
-                        Log.d("CompHandCard", tempCard.GetCard());
                         currentWord = input.next();
                     }
                 }
@@ -652,7 +648,6 @@ public class Tournament_Model {
                     while(currentWord.length() == 2) {
                         tempCard.SetCard(currentWord);
                         loadGameComputerPile.add(new Card_Model(currentWord));
-                        Log.d("CompPileCard", tempCard.GetCard());
                         currentWord = input.next();
                     }
                 }
@@ -663,7 +658,6 @@ public class Tournament_Model {
                 if(currentWord.equals("Score:")) {
                     currentWord = input.next();
                     loadGameHumanScore = Integer.parseInt(currentWord);
-                    Log.d("humanScore", Integer.toString(loadGameHumanScore));
                 }
 
                 currentWord = input.next();
@@ -674,7 +668,6 @@ public class Tournament_Model {
                     currentWord = input.next();
                     while(currentWord.length() == 2) {
                         loadGameHumanHand.add(new Card_Model(currentWord));
-                        Log.d("HumanHand", tempCard.GetCard());
                         currentWord = input.next();
                     }
                 }
@@ -684,13 +677,10 @@ public class Tournament_Model {
                     currentWord = input.next();
                     while(currentWord.length() == 2) {
                         tempCard.SetCard(currentWord);
-                        Log.d("HumanPile", currentWord);
                         loadGameHumanPile.add(new Card_Model(currentWord));
                         currentWord = input.next();
                     }
                 }
-
-                Log.d("RightBeforeTable", currentWord);
 
                 // Getting the table
                 if(currentWord.equals("Table:")) {
@@ -748,7 +738,6 @@ public class Tournament_Model {
                             // add it to the vector of cards to make up a build
                             if(buildString.length() == 2) {
                                 tempCard.SetCard(buildString);
-                                Log.d("AddingBuildCard", tempCard.GetCard());
                                 loadGameBuildCards.add(new Card_Model(buildString));
                             }
 
@@ -757,7 +746,6 @@ public class Tournament_Model {
 
                         tempBuild.SetBuildOfCards(loadGameBuildCards);
 
-                        Log.d("CurrentWordBeforeOwner", currentWord);
                         if(currentWord.equals("Computer")) {
                             tempBuild.SetOwner(1);
                             loadGameBuildOwner.add("Computer");
@@ -782,19 +770,14 @@ public class Tournament_Model {
                     currentWord = input.next();
                     currentWord = input.next();
 
-                    Log.d("Current", currentWord);
                     loadGameLastCapture = currentWord;
                 }
 
                 currentWord = input.next();
-                Log.d("Deck?", currentWord);
-                //currentWord = input.next();
 
-                Log.d("CurrentFirst", currentWord);
                 if(currentWord.equals("Deck:")) {
                     currentWord = input.next();
 
-                    Log.d("CurrentWord", currentWord);
                     if(!currentWord.equals("Next")) {
                         while(currentWord.length() == 2) {
                             tempCard.SetCard(currentWord);
@@ -804,10 +787,6 @@ public class Tournament_Model {
                     }
 
                     currentWord = input.next();
-                }
-
-                for(int i = 0; i < loadGameDeck.size(); i++) {
-                    Log.d("Deck", loadGameDeck.get(i).GetCard());
                 }
 
 
@@ -1080,6 +1059,14 @@ public class Tournament_Model {
       ********************************************************************* */
     Vector<String> GetLoadGameBuildOwner() {
         return loadGameBuildOwner;
+    }
+
+    String GetRoundPointsHumanMessage() {
+        return roundPointsHumanMessage;
+    }
+
+    String GetRoundPointsComputerMessage() {
+        return roundPointsComputerMessage;
     }
 
 

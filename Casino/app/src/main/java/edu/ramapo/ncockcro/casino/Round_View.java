@@ -241,17 +241,10 @@ public class Round_View extends MainGame_Activity {
         tableLinearLayout.removeAllViews();
         highlightedTableCard.clear();
 
-        Log.d("InUpdate", Integer.toString(roundModel.GetTableBuilds().size()));
         tableCards = cardView.ConvertModelToView(roundModel.GetTable());
-
-        for(int i = 0; i < tableCards.size(); i++) {
-            Log.d("TableCards", tableCards.get(i).GetCard());
-        }
 
         // Get the builds from the model
         multipleBuildCards = roundModel.GetTableBuilds();
-
-        Log.d("tableBuilds", Integer.toString(multipleBuildCards.size()));
 
         // Start a counter at 0 to keep track of how many cards are on the table
         int numOfBuildCards = 0;
@@ -259,14 +252,12 @@ public class Round_View extends MainGame_Activity {
         // Cycle through the build objects...
         for(int i = 0; i < multipleBuildCards.size(); i++) {
 
-            Log.d("multiBuild", "Hello");
             // Get the build cards for the specific build object
             singleBuildCards = cardView.ConvertModelToView(multipleBuildCards.get(i).GetBuildOfCards());
-            Log.d("singleSize", Integer.toString(singleBuildCards.size()));
 
             // Cycle through the cards and display them on the table
             for(int j = 0; j < singleBuildCards.size(); j++) {
-                Log.d("buildInView", singleBuildCards.get(j).GetCard());
+
                 table.add(AddCardToTable(context));
                 singleBuildCards.get(j).DrawImageCard(table.get(numOfBuildCards));
 
@@ -388,6 +379,7 @@ public class Round_View extends MainGame_Activity {
      Assistance Received: none
       ********************************************************************* */
     ImageButton AddCardToTable(Context context) {
+
         ImageButton button = new ImageButton(context);
         button.setImageResource(R.drawable.blackback);
         button.setId(tableIdCounter);
@@ -428,6 +420,7 @@ public class Round_View extends MainGame_Activity {
      Assistance Received: none
       ********************************************************************* */
     ImageView AddCardToDeck(Context context) {
+
         ImageView button = new ImageView(context);
         button.setImageResource(R.drawable.blackback);
         button.setLayoutParams(new LinearLayout.LayoutParams(89, 125));
@@ -455,6 +448,7 @@ public class Round_View extends MainGame_Activity {
      Assistance Received: none
      ********************************************************************* */
     ImageView AddCardToPlayerPile(Context context) {
+
         ImageView button = new ImageView(context);
         button.setImageResource(R.drawable.redback);
         button.setLayoutParams(new LinearLayout.LayoutParams(89, 125));
@@ -481,6 +475,7 @@ public class Round_View extends MainGame_Activity {
      Assistance Received: none
      ********************************************************************* */
     ImageView AddCardToComputerPile(Context context) {
+
         ImageView button = new ImageView(context);
         button.setImageResource(R.drawable.redback);
         button.setLayoutParams(new LinearLayout.LayoutParams(89, 125));
@@ -553,24 +548,41 @@ public class Round_View extends MainGame_Activity {
      ********************************************************************* */
     void HighlightTableCard(View view) {
 
-        for(int i = 0; i < multipleBuildCards.size(); i++) {
-
-            //singleBuildCards = multipleBuildCards.get(i).GetBuildOfCards()
-        }
-
         // If the player is capturing a set...
         if(roundModel.GetPlayerModelWantSet() == 'y') {
 
             // If they haven't clicked on two cards yet...
             if(setCardPickedCounter < 2) {
 
-                // Highlight the card the player picked cyan and add the card to the setHighlightedTableCard
-                for (int i = 0; i < table.size(); i++) {
-                    if (view.getId() == table.get(i).getId()) {
+                int numOfBuilds = 0;
+
+                // Cycle through the builds and highlight them to the correct colors
+                for(int i = 0; i < multipleBuildCards.size(); i++) {
+
+                    singleBuildCards = cardView.ConvertModelToView(multipleBuildCards.get(i).GetBuildOfCards());
+
+                    for(int j = 0; j < singleBuildCards.size(); j++) {
+
+                        if(i % 2 == 0) {
+                            table.get(numOfBuilds).setColorFilter(0x4033FF42);
+                        }
+                        else {
+                            table.get(numOfBuilds).setColorFilter(0x403336FF);
+                        }
+
+                        numOfBuilds++;
+                    }
+                }
+
+                // Then cycle through the actual table cards
+                int tableCount = 0;
+                for(int i = numOfBuilds; i < table.size(); i++) {
+                    if(view.getId() == table.get(i).getId()) {
                         table.get(i).setColorFilter(0x4000ffff);
-                        setHighlightedTableCard.add(tableCards.get(i));
+                        setHighlightedTableCard.add(tableCards.get(tableCount));
                         table.get(i).setEnabled(false);
                     }
+                    tableCount++;
                 }
             }
         }
@@ -614,7 +626,6 @@ public class Round_View extends MainGame_Activity {
         else if(roundModel.GetPlayerModelWantCaptureBuild() == 'y' || roundModel.GetPlayerModelWantNewOrExisting() == 'e') {
 
             int numOfBuilds = 0;
-            Log.d("InBuilds", "in the builds");
             // Cycle through the builds...
             for(int i = 0; i < multipleBuildCards.size(); i++) {
                 singleBuildCards = cardView.ConvertModelToView(multipleBuildCards.get(i).GetBuildOfCards());
@@ -641,13 +652,11 @@ public class Round_View extends MainGame_Activity {
 
                 for(int j = 0; j < singleBuildCards.size(); j++) {
                     numOfBuilds++;
-                    Log.d("numOfBuilds", Integer.toString(numOfBuilds));
                 }
 
 
             }
 
-            Log.d("In highlight", "We are here");
             int tableCount = 0;
             for (int i = numOfBuilds; i < tableCards.size() + numOfBuilds; i++) {
                 if (view.getId() == table.get(i).getId()) {
@@ -658,9 +667,6 @@ public class Round_View extends MainGame_Activity {
                 tableCount++;
             }
 
-            for(int i = 0; i < highlightedTableCard.size(); i++) {
-                Log.d("Highlighted", highlightedTableCard.get(i).GetCard());
-            }
         }
 
         // If the player is capturing sets,
@@ -719,7 +725,6 @@ public class Round_View extends MainGame_Activity {
                     // If the cards from a particular build match with the cards we want
                     // highlighted, then highlight and disable those cards
                     if (tempCards.get(j).GetCard().equals(buildCards.get(k).GetCard())) {
-                        Log.d("Color", buildCards.get(k).GetCard());
                         table.get(numOfBuilds).setColorFilter(0x40ff0000);
                         table.get(numOfBuilds).setEnabled(false);
                         currentBuildCard = buildCards.get(k);
@@ -778,10 +783,6 @@ public class Round_View extends MainGame_Activity {
                 }
             }
 
-            // Sending over the card from the table the player selected
-            for(int i = 0; i < buildHighlightedTableCards.size(); i++) {
-                Log.d("Build", Character.toString(buildHighlightedTableCards.get(i).GetNumber()));
-            }
             roundModel.SetPlayerModelBuildCards(cardView.ConvertViewToModelVector(buildHighlightedTableCards));
 
             // Unhighlighting the rest of the player's cards
@@ -871,7 +872,6 @@ public class Round_View extends MainGame_Activity {
 
         // Draw the player's hand
         for(int i = 0; i < playerCards.size(); i++) {
-            Log.d("Player", playerCards.get(i).GetCard());
             playerCards.get(i).DrawImageCard(playerImageButtonHand.get(i));
         }
 
@@ -890,7 +890,6 @@ public class Round_View extends MainGame_Activity {
             computerImageViewHand.get(i).setVisibility(View.GONE);
         }
 
-        Log.d("update", "In updating screen");
         // Draw the rest of the content to the screen
         DrawTable(context);
         DrawDeck(context);
@@ -913,18 +912,8 @@ public class Round_View extends MainGame_Activity {
       ********************************************************************* */
     Integer CheckForDealingCards(Context context) {
 
-        Log.d("Check", "Checking for dealing cards");
-
-        for(int i = 0; i < roundModel.GetHand(0).size(); i++) {
-            Log.d("humanCards", roundModel.GetHand(0).get(i).GetCard());
-        }
-
-        Log.d("HandEmpty", Boolean.toString(roundModel.CheckIfPlayersHandEmpty()));
-        Log.d("DeckEmpty", Boolean.toString(roundModel.CheckIfDeckEmpty()));
-
         // If the player's hands are empty but not the deck, deal cards and return true
         if(roundModel.CheckIfPlayersHandEmpty() && !roundModel.CheckIfDeckEmpty()) {
-            Log.d("Choice", "Returning 1");
             roundModel.DealCardsToPlayer();
             SetPlayersHandsVisible();
             UpdateScreen(context);
@@ -932,12 +921,10 @@ public class Round_View extends MainGame_Activity {
         }
         // If the hands aren't empty and the deck isn't empty, return true
         else if(!roundModel.CheckIfPlayersHandEmpty() && !roundModel.CheckIfDeckEmpty()) {
-            Log.d("Choice", "returning 2");
             return 2;
         }
         // Otherwise, return false, the round is over
         else if(roundModel.CheckIfPlayersHandEmpty() && roundModel.CheckIfDeckEmpty()){
-            Log.d("Choice", "returning 3");
 
             roundModel.GiveTableCards();
             HideAllButtons();
@@ -998,6 +985,7 @@ public class Round_View extends MainGame_Activity {
         // Enabled the player's hand buttons
         for(int i = 0; i < playerCards.size(); i++) {
             playerImageButtonHand.get(i).setEnabled(true);
+            playerImageButtonHand.get(i).setColorFilter(null);
         }
     }
 
@@ -1021,7 +1009,8 @@ public class Round_View extends MainGame_Activity {
         // Disable the human hand's buttons so they cant click on them
         for(int i = 0; i < playerCards.size(); i++) {
             playerImageButtonHand.get(i).setEnabled(false);
-        }
+            playerImageButtonHand.get(i).setColorFilter(null);
+        };
     }
 
     /** *********************************************************************
@@ -1206,7 +1195,6 @@ public class Round_View extends MainGame_Activity {
 
         // If there was an error reason...
         if(!roundModel.GetErrorReason().equals("None")) {
-            Log.d("err", "inside of print errors");
 
             // Output the error reason to the text view
             outputTextView.append(roundModel.GetErrorReason());
@@ -1241,16 +1229,24 @@ public class Round_View extends MainGame_Activity {
             for(int i = numOfBuildCards; i < tableCards.size(); i++) {
                 table.get(i).setColorFilter(null);
                 highlightedTableCard.clear();
-                table.get(i).setEnabled(true);
+                table.get(i).setEnabled(false);
             }
+
+            for(int i = 0; i < playerCards.size(); i++) {
+                playerImageButtonHand.get(i).setColorFilter(null);
+            }
+
+            setHighlightedTableCard.clear();
+            buildHighlightedTableCards.clear();
+
 
             return true;
         }
 
         // Otherwise, switch to the computer's button for their move
         else {
-            Log.d("CurrentPlayer", Integer.toString(roundModel.GetCurrentPlayer()));
-            Log.d("Else", "switching to computer buttons");
+            roundModel.SetPlayerModelWantNewOrExisting('n');
+            roundModel.SetPlayerModelWantBuild('n');
             ShowComputerButtons();
             return false;
         }
@@ -1305,7 +1301,6 @@ public class Round_View extends MainGame_Activity {
       ********************************************************************* */
     void EnableTableButtons() {
 
-        Log.d("TableSize", Integer.toString(table.size()));
         for(int i = 0; i < table.size(); i++) {
             table.get(i).setEnabled(true);
         }
@@ -1350,25 +1345,6 @@ public class Round_View extends MainGame_Activity {
             computerImageViewHand.get(i).setVisibility(View.VISIBLE);
         }
     }
-
-    /** *********************************************************************
-     Function Name: PrintTableToOutput
-     Purpose: Print the table to the output text view
-     Parameters: None
-     Return Value: Void
-     Local Variables: None
-     Algorithm:
-     1) Print the table to the output text view
-     Assistance Received: none
-      ********************************************************************* */
-    /*void PrintTableToOutput() {
-
-        outputTextView.append("TABLE: ");
-        for(int i = 0; i < tableCards.size(); i++) {
-            outputTextView.append(tableCards.get(i).GetCard() + " ");
-        }
-        outputTextView.append("\n");
-    }*/
 
     /** *********************************************************************
      Function Name: AddSetToPlayer
@@ -1419,7 +1395,6 @@ public class Round_View extends MainGame_Activity {
             singleBuildCards = cardView.ConvertModelToView(multipleBuildCards.get(i).GetBuildOfCards());
 
             for(int j = 0; j < singleBuildCards.size(); j++) {
-                Log.d("buildInView", singleBuildCards.get(j).GetCard());
                 singleBuildCards.get(j).DrawImageCard(table.get(numOfBuildCards));
 
                 if(i % 2 == 0) {
@@ -1440,9 +1415,6 @@ public class Round_View extends MainGame_Activity {
         setCardPickedCounter = 0;
         roundModel.SetPlayerModelWantSet('n');
         roundModel.SetPlayerModelWantBuild('n');
-
-        setHighlightedTableCard.clear();
-        buildHighlightedTableCards.clear();
     }
 
     /** *********************************************************************
@@ -1626,6 +1598,32 @@ public class Round_View extends MainGame_Activity {
         // Disable the human hand's buttons so they cant click on them
         for(int i = 0; i < playerCards.size(); i++) {
             playerImageButtonHand.get(i).setEnabled(false);
+        }
+    }
+
+    void DisableBuildButtons() {
+
+        for(int i = 0; i < multipleBuildCards.size(); i++) {
+
+            singleBuildCards = cardView.ConvertModelToView(multipleBuildCards.get(i).GetBuildOfCards());
+
+            for(int j = 0; j < singleBuildCards.size(); j++) {
+
+                table.get(j).setEnabled(false);
+            }
+        }
+    }
+
+    void EnableBuildButtons() {
+
+        for(int i = 0; i < multipleBuildCards.size(); i++) {
+
+            singleBuildCards = cardView.ConvertModelToView(multipleBuildCards.get(i).GetBuildOfCards());
+
+            for(int j = 0; j < singleBuildCards.size(); j++) {
+
+                table.get(j).setEnabled(true);
+            }
         }
     }
 

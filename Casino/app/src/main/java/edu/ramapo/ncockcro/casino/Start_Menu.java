@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import java.io.File;
 import java.util.Vector;
@@ -68,11 +69,29 @@ public class Start_Menu extends AppCompatActivity {
         dialog.setMessage("Enter a file name to load from.");
         dialog.setView(loadEditText);
         final String newDirectory = directory.toString();
+        final File fileDirectory = directory;
+        final Toast myToast = Toast.makeText(this, "Could not find file.", Toast.LENGTH_LONG);
+        final View myView = view;
         dialog.setPositiveButton("Load", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-                tournamentModelLG.SetFileToLoadFrom(loadEditText.getText().toString());
-                tournamentModelLG.LoadGame(newDirectory, "/" + loadEditText.getText().toString() + ".txt");
-                StartLoadedGame();
+
+                File[] downloadFiles = fileDirectory.listFiles();
+                boolean foundFile = false;
+
+                for(int i = 0; i < downloadFiles.length; i++) {
+                    if(downloadFiles[i].getName().equals(loadEditText.getText().toString() + ".txt")) {
+                        foundFile = true;
+                    }
+                }
+
+                if(foundFile) {
+                    tournamentModelLG.SetFileToLoadFrom(loadEditText.getText().toString());
+                    tournamentModelLG.LoadGame(newDirectory, "/" + loadEditText.getText().toString() + ".txt");
+                    StartLoadedGame();
+                }
+                else {
+                    myToast.show();
+                }
             }
 
         });
@@ -140,7 +159,6 @@ public class Start_Menu extends AppCompatActivity {
             loadIntent.putExtra("loadGameComputerPile" + i, tournamentModelLG.GetLoadGameComputerPile().get(i).GetCard());
         }
         String stringComputerPileSize = Integer.toString(tournamentModelLG.GetLoadGameComputerPile().size());
-        Log.d("ComputerPileSize", stringComputerPileSize);
         loadIntent.putExtra("computerPileSize", stringComputerPileSize);
 
         // Load in the human's score
@@ -150,7 +168,6 @@ public class Start_Menu extends AppCompatActivity {
         // Load in the human's hand
         for(int i = 0; i < tournamentModelLG.GetLoadGameHumanHand().size(); i++) {
             loadIntent.putExtra("loadGameHumanHand" + i, tournamentModelLG.GetLoadGameHumanHand().get(i).GetCard());
-            Log.d("LoadingHnd", tournamentModelLG.GetLoadGameHumanHand().get(i).GetCard());
         }
 
         String stringHumanHandSize = Integer.toString(tournamentModelLG.GetLoadGameHumanHand().size());

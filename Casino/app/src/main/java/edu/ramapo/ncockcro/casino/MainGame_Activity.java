@@ -41,7 +41,6 @@ public class MainGame_Activity extends AppCompatActivity {
 
         Intent intent = getIntent();
         coinTossWinner = intent.getStringExtra("coinWinner");
-        Log.d("coinW", coinTossWinner);
 
         // Loading in the scores and the current round
         roundView.SetHumanScore(Integer.parseInt(intent.getStringExtra("humanScore")));
@@ -83,7 +82,6 @@ public class MainGame_Activity extends AppCompatActivity {
         Vector<Card_Model> humanHandTempCards = new Vector<Card_Model>();
         for(int i = 0; i < Integer.parseInt(intent.getStringExtra("humanHandSize")); i++) {
             humanHandTempCards.add(new Card_Model(intent.getStringExtra("loadGameHumanHand" + i)));
-            Log.d("StartPlayerHandFirst", intent.getStringExtra("loadGameHumanHand" + i));
         }
 
         roundModel.SetPlayerHand(0, humanHandTempCards);
@@ -124,14 +122,12 @@ public class MainGame_Activity extends AppCompatActivity {
             for(int j = 0; j < Integer.parseInt(intent.getStringExtra("buildCardSize" + i)); j++) {
                 //tempCards.add(new Card_Model(intent.getStringExtra("loadGameBuilds" + i + j)));
                 roundModel.AddCardToBuild(i, new Card_Model(intent.getStringExtra("loadGameBuilds" + i + j)));
-                Log.d("BuildCardInGame", intent.getStringExtra("loadGameBuilds" + i + j));
             }
             tempBuildSingle.SetBuildOfCards(tempCards);
             tempBuilds.add(tempBuildSingle);
 
         }
 
-        Log.d("BuildsSize", Integer.toString(tempBuilds.size()));
         //roundModel.SetTableBuilds(tempBuilds);
         roundModel.SetBuildCounter(Integer.parseInt(intent.getStringExtra("buildSize")));
 
@@ -191,21 +187,46 @@ public class MainGame_Activity extends AppCompatActivity {
       ********************************************************************* */
     public void BuildButtonPressed(View view) {
 
-        //roundView.PrintTableToOutput();
+        // Enable the table cards to be clicked, set the player's move to 'b', and show the build buttons
         roundView.EnableTableButtons();
         roundModel.SetPlayerMove('b');
         roundView.ShowBuildButtons();
         roundView.DisableTableButtons();
     }
 
+    /** *********************************************************************
+     Function Name: NewBuildButtonPressed
+     Purpose: When the player wants to make a new build, this sets the necessary parameters for that
+     Parameters:
+     @param view
+     Return Value: Void
+     Local Variables:None
+     Algorithm:
+     1) Set the build info to 'n' for wanting a new build
+     2) Show the build buttons to capture the build
+     Assistance Received: none
+      ********************************************************************* */
     public void NewBuildButtonPressed(View view) {
         roundModel.SetPlayerModelWantNewOrExisting('n');
         roundView.ShowNewOrExistingBuildButtons();
         roundView.EnableTableButtons();
     }
 
+    /** *********************************************************************
+     Function Name: ExistingBuildButtonPressed
+     Purpose: When the player wants to add to an existing build, this sets the necessary parameters for that
+     Parameters:
+     @param view
+     Return Value: Void
+     Local Variables:None
+     Algorithm:
+     1) Set the build info to 'e' for wanting an existing build
+     2) Show the builds buttons to add to an existing build
+     Assistance Received: none
+      ********************************************************************* */
     public void ExistingBuildButtonPressed(View view) {
         roundModel.SetPlayerModelWantNewOrExisting('e');
+        roundView.EnableBuildButtons();
         roundView.ShowNewOrExistingBuildButtons();
         roundView.EnableTableButtons();
     }
@@ -225,8 +246,8 @@ public class MainGame_Activity extends AppCompatActivity {
       ********************************************************************* */
     public void CaptureButtonPressed(View view) {
 
-        //roundView.PrintTableToOutput();
         roundView.EnableTableButtons();
+        roundView.DisableBuildButtons();
         roundModel.SetPlayerMove('c');
         roundView.ShowCaptureButtons();
     }
@@ -247,8 +268,8 @@ public class MainGame_Activity extends AppCompatActivity {
 
         roundModel.CheckForBuilds();
         if(!roundView.CaptureBuildPrintError()) {
-            Log.d("Yes", "Sending yes to the model");
             roundModel.SetPlayerModelWantBuild('y');
+            roundView.EnableBuildButtons();
             roundView.ShowCaptureBuildButtons();
 
         }
@@ -358,7 +379,6 @@ public class MainGame_Activity extends AppCompatActivity {
      ********************************************************************* */
     public void TrailCardPressed(View view) {
 
-        //roundView.PrintTableToOutput();
         roundView.SetTrailInfo();
         roundModel.PlayerMakeMove();
 
@@ -381,8 +401,6 @@ public class MainGame_Activity extends AppCompatActivity {
      Assistance Received: none
      ********************************************************************* */
     public void ComputerMoveButtonPressed(View view) {
-
-        //roundView.PrintTableToOutput();
 
         roundModel.PlayerMakeMove();
         roundView.OutputPlayerMessages();
@@ -441,7 +459,6 @@ public class MainGame_Activity extends AppCompatActivity {
 
         // Pushing the size of the player's pile into the intent
         String playerPileSize = Integer.toString(tempPlayerPile.size());
-        Log.d("playerPileSize", Integer.toString(tempPlayerPile.size()));
         intentResults.putExtra("PlayerPileSize", playerPileSize);
 
         // Pushing the computer's pile onto the intent

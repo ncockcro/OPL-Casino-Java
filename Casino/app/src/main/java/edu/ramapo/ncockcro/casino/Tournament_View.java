@@ -28,6 +28,8 @@ public class Tournament_View {
     private TextView mostAcesView;
     private TextView humanScore;
     private TextView computerScore;
+    private TextView addedRoundPointsHuman;
+    private TextView addedRoundPointsComputer;
 
     Vector<ImageView> playerPile = new Vector<ImageView>();
     Vector<ImageView> computerPile = new Vector<ImageView>();
@@ -87,6 +89,9 @@ public class Tournament_View {
 
         humanScore = (TextView) activity.findViewById(R.id.humanScore);
         computerScore = (TextView) activity.findViewById(R.id.computerScore);
+
+        addedRoundPointsHuman = (TextView) activity.findViewById(R.id.roundPointsHumanTextView);
+        addedRoundPointsComputer = (TextView) activity.findViewById(R.id.roundPointsComputerTextView);
 
         tournamentModel = passedTournamentModel;
     }
@@ -155,6 +160,9 @@ public class Tournament_View {
 
         humanScore.append(Integer.toString(tournamentModel.GetHumanPoints()));
         computerScore.append(Integer.toString(tournamentModel.GetComputerPoints()));
+
+        addedRoundPointsHuman.append(tournamentModel.GetRoundPointsHumanMessage());
+        addedRoundPointsComputer.append(tournamentModel.GetRoundPointsComputerMessage());
 
     }
 

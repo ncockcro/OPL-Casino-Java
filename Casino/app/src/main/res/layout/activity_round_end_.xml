@@ -151,6 +151,7 @@
         android:layout_marginTop="300dp"
         android:text="@string/humanScoreTextView"
         android:textColor="#FFFFFFFF"
+        android:textSize="32dp"
         android:gravity="center"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -164,6 +165,7 @@
         android:layout_marginRight="123dp"
         android:text="@string/computerScoreTextView"
         android:textColor="#FFFFFFFF"
+        android:textSize="32dp"
         android:gravity="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -172,8 +174,8 @@
         android:id="@+id/humanScore"
         android:layout_width="119dp"
         android:layout_height="114dp"
-        android:layout_marginStart="100dp"
-        android:layout_marginLeft="100dp"
+        android:layout_marginStart="150dp"
+        android:layout_marginLeft="150dp"
         android:layout_marginTop="36dp"
         android:textColor="#FFFFFFFF"
         android:textSize="32dp"
@@ -185,8 +187,8 @@
         android:layout_width="119dp"
         android:layout_height="114dp"
         android:layout_marginTop="36dp"
-        android:layout_marginEnd="100dp"
-        android:layout_marginRight="100dp"
+        android:layout_marginEnd="130dp"
+        android:layout_marginRight="130dp"
         android:textColor="#FFFFFFFF"
         android:textSize="32dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -204,5 +206,29 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/gameWonTextView" />
+
+    <TextView
+        android:id="@+id/roundPointsHumanTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="50dp"
+        android:layout_marginLeft="50dp"
+        android:layout_marginBottom="116dp"
+        android:textColor="#FFFFFFFF"
+        android:textSize="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/roundPointsComputerTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="50dp"
+        android:layout_marginRight="50dp"
+        android:layout_marginBottom="116dp"
+        android:textColor="#FFFFFFFF"
+        android:textSize="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </android.support.constraint.ConstraintLayout>

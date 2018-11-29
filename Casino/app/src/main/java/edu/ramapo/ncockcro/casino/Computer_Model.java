@@ -22,8 +22,8 @@ public class Computer_Model extends Player_Model {
      Assistance Received: none
      ********************************************************************* */
     @Override public char MakeMove(Vector<Card_Model> table, Vector<Build_Model> tableBuilds) {
+
         //Check for build
-        Log.d("In computer", Integer.toString(tableBuilds.size()));
         if(AICheckForBuild(table, tableBuilds)) {
             playerMove = 'b';
             return 'b';
@@ -51,18 +51,20 @@ public class Computer_Model extends Player_Model {
      Assistance Received: none
      ********************************************************************* */
     @Override public void PrintMove() {
-        Log.d("Printing", "Printing in the computer");
 
+        // Clear the output messages vector in case anything was in it from before
         playerOutputMessages.clear();
-        Log.d("PlayerMove", Character.toString(playerMove));
 
+        // If the computer made a build...
         if(playerMove == 'b') {
 
             playerOutputMessages.add("The computer chose to play a " + GetNumberName(playerCard.GetNumber()) + " of " + GetSuitName(playerCard.GetSuit()));
 
+            // If they made a new build...
             if(newOrExistingBuild == 'n') {
                 playerOutputMessages.add(" to make a build with ");
 
+                // Cycle through and get the table cards the computer made a build with
                 for(int i = 0; i < printTableBuildCards.size(); i++) {
                     if(i > 1) {
                         playerOutputMessages.add(" and ");
@@ -74,9 +76,11 @@ public class Computer_Model extends Player_Model {
                 playerOutputMessages.add(". It wanted to be able to capture more cards later.");
             }
 
+            // If the computer added to an existing build...
             else if(newOrExistingBuild == 'e') {
                 playerOutputMessages.add(" to add to an existing build with the ");
 
+                // Cycle through the table cards the existing build consisted of
                 for(int i = 0; i < printTableBuildCards.size(); i++) {
                     if(i > 1) {
                         playerOutputMessages.add(" and ");
@@ -91,10 +95,14 @@ public class Computer_Model extends Player_Model {
             }
         }
 
+        // If the computer captured...
         else if(playerMove == 'c') {
             playerOutputMessages.add("The computer chose to play a " + GetNumberName(playerCard.GetNumber()) + " of " + GetSuitName(playerCard.GetSuit()) + " to capture the ");
 
+            // If the computer captured a build...
             if(printPlayerCaptureBuild == 'y') {
+
+                // Cycle through the cards from the build they captured
                 for(int i = 0; i < printTableBuildCards.size(); i++) {
                     if(i > 0) {
                         playerOutputMessages.add(" and ");
@@ -104,6 +112,7 @@ public class Computer_Model extends Player_Model {
                 }
             }
 
+            // Cycle through the cards the computer captured
             for(int i = 0; i < printTableCaptureCards.size(); i++) {
                 if(i > 1) {
                     playerOutputMessages.add(" and ");
@@ -112,16 +121,18 @@ public class Computer_Model extends Player_Model {
 
             }
 
+            // If the computer captured a set...
             if(playerWantSet == 'y') {
                 playerOutputMessages.add(" and the set of ");
 
+                // Cycle through the set cards that the computer captured
                 for(int i = 0; i < playerMultipleSetCards.size(); i++) {
                     for(int j = 0; j < playerMultipleSetCards.get(i).GetCardOfSet().size(); j++) {
                         if(i > 0) {
                             playerOutputMessages.add(" and ");
                         }
 
-                        playerOutputMessages.add(GetNumberName(playerMultipleSetCards.get(i).GetCardOfSet().get(j).GetNumber()) + " of " + GetSuitName(playerMultipleSetCards.get(i).GetCardOfSet().get(j).GetNumber()));
+                        playerOutputMessages.add(GetNumberName(playerMultipleSetCards.get(i).GetCardOfSet().get(j).GetNumber()) + " of " + GetSuitName(playerMultipleSetCards.get(i).GetCardOfSet().get(j).GetSuit()));
 
                     }
                 }
@@ -130,6 +141,7 @@ public class Computer_Model extends Player_Model {
             playerOutputMessages.add(". It wanted to add more cards to its pile.");
         }
 
+        // If the computer trailed, output the card they trailed with
         else if(playerMove == 't') {
             playerOutputMessages.add("The computer chose to trail with the " + GetNumberName(playerCard.GetNumber()) + " of " + GetSuitName(playerCard.GetSuit()));
             playerOutputMessages.add(". It had no other moves to make.");
@@ -138,8 +150,5 @@ public class Computer_Model extends Player_Model {
             Log.d("MyError", "Error in setting the computer's print statement in computer model.");
         }
 
-        for(int i = 0; i < playerOutputMessages.size(); i++) {
-            Log.d("PrintingMessage", playerOutputMessages.get(i));
-        }
     }
 }
