@@ -26,7 +26,7 @@ public class Start_Menu extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start__menu);
-        tournamentViewLG = new Tournament_View(tournamentModelLG);
+        tournamentViewLG = new Tournament_View(tournamentModelLG, this);
 
     }
 
@@ -103,8 +103,20 @@ public class Start_Menu extends AppCompatActivity {
 
         });
 
-        dialog.create();
-        dialog.show();
+        /*dialog.create();
+        dialog.show();*/
+
+        File[] downloadFiles = fileDirectory.listFiles();
+
+        for(int i = 0; i < downloadFiles.length; i++) {
+            Log.d("file", downloadFiles[i].getName());
+            tournamentViewLG.AddCardToLoadGame(this, downloadFiles[i].getName());
+        }
+    }
+
+    public void PlayLoadGameButtonPressed(View view) {
+
+        StartLoadedGame();
     }
 
     /** *********************************************************************

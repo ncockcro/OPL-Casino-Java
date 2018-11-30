@@ -5,11 +5,16 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
+import android.os.Environment;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import java.io.File;
@@ -37,6 +42,13 @@ public class Tournament_View {
     private Tournament_Model tournamentModel;
     private Card_View cardView = new Card_View();
 
+    private ScrollView loadGameVerticleScrollView;
+    private LinearLayout loadGameLinearLayout;
+    private int loadGameFileCounter = 0;
+    private Button newGameButton;
+    private Button loadGameButton;
+    private Button playLoadButton;
+
     /** *********************************************************************
      Function Name: Tournament_View
      Purpose: Default constructor
@@ -53,6 +65,20 @@ public class Tournament_View {
 
     Tournament_View(Tournament_Model passedTournamentModel) {
         tournamentModel = passedTournamentModel;
+    }
+
+    Tournament_View(Tournament_Model passedTournamentModel, Activity activity) {
+
+        tournamentModel = passedTournamentModel;
+
+        loadGameVerticleScrollView = (ScrollView) activity.findViewById(R.id.loadGameVerticleScrollView);
+        loadGameLinearLayout = (LinearLayout) activity.findViewById(R.id.loadGameLinearLayout);
+        loadGameLinearLayout.setBackgroundColor(Color.WHITE);
+        loadGameVerticleScrollView.setVisibility(View.GONE);
+        newGameButton = (Button) activity.findViewById(R.id.NewGameButton);
+        loadGameButton = (Button) activity.findViewById(R.id.LoadGameButton);
+        playLoadButton = (Button) activity.findViewById(R.id.playLoadButton);
+        playLoadButton.setVisibility(View.GONE);
     }
 
     /** *********************************************************************
@@ -94,6 +120,8 @@ public class Tournament_View {
         addedRoundPointsComputer = (TextView) activity.findViewById(R.id.roundPointsComputerTextView);
 
         tournamentModel = passedTournamentModel;
+
+
     }
 
     /** *********************************************************************
@@ -267,6 +295,7 @@ public class Tournament_View {
      Assistance Received: none
       ********************************************************************* */
     void ShowLoadTextInput(Context context, File directory) {
+
         final EditText loadEditText = new EditText(context);
         AlertDialog.Builder dialog = new AlertDialog.Builder(context);
         dialog.setTitle("Loading");
@@ -292,6 +321,56 @@ public class Tournament_View {
         dialog.create();
         dialog.show();
 
+    }
+
+    /** *********************************************************************
+     Function Name: AddCardToLoadGame
+     Purpose: To add a file button to the verticle scroll view for the player to pick from
+     Parameters:
+     @param context, Context object
+     @param fileName, String
+     Return Value: Void
+     Local Variables: None
+     Algorithm:
+     1) Create a new clickable button and append it to the verticle scroll view for files
+     and start the round
+     Assistance Received: none
+      ********************************************************************* */
+    Button AddCardToLoadGame(Context context, String fileName) {
+
+        newGameButton.setVisibility(View.GONE);
+        loadGameButton.setVisibility(View.GONE);
+        loadGameVerticleScrollView.setVisibility(View.VISIBLE);
+
+        File directory = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "CasinoSave");
+
+        Button button = new Button(context);
+        button.setId(loadGameFileCounter);
+        loadGameFileCounter++;
+        button.setLayoutParams(new LinearLayout.LayoutParams(89, 125));
+        button.setBackgroundColor(Color.TRANSPARENT);
+        button.setEnabled(true);
+        button.setText(fileName);
+        loadGameLinearLayout.addView(button);
+
+        final String newDirectory = directory.toString();
+
+        final String finalFileName = fileName;
+        // When a button from the table is clicked, this is the on click listener that handles what
+        // to do with that button
+        button.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                Log.d("click", "being clicked");
+                tournamentModel.SetFileToLoadFrom(finalFileName.toString());
+                tournamentModel.LoadGame(newDirectory, "/" + finalFileName);
+
+                loadGameVerticleScrollView.setVisibility(View.GONE);
+                playLoadButton.setVisibility(View.VISIBLE);
+
+            }
+        });
+
+        return button;
     }
 
 

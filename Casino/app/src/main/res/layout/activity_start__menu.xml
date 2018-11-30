@@ -51,4 +51,31 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <ScrollView
+        android:id="@+id/loadGameVerticleScrollView"
+        android:layout_width="364dp"
+        android:layout_height="372dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/WeclomeTextView">
+
+        <LinearLayout
+            android:id="@+id/loadGameLinearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" />
+    </ScrollView>
+
+    <Button
+        android:id="@+id/playLoadButton"
+        android:layout_width="417dp"
+        android:layout_height="160dp"
+        android:layout_marginTop="200dp"
+        android:onClick="PlayLoadGameButtonPressed"
+        android:text="@string/playLoadButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/WeclomeTextView" />
+
 </android.support.constraint.ConstraintLayout>

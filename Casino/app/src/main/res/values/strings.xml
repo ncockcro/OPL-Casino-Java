@@ -66,4 +66,5 @@
     <string name="humanScoreTextView">Your Score</string>
     <string name="computerScoreTextView">Computer Score</string>
     <string name="endGameButton">End Game</string>
+    <string name="playLoadButton">Play Loaded Game!</string>
 </resources>
