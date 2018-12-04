@@ -238,7 +238,7 @@ public class Tournament_Model {
         } else if (humanSpadeCount < computerSpadeCount) {
             mostSpadesColor = "Red";
             mostSpadesMessage = "The computer had the most Spades, with " + computerSpadeCount + " Spades. You had " + humanSpadeCount + " Spades.";
-            computerSpadeCount++;
+            computerRoundPoints++;
         }
         else {
             mostSpadesColor = "Yellow";
@@ -1061,10 +1061,32 @@ public class Tournament_Model {
         return loadGameBuildOwner;
     }
 
+    /** *********************************************************************
+     Function Name: GetRoundPointsHumanMessage
+     Purpose: To retrieve the message of how many points the player earned that round
+     Parameters: None
+     Return Value:
+     @return String
+     Local Variables: None
+     Algorithm:
+     1) Return the roundPointsHumanMessage variable
+     Assistance Received: none
+      ********************************************************************* */
     String GetRoundPointsHumanMessage() {
         return roundPointsHumanMessage;
     }
 
+    /** *********************************************************************
+     Function Name: GetLoadGameBuildOwner
+     Purpose: To retrieve amount of points the computer earned that round
+     Parameters: None
+     Return Value:
+     @return Vector<String>
+     Local Variables: None
+     Algorithm:
+     1) Return the roundPointsComputerMessage variable
+     Assistance Received: none
+      ********************************************************************* */
     String GetRoundPointsComputerMessage() {
         return roundPointsComputerMessage;
     }

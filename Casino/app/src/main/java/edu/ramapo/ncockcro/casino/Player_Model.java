@@ -46,7 +46,7 @@ public class Player_Model {
      and computer classes return the player's move
      Assistance Received: none
       ********************************************************************* */
-    public char MakeMove(Vector<Card_Model> table, Vector<Build_Model> tableBuilds) {
+    public char MakeMove(Vector<Card_Model> table, Vector<Build_Model> tableBuilds, int currentPlayer) {
         return '0';
     }
 
@@ -244,6 +244,7 @@ public class Player_Model {
         }
 
         if(!notFound) {
+            Log.d("PassedCard", passedCard.GetCard());
             Log.d("MyError", "Error in removing a card in the player model class.");
         }
     }
@@ -263,6 +264,8 @@ public class Player_Model {
 
         int count = 0;
 
+        // Cycling through the unique cards and making sure the pile that was passed in
+        // are actually valid cards
         for(int i = 0; i < uniqueCards.size(); i++) {
             for(int j = 0; j < passedPile.size(); j++) {
                 if(uniqueCards.get(i).GetCard().equals(passedPile.get(j).GetCard())) {
@@ -271,6 +274,7 @@ public class Player_Model {
             }
         }
 
+        // If the count is equals to the size of the pile, then all cards were valid
         if(count == passedPile.size()) {
             pile = passedPile;
         }
@@ -554,7 +558,7 @@ public class Player_Model {
     5) If there aren't, the function will return false
     Assistance Received: none
     ********************************************************************* */
-    protected boolean AICheckForBuild(Vector<Card_Model> table, Vector<Build_Model> tableBuilds) {
+    protected boolean AICheckForBuild(Vector<Card_Model> table, Vector<Build_Model> tableBuilds, int currentPlayer) {
 
         buildCards.clear();
         // ****** For creating a new build ******
@@ -599,6 +603,7 @@ public class Player_Model {
                     continue;
                 }
 
+                // Cycling through the table builds and skipping over the
                 for (int l = 0; l < tableBuilds.size(); l++) {
 
                     // Have a try catch here since sometimes when loading in a file, if the capture card of
@@ -624,7 +629,6 @@ public class Player_Model {
                             playerCard = hand.get(j);
                             buildCards.add(table.get(k));
                             printTableBuildCards.clear();
-                            //printTableBuildCards.add(table.get(k));
                             return true;
                         }
                     }
@@ -657,7 +661,7 @@ public class Player_Model {
                 for(int k = 0; k < hand.size(); k++) {
 
                     // If there is, then save that and add it to the existing build
-                    if(CardNumber(hand.get(i).GetNumber()) == buildWithAddedCards.get(j)) {
+                    if(CardNumber(hand.get(k).GetNumber()) == buildWithAddedCards.get(j)) {
                         newOrExistingBuild = 'e';
                         playerCard = hand.get(j);
                         existingBuildCard = tableBuilds.get(i).GetBuildOfCards().lastElement();
@@ -1045,12 +1049,12 @@ public class Player_Model {
      3) If the AI can't do either of those, then trail and output a card for the player to trail with
      Assistance Received: none
      ********************************************************************* */
-    void AskForHelp(Vector<Card_Model> table, Vector<Build_Model> tableBuilds) {
+    void AskForHelp(Vector<Card_Model> table, Vector<Build_Model> tableBuilds, int currentPlayer) {
 
         helpOutputMessages.clear();
 
         // Check if the player can make a capture and output the move they would make
-        if(AICheckForBuild(table, tableBuilds)) {
+        if(AICheckForBuild(table, tableBuilds, currentPlayer)) {
             helpOutputMessages.add("The player should make a build.");
             helpOutputMessages.add("The player should user" + GetNumberName(playerCard.GetNumber()));
             helpOutputMessages.add(" of " + GetSuitName(playerCard.GetSuit()) + " to make a build.");
@@ -1516,6 +1520,11 @@ public class Player_Model {
      ********************************************************************* */
     Vector<String> GetPlayerOutputMessages() {
         return playerOutputMessages;
+    }
+
+    void ClearPrintMessages() {
+        printTableBuildCards.clear();
+        printTableCaptureCards.clear();
     }
 
 

@@ -70,6 +70,19 @@ public class RoundEnd_Activity extends AppCompatActivity {
 
     }
 
+    /** *********************************************************************
+     Function Name: NextRoundButtonPressed
+     Purpose: When the player wants to play the next round, this view will get triggered
+     Parameters:
+     @param view, View object
+     Return Value: Void
+     Local Variables: None
+     Algorithm:
+     1) Get information from the tournament model such as the player's scores
+     and round to be passed on to the new round
+     2) Start the new round by calling the main game activity
+     Assistance Received: none
+     ********************************************************************* */
     public void NextRoundButtonPressed(View view) {
         Intent intentRound = new Intent(this, MainGame_Activity.class);
 
@@ -78,6 +91,8 @@ public class RoundEnd_Activity extends AppCompatActivity {
         String roundString = Integer.toString(tournamentModel.GetRound());
 
         intentRound.putExtra("coinWinner", tournamentModel.GetLastCapture());
+        Log.d("humanScore", humanScoreString);
+        Log.d("computerScore", computerScoreString);
         intentRound.putExtra("humanScore", humanScoreString);
         intentRound.putExtra("computerScore", computerScoreString);
         intentRound.putExtra("currentRound", roundString);
@@ -88,6 +103,17 @@ public class RoundEnd_Activity extends AppCompatActivity {
 
     }
 
+    /** *********************************************************************
+     Function Name: EndGameButtonPressed
+     Purpose: When the game is over, the user will press this button and be triggered
+     Parameters:
+     @param view, View object
+     Return Value: Void
+     Local Variables: None
+     Algorithm:
+     1) Exit out of the game
+     Assistance Received: none
+     ********************************************************************* */
     public void EndGameButtonPressed(View view) {
 
         Intent intent = new Intent(Intent.ACTION_MAIN);

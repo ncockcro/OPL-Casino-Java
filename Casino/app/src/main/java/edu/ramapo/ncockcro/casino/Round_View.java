@@ -54,6 +54,7 @@ public class Round_View extends MainGame_Activity {
     private Button existingBuildButton;
     private Button insideCaptureBuildButton;
     private Button seeResultsButton;
+    private Button doneSetButton;
 
     private Vector<Card_View> playerCards = new Vector<Card_View>();
     private Vector<Card_View> computerCards = new Vector<Card_View>();
@@ -75,6 +76,7 @@ public class Round_View extends MainGame_Activity {
     private int humanScore;
     private int computerScore;
     int round;
+    private boolean capturingBuild =  false;
 
     /** *********************************************************************
      Function Name: Round_View
@@ -146,6 +148,7 @@ public class Round_View extends MainGame_Activity {
         existingBuildButton = (Button) activity.findViewById(R.id.existingBuildButton);
         insideCaptureBuildButton = (Button) activity.findViewById(R.id.insideCaptureBuildButton);
         seeResultsButton = (Button) activity.findViewById(R.id.seeResultsButton);
+        doneSetButton = (Button) activity.findViewById(R.id.doneSetButton);
 
     }
 
@@ -550,6 +553,7 @@ public class Round_View extends MainGame_Activity {
 
         // If the player is capturing a set...
         if(roundModel.GetPlayerModelWantSet() == 'y') {
+            Log.d("In", "In highlighted player set");
 
             // If they haven't clicked on two cards yet...
             if(setCardPickedCounter < 2) {
@@ -560,6 +564,7 @@ public class Round_View extends MainGame_Activity {
                 for(int i = 0; i < multipleBuildCards.size(); i++) {
 
                     singleBuildCards = cardView.ConvertModelToView(multipleBuildCards.get(i).GetBuildOfCards());
+                    int buildStarting = numOfBuilds;
 
                     for(int j = 0; j < singleBuildCards.size(); j++) {
 
@@ -568,6 +573,20 @@ public class Round_View extends MainGame_Activity {
                         }
                         else {
                             table.get(numOfBuilds).setColorFilter(0x403336FF);
+                        }
+
+                        try {
+                            if (singleBuildCards.get(j).GetCard().equals(currentBuildCard.GetCard()) && capturingBuild) {
+                                for (int k = 0; k < singleBuildCards.size(); k++) {
+                                    table.get(buildStarting).setColorFilter(0x40ff0000);
+                                    table.get(buildStarting).setEnabled(false);
+                                    buildStarting++;
+                                }
+
+                            }
+                        }
+                        catch (Exception e) {
+                            Log.d("MyError", "There was no currentBuildCard in round view");
                         }
 
                         numOfBuilds++;
@@ -589,6 +608,7 @@ public class Round_View extends MainGame_Activity {
 
         // If the player is making a new build...
         else if(roundModel.GetPlayerMove() == 'b' && roundModel.GetPlayerModelWantNewOrExisting() != 'e') {
+            Log.d("In", "In player build highlight but not existing");
 
             int numOfBuilds = 0;
 
@@ -624,6 +644,7 @@ public class Round_View extends MainGame_Activity {
 
         // If the player is capturing a build or adding to an existing build...
         else if(roundModel.GetPlayerModelWantCaptureBuild() == 'y' || roundModel.GetPlayerModelWantNewOrExisting() == 'e') {
+            Log.d("In", "In player highlighted build with existing");
 
             int numOfBuilds = 0;
             // Cycle through the builds...
@@ -646,6 +667,7 @@ public class Round_View extends MainGame_Activity {
 
         // Otherwise, we just highlight the card the player chose in red
         else {
+            Log.d("In", "In highlighting just a normal card");
             int numOfBuilds = 0;
             for(int i = 0; i < multipleBuildCards.size(); i++) {
                 singleBuildCards = cardView.ConvertModelToView(multipleBuildCards.get(i).GetBuildOfCards());
@@ -1055,6 +1077,8 @@ public class Round_View extends MainGame_Activity {
         DoneButton.setVisibility(View.GONE);
         DoneButton.setEnabled(false);
         backButton.setVisibility(View.VISIBLE);
+        doneSetButton.setVisibility(View.GONE);
+        doneSetButton.setEnabled(false);
     }
 
     /** *********************************************************************
@@ -1106,7 +1130,8 @@ public class Round_View extends MainGame_Activity {
     void ShowCaptureBuildButtons() {
 
         HideAllButtons();
-        backButton.setVisibility(View.VISIBLE);
+        //backButton.setVisibility(View.VISIBLE);
+        captureSetButton.setVisibility(View.VISIBLE);
         insideCaptureBuildButton.setVisibility(View.VISIBLE);
         insideCaptureBuildButton.setEnabled(false);
     }
@@ -1170,6 +1195,7 @@ public class Round_View extends MainGame_Activity {
         existingBuildButton.setVisibility(View.GONE);
         insideCaptureBuildButton.setVisibility(View.GONE);
         seeResultsButton.setVisibility(View.GONE);
+        doneSetButton.setVisibility(View.GONE);
 
     }
 
@@ -1208,11 +1234,13 @@ public class Round_View extends MainGame_Activity {
 
             int numOfBuildCards = 0;
 
+            Log.d("BuildsSize", Integer.toString(multipleBuildCards.size()));
             for(int i = 0; i < multipleBuildCards.size(); i++) {
 
                 singleBuildCards = cardView.ConvertModelToView(multipleBuildCards.get(i).GetBuildOfCards());
 
                 for(int j = 0; j < singleBuildCards.size(); j++) {
+                    Log.d("SingleBuildCard", singleBuildCards.get(j).GetCard() );
                     singleBuildCards.get(j).DrawImageCard(table.get(numOfBuildCards));
 
                     if(i % 2 == 0) {
@@ -1226,7 +1254,8 @@ public class Round_View extends MainGame_Activity {
             }
 
             // Unhighlight the cards on the table and re enable them
-            for(int i = numOfBuildCards; i < tableCards.size(); i++) {
+            for(int i = numOfBuildCards; i < table.size(); i++) {
+                //Log.d("Clearing", tableCards.get(i).GetCard());
                 table.get(i).setColorFilter(null);
                 highlightedTableCard.clear();
                 table.get(i).setEnabled(false);
@@ -1238,6 +1267,8 @@ public class Round_View extends MainGame_Activity {
 
             setHighlightedTableCard.clear();
             buildHighlightedTableCards.clear();
+            roundModel.SetPlayerModelWantNewOrExisting('n');
+            roundModel.SetPlayerModelWantBuild('n');
 
 
             return true;
@@ -1276,6 +1307,7 @@ public class Round_View extends MainGame_Activity {
             roundModel.ClearErrorReason();
             HideAllButtons();
             ShowHumanButtons();
+            DisableTableButtons();
 
             ClearData();
 
@@ -1361,7 +1393,10 @@ public class Round_View extends MainGame_Activity {
         Set_Model tempSet = new Set_Model();
         tempSet.SetCardsOfSet(cardView.ConvertViewToModelVector(setHighlightedTableCard));
         roundModel.SetPlayerModelAddSet(tempSet);
+        doneSetButton.setVisibility(View.VISIBLE);
+        doneSetButton.setEnabled(true);
         DoneButton.setVisibility(View.VISIBLE);
+        setCardPickedCounter = 0;
 
     }
 
@@ -1410,7 +1445,11 @@ public class Round_View extends MainGame_Activity {
         // Unhighlight table cards
         for(int i = numOfBuildCards; i < tableCards.size(); i++) {
             table.get(i).setColorFilter(null);
+
         }
+
+        highlightedTableCard.clear();
+        setHighlightedTableCard.clear();
         roundModel.PlayerModelClearPlayerMultipleSets();
         setCardPickedCounter = 0;
         roundModel.SetPlayerModelWantSet('n');
@@ -1430,6 +1469,7 @@ public class Round_View extends MainGame_Activity {
      ********************************************************************* */
     void SetHumanScore(int score) {
         humanScore = score;
+        roundModel.SetHumanPoints(Integer.toString(score));
     }
 
     /** *********************************************************************
@@ -1445,6 +1485,7 @@ public class Round_View extends MainGame_Activity {
       ********************************************************************* */
     void SetComputerScore(int score) {
         computerScore = score;
+        roundModel.SetComputerPoints(Integer.toString(score));
     }
 
     /** *********************************************************************
@@ -1460,6 +1501,7 @@ public class Round_View extends MainGame_Activity {
       ********************************************************************* */
     void SetRound(int passedRound) {
         round = passedRound;
+        roundModel.SetRound(passedRound);
     }
 
     /** *********************************************************************
@@ -1601,6 +1643,16 @@ public class Round_View extends MainGame_Activity {
         }
     }
 
+    /** *********************************************************************
+     Function Name: DisableBuildButtons
+     Purpose: To disable the build buttons on the table
+     Parameters: None
+     Return Value: Void
+     Local Variables: None
+     Algorithm:
+     1) Cycle through the builds on the table and disable the buttons
+     Assistance Received: none
+     ********************************************************************* */
     void DisableBuildButtons() {
 
         for(int i = 0; i < multipleBuildCards.size(); i++) {
@@ -1614,17 +1666,64 @@ public class Round_View extends MainGame_Activity {
         }
     }
 
+    /** *********************************************************************
+     Function Name: EnableBuildButtons
+     Purpose: To enable the build buttons on the table
+     Parameters: None
+     Return Value: Void
+     Local Variables: None
+     Algorithm:
+     1) Cycle through the build cards on the table and enable them
+     Assistance Received: none
+     ********************************************************************* */
     void EnableBuildButtons() {
 
+        int tableCounter = 0;
+        Log.d("BuildSize", Integer.toString(multipleBuildCards.size()));
         for(int i = 0; i < multipleBuildCards.size(); i++) {
+
 
             singleBuildCards = cardView.ConvertModelToView(multipleBuildCards.get(i).GetBuildOfCards());
 
             for(int j = 0; j < singleBuildCards.size(); j++) {
+                Log.d("BuildCard", singleBuildCards.get(j).GetCard());
+                Log.d("tableCounter", Integer.toString(tableCounter));
 
-                table.get(j).setEnabled(true);
+                table.get(tableCounter).setEnabled(true);
+                tableCounter++;
             }
         }
+    }
+
+    /** *********************************************************************
+     Function Name: SetCapturingBuild
+     Purpose: To set the boolean value of capturing a build true or false
+     Parameters:
+     @param choice, a boolean
+     Return Value: Void
+     Local Variables: None
+     Algorithm:
+     1) Set the choice to capturingBuild vairable
+     Assistance Received: none
+     ********************************************************************* */
+    void SetCapturingBuild(boolean choice) {
+        capturingBuild = choice;
+    }
+
+    /** *********************************************************************
+     Function Name: SendTableCaptureCards
+     Purpose: To send to the model the cards the player wants to capture
+     Parameters: None
+     Return Value: Void
+     Local Variables: None
+     Algorithm:
+     1) Send to the model the cards the player wants to capture
+     Assistance Received: none
+     ********************************************************************* */
+    void SendTableCaptureCards() {
+
+        // Sending over the table cards the player selected
+        roundModel.SetTableCardsToBeCaptured(cardView.ConvertViewToModelVector(highlightedTableCard));
     }
 
 }

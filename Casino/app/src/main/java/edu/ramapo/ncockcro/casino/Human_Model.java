@@ -23,7 +23,7 @@ public class Human_Model extends Player_Model {
      Assistance Received: none
      ********************************************************************* */
     @Override
-    public char MakeMove(Vector<Card_Model> table, Vector<Build_Model> buildTable) {
+    public char MakeMove(Vector<Card_Model> table, Vector<Build_Model> buildTable, int currentPlayer) {
 
         // Nothing to do in here, previously in C++ this was where user input was gathered
         if(playerMove == 'b') {

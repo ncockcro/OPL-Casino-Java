@@ -21,10 +21,10 @@ public class Computer_Model extends Player_Model {
      3) If neither of the other options, return 't'
      Assistance Received: none
      ********************************************************************* */
-    @Override public char MakeMove(Vector<Card_Model> table, Vector<Build_Model> tableBuilds) {
+    @Override public char MakeMove(Vector<Card_Model> table, Vector<Build_Model> tableBuilds, int currentPlayer) {
 
         //Check for build
-        if(AICheckForBuild(table, tableBuilds)) {
+        if(AICheckForBuild(table, tableBuilds, currentPlayer)) {
             playerMove = 'b';
             return 'b';
         }

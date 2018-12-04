@@ -374,6 +374,8 @@ public class Round_Model {
         // Iterate through the cards the player wants to build with and count their values
         for(int i = 0; i < playerBuildCards.size(); i++) {
 
+            Log.d("playerBuildCards", playerBuildCards.get(i).GetCard());
+
             // If the card is an ace, we must increment the two different counts with 1 and 14 as the ace card
             if(playerBuildCards.get(i).GetNumber() == 'A') {
                 aceAs1++;
@@ -389,8 +391,39 @@ public class Round_Model {
 
         // If the player has a card that equals the total value of the build, then return true
         for(int i = 0; i < playerHand.size(); i++) {
+
+            Log.d("PlayerHandBuild", playerHand.get(i).GetCard());
+
+            boolean skipBuildCard = false;
+
             if(player.get(currentPlayer).CardNumber(playerHand.get(i).GetNumber()) == aceAs1 ||
                     player.get(currentPlayer).CardNumber(playerHand.get(i).GetNumber()) == aceAs14) {
+
+
+                // If there is a build on the table that needs that capture card, return false since
+                // they cant make a new build with that card
+                for(int j = 0; j < tableBuilds.size(); j++) {
+                    try {
+                        if (playerHand.get(i).GetCard().equals(tableBuilds.get(j).GetCaptureCardOfBuild().GetCard())) {
+
+                            skipBuildCard = true;
+                            Log.d("Falsing", "Returning false");
+                            //return false;
+                        }
+                    }
+                    catch (Exception e) {
+                        Log.d("MyError", "Failed because there was no capture card of the build.");
+                    }
+                }
+
+                if(skipBuildCard) {
+                    continue;
+                }
+
+                Log.d("aceAs1", Integer.toString(aceAs1));
+                Log.d("aceAs14", Integer.toString(aceAs14));
+                Log.d("PlayerHand", Integer.toString(player.get(currentPlayer).CardNumber(playerHand.get(i).GetNumber())));
+
                 hasRightCards = true;
                 player.get(currentPlayer).AddToPlayerBuildCards(playerHand.get(i));
                 playerTableBuildCards.remove(playerTableBuildCards.size() - 1);
@@ -399,6 +432,30 @@ public class Round_Model {
 
             // If the player is creating a build with an ace as the card they will use to capture it with later...
             if(playerHand.get(i).GetNumber() == 'A' && aceAs14 == 14 || aceAs1 == 14) {
+
+                // If the card is not an ace card, return false because they can't make a build with that
+                if(playerHand.get(i).GetNumber() != 'A') {
+                    return false;
+                }
+
+                // If there is a build on the table that needs that capture card, return false since
+                // they cant make a new build with that card
+                for(int j = 0; j < tableBuilds.size(); j++) {
+                    try {
+                        if (playerHand.get(i).GetCard().equals(tableBuilds.get(j).GetCaptureCardOfBuild().GetCard())) {
+                            return false;
+                        }
+                    }
+                    catch(Exception e) {
+                        Log.d("MyError", "Failed because there was no capture card of the build.");
+                    }
+                }
+
+                Log.d("Inside", "Inside of aces");
+                Log.d("aceAs1", Integer.toString(aceAs1));
+                Log.d("aceAs14", Integer.toString(aceAs14));
+                Log.d("PlayerHand", Character.toString(playerHand.get(i).GetNumber()));
+
                 hasRightCards = true;
                 player.get(currentPlayer).AddToPlayerBuildCards(playerHand.get(i));
                 playerTableBuildCards.remove(playerTableBuildCards.size() - 1);
@@ -522,12 +579,19 @@ public class Round_Model {
 
                 cardsOfSet = playerSets.get(i).GetCardOfSet();
 
+
                 // For each set, we must check and make sure that the cards are actually on the table
                 for(int j = 0; j < table.size(); j++) {
                     for(int k = 0; k < cardsOfSet.size(); k++) {
 
+                        Log.d("CardsOfSet", cardsOfSet.get(k).GetCard());
+
                         // If the card is on the table, push it onto the pile vector to be added later
                         if(table.get(j).GetCard().equals(cardsOfSet.get(k).GetCard())) {
+
+
+                            Log.d("Add", "Adding set cards to pile");
+                            Log.d("Table", table.get(j).GetCard());
                             pile.add(table.get(j));
                             removeTableCards.add(table.get(j));
 
@@ -562,13 +626,41 @@ public class Round_Model {
         // If the player wanted to build, then this function will check if it is possible based on
         // the information the user provided
         if(player.get(currentPlayer).GetPlayerWantBuild() == 'y') {
+            Log.d("In", "In player wanting a build");
+
+            for(int i = 0; i < tableCardsForCapturing.size(); i++) {
+                if(player.get(currentPlayer).CardNumber(tableCardsForCapturing.get(i).GetNumber()) == number) {
+                    pile.add(tableCardsForCapturing.get(i));
+                    removeTableCards.add(tableCardsForCapturing.get(i));
+                    canCapture = true;
+                    looseCardsCapture = true;
+                }
+                else {
+                    errorReason = "The loose cards you chose are not the same value as the card used for build.";
+                    return false;
+                }
+            }
+
             if(CheckIfPlayerCanCaptureBuild(playerHandCaptureCard, playerHand)) {
+
+                Log.d("CapturedBuild", "Build is captured");
                 canCapture = true;
 
                 // Decrement the build counter since the player is capturing the build
                 buildCounter--;
                 // Resetting this variable so the player doesn't always want a build
                 player.get(currentPlayer).SetPlayerWantBuild('n');
+
+                // Removing the first index which is the player's capture card since it was already
+                // removed from capturing the build
+                pile.remove(0);
+                player.get(currentPlayer).RemoveCard(playerHandCaptureCard);
+                RemoveTableCards(removeTableCards);
+
+                for(int i = 0; i < pile.size(); i++) {
+                    Log.d("PileBuild", pile.get(i).GetCard());
+                }
+                player.get(currentPlayer).AddToPile(pile);
             }
         }
         else {
@@ -596,7 +688,10 @@ public class Round_Model {
                 for(int j = 0; j < tableBuilds.size(); j++) {
 
                     // If the card the player is capturing with equals the build and they are the owner
+                    Log.d("Number", Integer.toString(number));
+                    Log.d("TableBuild", Integer.toString(tableBuilds.get(j).GetCardValueOfBuild()));
                     if(tableBuilds.get(j).GetCardValueOfBuild() == number && tableBuilds.get(j).GetOwner() == currentPlayer) {
+                        Log.d("Part", "Part of build");
                         partOfBuild = true;
                         continue;
                     }
@@ -628,6 +723,72 @@ public class Round_Model {
             // If everything is correct, add the cards and remove them properly
             if(canCapture) {
 
+                if(player.get(currentPlayer).GetPlayerWantBuild() != 'y' && tableCardsForCapturing.size() == 0) {
+                    // Checking to make sure the card the player is capturing with is not needed for a build
+                    for(int j = 0; j < tableBuilds.size(); j++) {
+
+                        // If the card the player is capturing with equals the build and they are the owner
+                        Log.d("Number", Integer.toString(number));
+                        Log.d("TableBuild", Integer.toString(tableBuilds.get(j).GetCardValueOfBuild()));
+                        if (tableBuilds.get(j).GetCardValueOfBuild() == number && tableBuilds.get(j).GetOwner() == currentPlayer) {
+                            Log.d("Part", "Part of build");
+                            errorReason = "Can not capture set because the card is needed for a build";
+                            return false;
+                        }
+
+                        // Same thing but if they are using an ace
+                        if (number == 1 && tableBuilds.get(j).GetCardValueOfBuild() == 14 && tableBuilds.get(j).GetOwner() == currentPlayer) {
+                            errorReason = "Can not capture set because the card is needed for a build";
+                            return false;
+                        }
+                    }
+                }
+
+                Log.d("Removing cards", "Removing table cards");
+
+                for(int i = 0; i < removeTableCards.size(); i++) {
+                    Log.d("Delete", removeTableCards.get(i).GetCard());
+                }
+
+
+                // Checking to make sure there are no duplicated cards that are about to be added to the player's pile
+                int dupeCard = 0;
+                Vector<Card_Model> duplicatedCards = new Vector<Card_Model>();
+                boolean skipCard = false;
+
+                for(int i = 0; i < pile.size(); i++) {
+                    for(int j = 0; j < pile.size(); j++) {
+                        if(pile.get(i).GetCard().equals(pile.get(j).GetCard())) {
+                            dupeCard++;
+                        }
+
+                        if(dupeCard == 2) {
+                            for(int k = 0; k < duplicatedCards.size(); k++) {
+                                if(pile.get(j).GetCard().equals(duplicatedCards.get(k).GetCard())) {
+                                    skipCard = true;
+                                }
+                            }
+
+                            if(!skipCard) {
+                                duplicatedCards.add(pile.get(j));
+                                break;
+                            }
+                            skipCard = false;
+                        }
+                    }
+                    dupeCard = 0;
+                }
+
+                for(int i = 0; i < duplicatedCards.size(); i++) {
+                    for(int j = 0; j < pile.size(); j++) {
+                        if(pile.get(j).GetCard().equals(duplicatedCards.get(i).GetCard())) {
+                            Log.d("Deleting", "Removing card from dupe" + pile.get(j).GetCard());
+                            pile.remove(j);
+                        }
+                    }
+                }
+
+
                 player.get(currentPlayer).RemoveCard(playerHandCaptureCard);
                 RemoveTableCards(removeTableCards);
 
@@ -645,8 +806,18 @@ public class Round_Model {
         }
 
         if(!canCapture) {
+            for(int i = 0; i < tableCardsForCapturing.size(); i++) {
+                Log.d("PlayerCard", tableCardsForCapturing.get(i).GetCard());
+            }
             errorReason = "You can not capture any cards on the table with that capture card.";
             return false;
+        }
+
+        for(int i = 0; i < removeTableCards.size(); i++) {
+            Log.d("removeTable", removeTableCards.get(i).GetCard());
+        }
+        for(int i = 0; i < pile.size(); i++) {
+            Log.d("Pile", pile.get(i).GetCard());
         }
 
         return canCapture;
@@ -677,10 +848,15 @@ public class Round_Model {
         // based on the specifications the user entered in
         for(int i = 0; i < tableBuilds.size(); i++) {
 
+            for(int j = 0; j < tableBuilds.get(i).GetBuildOfCards().size(); j++) {
+                Log.d("CardInBuild", tableBuilds.get(i).GetBuildOfCards().get(j).GetCard());
+            }
+
             // If there was a build that can be successfully captured after checking if possible, move the cards
             // from the build element into player's pile, move the card used for capture to player pile, and
             // erase this build
             if(tableBuilds.get(i).CanCaptureBuildOfCards(playerHandCaptureCard, existingBuildCard, playerHand)) {
+                Log.d("CheckCapture", "caputring the build cards in the check");
                 tempPile = tableBuilds.get(i).GetBuildOfCards();
                 tempPile.add(playerHandCaptureCard);
                 player.get(currentPlayer).AddToPile(tempPile);
@@ -741,6 +917,7 @@ public class Round_Model {
             }
         }
 
+        Log.d("Builds", Integer.toString(tableBuilds.size()));
         int tempOwner;
         Vector<Card_Model> cardsFromBuild = new Vector<Card_Model>();
         for(int i = 0; i < tableBuilds.size(); i++) {
@@ -754,6 +931,7 @@ public class Round_Model {
 
         player.get(currentPlayer).RemoveCard(passedCard);
 
+        Log.d("TrailCard", passedCard.GetCard());
         Vector<Card_Model> trailCard = new Vector<Card_Model>();
         trailCard.add(passedCard);
 
@@ -892,9 +1070,11 @@ public class Round_Model {
     void PlayerMakeMove() {
         char move;
 
+        player.get(currentPlayer).ClearPrintMessages();
+
         // Clearing the error reason from before
         errorReason = "None";
-        move = player.get(currentPlayer).MakeMove(table, tableBuilds);
+        move = player.get(currentPlayer).MakeMove(table, tableBuilds, currentPlayer);
 
         // Builds
         if(move == 'b') {
@@ -1575,7 +1755,7 @@ public class Round_Model {
      Assistance Received: none
       ********************************************************************* */
     Vector<String> GetPlayerHelpOutputMessages() {
-        player.get(currentPlayer).AskForHelp(table, tableBuilds);
+        player.get(currentPlayer).AskForHelp(table, tableBuilds, currentPlayer);
         return player.get(currentPlayer).GetHelpOutputMessages();
     }
 
@@ -1670,7 +1850,7 @@ public class Round_Model {
                 // Otherwise, just see if the card value matches the value of the build
                 else if(player.get(currentPlayer).CardNumber(playersHand.get(j).GetNumber()) == count) {
                     setValue = true;
-                    tableBuilds.get(j).SetCaptureCardOfBuild(playersHand.get(j));
+                    tableBuilds.get(i).SetCaptureCardOfBuild(playersHand.get(j));
                     tableBuilds.get(i).SetValueOfBuild(count);
                 }
             }
@@ -1722,5 +1902,20 @@ public class Round_Model {
       ********************************************************************* */
     void AddCardToBuild(int index, Card_Model passedCard) {
         tableBuilds.get(index).AddCardToBuild(passedCard);
+    }
+
+    /** *********************************************************************
+     Function Name: SetRound
+     Purpose: To set the current round to what was passed in
+     Parameters:
+     @param passedRound, int
+     Return Value: Void
+     Local Variables: None
+     Algorithm:
+     1) Set the current round to what was passed in
+     Assistance Received: none
+      ********************************************************************* */
+    void SetRound(int passedRound) {
+        currentRound = passedRound;
     }
 }
