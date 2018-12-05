@@ -553,7 +553,6 @@ public class Round_View extends MainGame_Activity {
 
         // If the player is capturing a set...
         if(roundModel.GetPlayerModelWantSet() == 'y') {
-            Log.d("In", "In highlighted player set");
 
             // If they haven't clicked on two cards yet...
             if(setCardPickedCounter < 2) {
@@ -608,7 +607,6 @@ public class Round_View extends MainGame_Activity {
 
         // If the player is making a new build...
         else if(roundModel.GetPlayerMove() == 'b' && roundModel.GetPlayerModelWantNewOrExisting() != 'e') {
-            Log.d("In", "In player build highlight but not existing");
 
             int numOfBuilds = 0;
 
@@ -644,7 +642,6 @@ public class Round_View extends MainGame_Activity {
 
         // If the player is capturing a build or adding to an existing build...
         else if(roundModel.GetPlayerModelWantCaptureBuild() == 'y' || roundModel.GetPlayerModelWantNewOrExisting() == 'e') {
-            Log.d("In", "In player highlighted build with existing");
 
             int numOfBuilds = 0;
             // Cycle through the builds...
@@ -667,7 +664,6 @@ public class Round_View extends MainGame_Activity {
 
         // Otherwise, we just highlight the card the player chose in red
         else {
-            Log.d("In", "In highlighting just a normal card");
             int numOfBuilds = 0;
             for(int i = 0; i < multipleBuildCards.size(); i++) {
                 singleBuildCards = cardView.ConvertModelToView(multipleBuildCards.get(i).GetBuildOfCards());
@@ -1234,13 +1230,11 @@ public class Round_View extends MainGame_Activity {
 
             int numOfBuildCards = 0;
 
-            Log.d("BuildsSize", Integer.toString(multipleBuildCards.size()));
             for(int i = 0; i < multipleBuildCards.size(); i++) {
 
                 singleBuildCards = cardView.ConvertModelToView(multipleBuildCards.get(i).GetBuildOfCards());
 
                 for(int j = 0; j < singleBuildCards.size(); j++) {
-                    Log.d("SingleBuildCard", singleBuildCards.get(j).GetCard() );
                     singleBuildCards.get(j).DrawImageCard(table.get(numOfBuildCards));
 
                     if(i % 2 == 0) {
@@ -1679,15 +1673,12 @@ public class Round_View extends MainGame_Activity {
     void EnableBuildButtons() {
 
         int tableCounter = 0;
-        Log.d("BuildSize", Integer.toString(multipleBuildCards.size()));
         for(int i = 0; i < multipleBuildCards.size(); i++) {
 
 
             singleBuildCards = cardView.ConvertModelToView(multipleBuildCards.get(i).GetBuildOfCards());
 
             for(int j = 0; j < singleBuildCards.size(); j++) {
-                Log.d("BuildCard", singleBuildCards.get(j).GetCard());
-                Log.d("tableCounter", Integer.toString(tableCounter));
 
                 table.get(tableCounter).setEnabled(true);
                 tableCounter++;

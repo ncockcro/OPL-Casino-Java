@@ -148,7 +148,6 @@ public class Build_Model {
             // Push the card the player wants to add to the build onto a temporary copy of the build to
             // be added if the numbers correctly add up to a card in their hand
             tempBuild.add(cardToBeAdded);
-            Log.d("AddedCard", cardToBeAdded.GetCard());
             cardAdded = cardToBeAdded;
 
             // Iterate through the build with the card added and see what number it adds up to
@@ -166,10 +165,7 @@ public class Build_Model {
             // Does it equal one of the cards in their hand
             for (int i = 0; i < playerHand.size(); i++) {
 
-                Log.d("CardToBeAdded", cardToBeAdded.GetCard());
-                Log.d("PlayerHand", playerHand.get(i).GetCard());
                 if(cardToBeAdded.GetCard().equals(playerHand.get(i).GetCard())) {
-                    Log.d("Continue", "Continuing");
                     continue;
                 }
 

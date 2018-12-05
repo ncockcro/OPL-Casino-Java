@@ -244,7 +244,6 @@ public class Player_Model {
         }
 
         if(!notFound) {
-            Log.d("PassedCard", passedCard.GetCard());
             Log.d("MyError", "Error in removing a card in the player model class.");
         }
     }
@@ -1522,10 +1521,10 @@ public class Player_Model {
         return playerOutputMessages;
     }
 
-    void ClearPrintMessages() {
+    /*void ClearPrintMessages() {
         printTableBuildCards.clear();
         printTableCaptureCards.clear();
-    }
+    }*/
 
 
 

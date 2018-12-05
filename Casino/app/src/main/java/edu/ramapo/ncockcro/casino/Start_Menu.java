@@ -109,7 +109,6 @@ public class Start_Menu extends AppCompatActivity {
         File[] downloadFiles = fileDirectory.listFiles();
 
         for(int i = 0; i < downloadFiles.length; i++) {
-            Log.d("file", downloadFiles[i].getName());
             tournamentViewLG.AddCardToLoadGame(this, downloadFiles[i].getName());
         }
     }

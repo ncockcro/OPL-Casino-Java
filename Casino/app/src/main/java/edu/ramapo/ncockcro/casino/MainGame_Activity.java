@@ -355,10 +355,6 @@ public class MainGame_Activity extends AppCompatActivity {
         }
 
         roundView.UpdateScreen(this);
-
-        for(int i = 0; i < roundModel.GetPlayerPile(0).size(); i++) {
-            Log.d("AfterPile", roundModel.GetPlayerPile(0).get(i).GetCard());
-        }
     }
 
     /** *********************************************************************

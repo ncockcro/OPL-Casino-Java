@@ -360,7 +360,6 @@ public class Tournament_View {
         // to do with that button
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                Log.d("click", "being clicked");
                 tournamentModel.SetFileToLoadFrom(finalFileName.toString());
                 tournamentModel.LoadGame(newDirectory, "/" + finalFileName);
 

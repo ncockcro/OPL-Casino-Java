@@ -91,8 +91,6 @@ public class RoundEnd_Activity extends AppCompatActivity {
         String roundString = Integer.toString(tournamentModel.GetRound());
 
         intentRound.putExtra("coinWinner", tournamentModel.GetLastCapture());
-        Log.d("humanScore", humanScoreString);
-        Log.d("computerScore", computerScoreString);
         intentRound.putExtra("humanScore", humanScoreString);
         intentRound.putExtra("computerScore", computerScoreString);
         intentRound.putExtra("currentRound", roundString);
